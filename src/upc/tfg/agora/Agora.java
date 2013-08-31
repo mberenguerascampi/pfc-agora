@@ -6,10 +6,14 @@ import java.awt.Container;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
 import upc.tfg.gui.VistaMenuPrincipal;
 import upc.tfg.gui.VistaTauler;
@@ -26,6 +30,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	CardLayout cardLayout;
 	VistaMenuPrincipal menuPrincipal;
 	VistaTauler tauler;
+	private JMenuBar menubar;
 	
 	public Agora() {
 		contentPane = getContentPane();
@@ -34,6 +39,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		
 		initFrame();
 		initViews();
+		initMenu();
 	}
 	
 	@Override
@@ -59,6 +65,42 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		setIconImage(icon);
 	}
 	
+	private void initMenu(){
+		menubar = new JMenuBar();
+        ImageIcon icon = new ImageIcon(getClass().getResource(Constants.fileUrl+"exit.png"));
+
+        JMenu file = new JMenu("File");
+        file.setFont(Constants.fontGillSansBold);
+        file.setMnemonic(KeyEvent.VK_F);
+
+        JMenuItem eMenuItem = new JMenuItem("Exit", icon);
+        eMenuItem.setBackground(Constants.colorGreen);
+        eMenuItem.setMnemonic(KeyEvent.VK_E);
+        eMenuItem.setToolTipText("Exit application");
+        eMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                System.exit(0);
+            }
+        });
+
+        file.add(eMenuItem);
+
+        menubar.add(file);
+        menubar.setBackground(Constants.colorGreen);
+        menubar.setFont(Constants.fontGillSansBold);
+        
+	}
+	
+	private void addMenu()
+	{
+		setJMenuBar(menubar);
+	}
+	
+	private void removeMenu()
+	{
+		setJMenuBar(null);
+	}
+	
 	private void initViews(){
 		menuPrincipal = new VistaMenuPrincipal(this);
 		menuPrincipal.setVisible(true);
@@ -73,8 +115,32 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	public void playPressed() {
 		System.out.println("You clicked the button");
 		 menuPrincipal.setVisible(false);
+		 afegeixCarta(1, 0, 0);
 		 tauler.setVisible(true);
+		 //addMenu();
 		 //cardLayout.next(contentPane);
+	}
+	
+	//FUNCIONS QUE IMPLEMENTEN EL LITENER DEL TAULER
+	/**
+	 * Funció cridada quan el jugador prem una carta en el tauler
+	 */
+	public void cartaSeleccionada(int jugadorID, int cartaID)
+	{
+		System.out.println("Carta seleccionada");
+	}
+	
+	//FUNCIONS PÜBLIQUES PER MODIFiCAR LA CAPA DE PRESENTACIÓ
+	/**
+	 * Mostra en la pantalla del tauler la carta amb identificador cartaID en les cartes del jugador amb 
+	 * identificador jugadorID
+	 * @param jugadorID identificador del jugador
+	 * @param cartaID identificador de la carta
+	 * @param posicio posició que ocupa la carta dintre del conjunt de cartes del jugador
+	 */
+	public void afegeixCarta(int jugadorID, int posicio, int cartaID)
+	{
+		tauler.afegeixCarta(jugadorID, posicio, cartaID);
 	}
 }
 
