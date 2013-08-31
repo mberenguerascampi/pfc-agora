@@ -40,7 +40,7 @@ public class VistaTauler extends DefaultView{
 		if(visibility){
 			mostraCartes();
 			addTauler();
-			addSkin(Constants.fileUrl+"tauler_background.jpg");
+			addSkin("tauler_background.jpg");
 		}
 	}
 	
