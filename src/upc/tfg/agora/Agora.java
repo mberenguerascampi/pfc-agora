@@ -115,7 +115,14 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	public void playPressed() {
 		System.out.println("You clicked the button");
 		 menuPrincipal.setVisible(false);
-		 afegeixCarta(1, 0, 0);
+		 afegeixCarta(4, 1, 1);
+		 afegeixCarta(1, 1, 1);
+		 afegeixCarta(1, 2, 2);
+		 afegeixCarta(1, 3, 3);
+		 afegeixCarta(3, 1, 1);
+		 afegeixCarta(3, 2, 2);
+		 afegeixCarta(3, 3, 3);
+		 afegeixCarta(2, 1, 1);
 		 tauler.setVisible(true);
 		 //addMenu();
 		 //cardLayout.next(contentPane);
