@@ -1,14 +1,21 @@
 package upc.tfg.gui;
 
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.TransferHandler;
 
 import upc.tfg.interfaces.TaulerListener;
 import upc.tfg.utils.Constants;
@@ -76,11 +83,45 @@ public class VistaTauler extends DefaultView{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				listener.cartaSeleccionada(jugadorSeleccionat, cartaSeleccionada);
+				//TODO: Comprovar si la carta ha estat deixada en una posició vàlida
 			}
 		});
 	    
+
+	    MouseAdapter listener = new MouseAdapter() {
+	    	 
+	        Point p = null;
+	   
+	        @Override
+	        public void mousePressed(MouseEvent e) {
+	          p = e.getLocationOnScreen();
+	          System.out.println("Mouse pressed");
+	        }
+	   
+	        @Override
+	        public void mouseDragged(MouseEvent e) {
+	          JComponent c = (JComponent) e.getSource();
+	          Point l = c.getLocation();
+	          Point here = e.getLocationOnScreen();
+	          c.setLocation(l.x + here.x - p.x, l.y + here.y - p.y);
+	          p = here;
+	        }
+	      };
+        //MouseListener listener = new DragMouseAdapter();
+        carta.addMouseListener(listener);
+        carta.addMouseMotionListener(listener);
+
+        carta.setTransferHandler(new TransferHandler("icon"));
 	    cartes.add(carta);
 	}
+	
+	class DragMouseAdapter extends MouseAdapter {
+        public void mousePressed(MouseEvent e) {
+            JComponent c = (JComponent) e.getSource();
+            TransferHandler handler = c.getTransferHandler();
+            handler.exportAsDrag(c, e, TransferHandler.COPY);
+        }
+    }
 	
 	private Posicio getCardPosition(int jugadorID, int posicio)
 	{

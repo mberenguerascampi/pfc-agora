@@ -40,6 +40,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		initFrame();
 		initViews();
 		initMenu();
+		//pack();
 	}
 	
 	@Override
@@ -54,8 +55,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         pack();
 		setSize(768, 1024);
-		setBounds(0, 0, 768, 1024);
-		//setExtendedState(JFrame.MAXIMIZED_BOTH);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		setBackground(Color.BLACK);
 		

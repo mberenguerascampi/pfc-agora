@@ -16,8 +16,8 @@ public class Constants {
 	public static final Font fontButton = new Font("Verdana", Font.BOLD, 13);
 	
 	//Sizes
-	public static final int width = 1024;
-	public static final int height = 768;
+	public static final int width = Toolkit.getDefaultToolkit().getScreenSize().width;//1024;
+	public static final int height = Toolkit.getDefaultToolkit().getScreenSize().height;//768;
 	
 	//Bounds
 	public static int paddingX = (Toolkit.getDefaultToolkit().getScreenSize().width - width)/2;
