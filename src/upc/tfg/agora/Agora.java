@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -20,6 +21,7 @@ import upc.tfg.gui.VistaTauler;
 import upc.tfg.interfaces.MenuPrincipalListener;
 import upc.tfg.interfaces.TaulerListener;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.ImageToNumberArray;
 
 public class Agora extends JFrame implements MenuPrincipalListener, TaulerListener, ActionListener{
 	/**
@@ -32,7 +34,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	VistaTauler tauler;
 	private JMenuBar menubar;
 	
-	public Agora() {
+	public Agora() throws IOException {
 		contentPane = getContentPane();
 		cardLayout = new CardLayout();
 		contentPane.setLayout(cardLayout);
@@ -40,6 +42,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		initFrame();
 		initViews();
 		initMenu();
+		ImageToNumberArray imtna = new ImageToNumberArray();
 		//pack();
 	}
 	

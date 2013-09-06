@@ -1,5 +1,7 @@
 package upc.tfg.agora;
 
+import java.io.IOException;
+
 import javax.swing.UIManager;
 
 public class Main {
@@ -13,7 +15,11 @@ public class Main {
 	        }  
 	        javax.swing.SwingUtilities.invokeLater(new Runnable() {  
 	            public void run() {  
-	            	agora = new Agora();  
+	            	try {
+						agora = new Agora();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}  
 	            }  
 	        });  
 	}
