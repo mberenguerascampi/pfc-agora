@@ -42,7 +42,8 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		initFrame();
 		initViews();
 		initMenu();
-		ImageToNumberArray imtna = new ImageToNumberArray();
+		
+		//new ImageToNumberArray();
 		//pack();
 	}
 	

@@ -7,6 +7,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -19,6 +24,7 @@ import javax.swing.TransferHandler;
 
 import upc.tfg.interfaces.TaulerListener;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.ImageToNumberArray;
 import upc.tfg.utils.Posicio;
 import upc.tfg.utils.RotatedIcon;
 
@@ -28,18 +34,30 @@ public class VistaTauler extends DefaultView{
 	 * 
 	 */
 	private static final long serialVersionUID = -5693342904886251734L;
-	private static final int IMG_TAULER_WIDTH = 538;
-	private static final int IMG_TAULER_HEIGHT = 388;
+	private static final int IMG_TAULER_WIDTH = 508;
+	private static final int IMG_TAULER_HEIGHT = 401;
 	private static final int CARTA_WIDTH = 74;
 	private static final int CARTA_HEIGHT = 105;
 	
+	private int[][]map;
+	
 	TaulerListener listener;
 	ArrayList<JButton> cartes = new ArrayList<JButton>();
+	JLabel tauler_img;
 	
 	public VistaTauler(TaulerListener tListener) {
 		listener = tListener;
 		setLayout(null);
 		setSize(Constants.width, Constants.height);
+		
+		//Llegim la matriu guardada que ens mapeja els districtes dins la imatge del tauler
+		//readMapMatrix();
+		try {
+			ImageToNumberArray im = new ImageToNumberArray();
+			map = im.pix;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void setVisible(boolean visibility)
@@ -105,6 +123,10 @@ public class VistaTauler extends DefaultView{
 	          Point here = e.getLocationOnScreen();
 	          c.setLocation(l.x + here.x - p.x, l.y + here.y - p.y);
 	          p = here;
+	          int x = here.x-tauler_img.getBounds().x;
+	          int y = here.y-tauler_img.getBounds().y;
+	          if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT)System.out.println(map[y][x]);
+	          //System.out.println(here.x + " - " + here.y);
 	        }
 	      };
         //MouseListener listener = new DragMouseAdapter();
@@ -220,11 +242,11 @@ public class VistaTauler extends DefaultView{
 	
 	private void addTauler()
 	{
-		JLabel tauler_img = new JLabel("");
+		tauler_img = new JLabel("");
         tauler_img.setLayout(null);
         
         //Agafem la imatge i la posem a la mida que volem
-        URL urlTaulerImg = getClass().getResource(Constants.fileUrl+"tauler_img.jpg");
+        URL urlTaulerImg = getClass().getResource(Constants.fileUrl+"tauler_img2.png");
         ImageIcon icon = new ImageIcon(urlTaulerImg);
         Image tempImg = icon.getImage();
         Image newimg = tempImg.getScaledInstance( IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
@@ -237,6 +259,33 @@ public class VistaTauler extends DefaultView{
 	    tauler_img.setSize(IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT);
 	    tauler_img.setIcon(icon);
         add(tauler_img);
+	}
+	
+	private void readMapMatrix()
+	{
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader("./src/txt/map_districtes.txt"));
+		    String line = br.readLine();
+		    int i = 0;
+		    map = new int[IMG_TAULER_HEIGHT][IMG_TAULER_WIDTH];
+		    
+		    while (line != null) {
+		    	for(int j = 0; j < IMG_TAULER_WIDTH; ++j){
+		    		System.out.println(line);
+		    		map[i][j] = line.charAt(j);
+		    	}
+		    	++i;
+		        line = br.readLine();
+		    }
+		    br.close();
+		    
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+				e.printStackTrace();
+		}
 	}
 
 }
