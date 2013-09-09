@@ -25,15 +25,15 @@ public class Constants {
 	public static int paddingY = (Toolkit.getDefaultToolkit().getScreenSize().height - height)/2;
 	
 	//Identificadors dels districtes
-	public static int LES_CORTS 			= 3;
-	public static int SARRIA_SANT_GERVASI 	= 4;
-	public static int GRACIA 				= 5;
-	public static int HORTA_GUINARDO 		= 6;
-	public static int NOU_BARIS 			= 7;
-	public static int SANT_ANDREU 			= 8;
-	public static int SANTS_MONTJUIC 		= 9;
-	public static int EIXAMPLE 				= 10;
-	public static int SANT_MARTI 			= 11;
-	public static int CIUTAT_VELLA 			= 12;
+	public static final int LES_CORTS 			= 3;
+	public static final int SARRIA_SANT_GERVASI 	= 4;
+	public static final int GRACIA 				= 5;
+	public static final int HORTA_GUINARDO 		= 6;
+	public static final int NOU_BARIS 			= 7;
+	public static final int SANT_ANDREU 			= 8;
+	public static final int SANTS_MONTJUIC 		= 9;
+	public static final int EIXAMPLE 				= 10;
+	public static final int SANT_MARTI 			= 11;
+	public static final int CIUTAT_VELLA 			= 12;
 	
 }

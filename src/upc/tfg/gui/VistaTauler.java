@@ -44,6 +44,8 @@ public class VistaTauler extends DefaultView{
 	TaulerListener listener;
 	ArrayList<JButton> cartes = new ArrayList<JButton>();
 	JLabel tauler_img;
+	JLabel districte_seleccionat_img;
+	private int previousDistrict = -1;
 	
 	public VistaTauler(TaulerListener tListener) {
 		listener = tListener;
@@ -125,7 +127,51 @@ public class VistaTauler extends DefaultView{
 	          p = here;
 	          int x = here.x-tauler_img.getBounds().x;
 	          int y = here.y-tauler_img.getBounds().y;
-	          if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT)System.out.println(map[y][x]);
+	          if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT){
+	        	  //System.out.println(map[y][x]);
+	        	  if(map[y][x] != previousDistrict){
+		        	  previousDistrict = map[y][x];
+		        	  districte_seleccionat_img.setVisible(true);
+		        	  switch(map[y][x]){
+		        	  	case Constants.LES_CORTS:
+		        	  		setDistrictedSelected("seleccionat_corts.png");
+		        	  		break;
+		        	  	case Constants.SARRIA_SANT_GERVASI:
+		        	  		setDistrictedSelected("seleccionat_sarria.png");
+		        	  		break;
+		        	  	case Constants.GRACIA:
+		        	  		setDistrictedSelected("seleccionat_gracia.png");
+		        	  		break;
+		        	  	case Constants.HORTA_GUINARDO:
+		        	  		setDistrictedSelected("seleccionat_horta.png");
+		        	  		break;
+		        	  	case Constants.NOU_BARIS:
+		        	  		setDistrictedSelected("seleccionat_nou.png");
+		        	  		break;
+		        	  	case Constants.SANT_ANDREU:
+		        	  		setDistrictedSelected("seleccionat_andreu.png");
+		        	  		break;
+		        	  	case Constants.SANTS_MONTJUIC:
+		        	  		setDistrictedSelected("seleccionat_sants.png");
+		        	  		break;
+		        	  	case Constants.EIXAMPLE:
+		        	  		setDistrictedSelected("seleccionat_eixample.png");
+		        	  		break;
+		        	  	case Constants.SANT_MARTI:
+		        	  		setDistrictedSelected("seleccionat_marti.png");
+		        	  		break;
+		        	  	case Constants.CIUTAT_VELLA:
+		        	  		setDistrictedSelected("seleccionat_vella.png");
+		        	  		break;
+		        	  	default:
+		        	  		districte_seleccionat_img.setVisible(false);
+		        	  		break;
+		        	  }
+	        	  }
+	          }
+	          else{
+	        	  districte_seleccionat_img.setVisible(false);
+	          }
 	          //System.out.println(here.x + " - " + here.y);
 	        }
 	      };
@@ -242,11 +288,18 @@ public class VistaTauler extends DefaultView{
 	
 	private void addTauler()
 	{
-		tauler_img = new JLabel("");
-        tauler_img.setLayout(null);
+		districte_seleccionat_img = addTaulerSkin("seleccionat_gracia.png");
+		tauler_img = addTaulerSkin("tauler_img2.png");
+		districte_seleccionat_img.setVisible(false);
+	}
+	
+	private JLabel addTaulerSkin(String imageName)
+	{
+		JLabel skin = new JLabel("");
+		skin.setLayout(null);
         
         //Agafem la imatge i la posem a la mida que volem
-        URL urlTaulerImg = getClass().getResource(Constants.fileUrl+"tauler_img2.png");
+        URL urlTaulerImg = getClass().getResource(Constants.fileUrl+imageName);
         ImageIcon icon = new ImageIcon(urlTaulerImg);
         Image tempImg = icon.getImage();
         Image newimg = tempImg.getScaledInstance( IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
@@ -255,10 +308,24 @@ public class VistaTauler extends DefaultView{
 	    //Coloquem el tauler al centre de la imatge
 	    int x = Constants.paddingX + (Constants.width/2) - (IMG_TAULER_WIDTH/2);
 	    int y = Constants.paddingY + (Constants.height/2) - (IMG_TAULER_HEIGHT/2);
-	    tauler_img.setBounds(x, y, IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT);
-	    tauler_img.setSize(IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT);
-	    tauler_img.setIcon(icon);
-        add(tauler_img);
+	    skin.setBounds(x, y, IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT);
+	    skin.setSize(IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT);
+	    skin.setIcon(icon);
+	    
+	    add(skin);
+	    return skin;
+	}
+	
+	private void setDistrictedSelected(String imageName)
+	{
+		 //Agafem la imatge i la posem a la mida que volem
+        URL urlTaulerImg = getClass().getResource(Constants.fileUrl+imageName);
+        ImageIcon icon = new ImageIcon(urlTaulerImg);
+        //Image tempImg = icon.getImage();
+        //Image newimg = tempImg.getScaledInstance( IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
+	    //icon = new ImageIcon( newimg );
+	    
+	    districte_seleccionat_img.setIcon(icon);
 	}
 	
 	private void readMapMatrix()
