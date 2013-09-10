@@ -1,5 +1,6 @@
 package upc.tfg.gui;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -19,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.TransferHandler;
 
@@ -39,6 +41,7 @@ public class VistaTauler extends DefaultView{
 	private static final int CARTA_WIDTH = 74;
 	private static final int CARTA_HEIGHT = 105;
 	
+	private InformationView infoView;
 	private int[][]map;
 	
 	TaulerListener listener;
@@ -67,11 +70,18 @@ public class VistaTauler extends DefaultView{
 		super.setVisible(visibility);
 		if(visibility){
 			mostraCartes();
+			addDistrictInformationView();
 			addTauler();
 			addSkin("tauler_background.jpg");
 		}
 	}
 	
+	private void addDistrictInformationView() {
+		infoView = new InformationView();
+		infoView.setBounds(Constants.width - InformationView.INFORMATION_WIDTH, 150, InformationView.INFORMATION_WIDTH, InformationView.INFORMATION_HEIGHT);
+		add(infoView);	
+	}
+
 	/**
 	 * Mostra en la pantalla del tauler la carta amb identificador cartaID en les cartes del jugador amb 
 	 * identificador jugadorID
@@ -135,33 +145,43 @@ public class VistaTauler extends DefaultView{
 		        	  switch(map[y][x]){
 		        	  	case Constants.LES_CORTS:
 		        	  		setDistrictedSelected("seleccionat_corts.png");
+		        	  		infoView.setNomDistricte("LES CORTS");
 		        	  		break;
 		        	  	case Constants.SARRIA_SANT_GERVASI:
 		        	  		setDistrictedSelected("seleccionat_sarria.png");
+		        	  		infoView.setNomDistricte("SARRIÀ SANT GERVASI");
 		        	  		break;
 		        	  	case Constants.GRACIA:
 		        	  		setDistrictedSelected("seleccionat_gracia.png");
+		        	  		infoView.setNomDistricte("GRACIA");
 		        	  		break;
 		        	  	case Constants.HORTA_GUINARDO:
 		        	  		setDistrictedSelected("seleccionat_horta.png");
+		        	  		infoView.setNomDistricte("HORTA GUINARDO");
 		        	  		break;
 		        	  	case Constants.NOU_BARIS:
 		        	  		setDistrictedSelected("seleccionat_nou.png");
+		        	  		infoView.setNomDistricte("NOU BARRIS");
 		        	  		break;
 		        	  	case Constants.SANT_ANDREU:
 		        	  		setDistrictedSelected("seleccionat_andreu.png");
+		        	  		infoView.setNomDistricte("SANT ANDREU");
 		        	  		break;
 		        	  	case Constants.SANTS_MONTJUIC:
 		        	  		setDistrictedSelected("seleccionat_sants.png");
+		        	  		infoView.setNomDistricte("SANTS MONTJUIC");
 		        	  		break;
 		        	  	case Constants.EIXAMPLE:
 		        	  		setDistrictedSelected("seleccionat_eixample.png");
+		        	  		infoView.setNomDistricte("EIXAMPLE");
 		        	  		break;
 		        	  	case Constants.SANT_MARTI:
 		        	  		setDistrictedSelected("seleccionat_marti.png");
+		        	  		infoView.setNomDistricte("SANT MARTI");
 		        	  		break;
 		        	  	case Constants.CIUTAT_VELLA:
 		        	  		setDistrictedSelected("seleccionat_vella.png");
+		        	  		infoView.setNomDistricte("CIUTAT VELLA");
 		        	  		break;
 		        	  	default:
 		        	  		districte_seleccionat_img.setVisible(false);

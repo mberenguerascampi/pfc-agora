@@ -64,7 +64,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		setBackground(Color.BLACK);
 		
 		//Posem una icona a la aplicació
-		URL urlIconImg = getClass().getResource(Constants.fileUrl+"bb.png");
+		URL urlIconImg = getClass().getResource(Constants.fileUrl+"icona.png");
 		Image icon =  new ImageIcon(urlIconImg).getImage();
 		setIconImage(icon);
 	}

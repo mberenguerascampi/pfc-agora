@@ -15,6 +15,7 @@ public class Constants {
 	//Fonts
 	public static final Font fontGillSansBold = new Font("Gill Sans MT", Font.BOLD, 12);
 	public static final Font fontButton = new Font("Verdana", Font.BOLD, 13);
+	public static final Font fontCooper = new Font("Cooper Black", Font.BOLD, 14);
 	
 	//Sizes
 	public static final int width = Toolkit.getDefaultToolkit().getScreenSize().width;//1024;

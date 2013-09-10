@@ -26,19 +26,19 @@ public class CustomDefaultButton extends JButton {
 		setBorderPainted(false);
 		
 		//Configurem el fons del butó per els tres possibles estats que té
-		URL urlImg = getClass().getResource(Constants.fileUrl+"default_button_background.png");
+		URL urlImg = getClass().getResource(Constants.fileUrl+"default_button_background2.png");
 	    ImageIcon icon = new ImageIcon(urlImg);
 	    Image tempImg = icon.getImage() ;  
 	    Image newimg = tempImg.getScaledInstance( BUTTON_WIDTH, BUTTON_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
 	    icon = new ImageIcon( newimg );
 	    
-	    URL urlRolloverImg = getClass().getResource(Constants.fileUrl+"default_button_rollover_background.png");
+	    URL urlRolloverImg = getClass().getResource(Constants.fileUrl+"default_button_rollover_background2.png");
 	    ImageIcon rolloverIcon = new ImageIcon(urlRolloverImg);
 	    tempImg = rolloverIcon.getImage() ;  
 	    newimg = tempImg.getScaledInstance( BUTTON_WIDTH, BUTTON_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
 	    rolloverIcon = new ImageIcon( newimg );
 	    
-	    URL urlPressedImg = getClass().getResource(Constants.fileUrl+"default_button_pressed_background.png");
+	    URL urlPressedImg = getClass().getResource(Constants.fileUrl+"default_button_pressed_background2.png");
 	    ImageIcon pressedIcon = new ImageIcon(urlPressedImg);
 	    tempImg = pressedIcon.getImage() ;  
 	    newimg = tempImg.getScaledInstance( BUTTON_WIDTH, BUTTON_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
