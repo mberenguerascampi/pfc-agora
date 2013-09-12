@@ -16,6 +16,9 @@ public class Constants {
 	public static final Font fontGillSansBold = new Font("Gill Sans MT", Font.BOLD, 12);
 	public static final Font fontButton = new Font("Verdana", Font.BOLD, 13);
 	public static final Font fontCooper = new Font("Cooper Black", Font.BOLD, 14);
+	public static final Font fontBradleyBig = new Font("Bradley Hand ITC", Font.BOLD, 18);
+	public static final Font fontArialRoundedBig = new Font("Arial Rounded MT Bold", Font.BOLD, 18);
+	public static final Font fontKristen = new Font("Kristen ITC", Font.BOLD, 16);
 	
 	//Sizes
 	public static final int width = Toolkit.getDefaultToolkit().getScreenSize().width;//1024;
@@ -26,15 +29,15 @@ public class Constants {
 	public static int paddingY = (Toolkit.getDefaultToolkit().getScreenSize().height - height)/2;
 	
 	//Identificadors dels districtes
-	public static final int LES_CORTS 			= 3;
+	public static final int LES_CORTS 				= 3;
 	public static final int SARRIA_SANT_GERVASI 	= 4;
-	public static final int GRACIA 				= 5;
-	public static final int HORTA_GUINARDO 		= 6;
-	public static final int NOU_BARIS 			= 7;
+	public static final int GRACIA 					= 5;
+	public static final int HORTA_GUINARDO 			= 6;
+	public static final int NOU_BARIS 				= 7;
 	public static final int SANT_ANDREU 			= 8;
-	public static final int SANTS_MONTJUIC 		= 9;
+	public static final int SANTS_MONTJUIC 			= 9;
 	public static final int EIXAMPLE 				= 10;
-	public static final int SANT_MARTI 			= 11;
+	public static final int SANT_MARTI 				= 11;
 	public static final int CIUTAT_VELLA 			= 12;
 	
 }

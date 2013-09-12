@@ -41,7 +41,7 @@ public class VistaTauler extends DefaultView{
 	private static final int CARTA_WIDTH = 74;
 	private static final int CARTA_HEIGHT = 105;
 	
-	private InformationView infoView;
+	private VistaInformacio infoView;
 	private int[][]map;
 	
 	TaulerListener listener;
@@ -77,8 +77,8 @@ public class VistaTauler extends DefaultView{
 	}
 	
 	private void addDistrictInformationView() {
-		infoView = new InformationView();
-		infoView.setBounds(Constants.width - InformationView.INFORMATION_WIDTH, 150, InformationView.INFORMATION_WIDTH, InformationView.INFORMATION_HEIGHT);
+		infoView = new VistaInformacio();
+		infoView.setBounds(Constants.width - VistaInformacio.INFORMATION_WIDTH, 150, VistaInformacio.INFORMATION_WIDTH, VistaInformacio.INFORMATION_HEIGHT);
 		add(infoView);	
 	}
 
