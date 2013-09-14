@@ -2,6 +2,7 @@ package upc.tfg.gui;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.Rectangle;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,7 +19,9 @@ public class VistaInformacio extends JPanel {
 	public static final int INFORMATION_HEIGHT = 210;
 	
 	private JLabel nomDistricte;
-	private JLabel passejantsVermells;
+	Districte districte;
+	VistaPassejant vp;
+	public int tempNum = 2;
 	
 	public VistaInformacio() {
 		setLayout(null);
@@ -34,16 +37,23 @@ public class VistaInformacio extends JPanel {
 		add(nomDistricte);
 		
 		//Afegim els passejants
-		passejantsVermells = new JLabel();
-		passejantsVermells.setLayout(null);
-		passejantsVermells.setBounds(10, 30, 20, 20);
+		vp = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, 2);
+		Rectangle frame = new Rectangle(10, 30, 95, 102);
+		vp.setBounds(frame);
+		add(vp);
 	}
 	
 	public void setDistricte(Districte districte){
+		this.districte = districte;
 		setNomDistricte(districte.getNom());
 	}
 	
 	public void setNomDistricte(String nom) {
 		nomDistricte.setText(nom);
+	}
+	
+	public void updatePassejants(int num){
+		vp.setNum(num);
+		tempNum = num;
 	}
 }

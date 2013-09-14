@@ -15,6 +15,7 @@ public class Constants {
 	//Fonts
 	public static final Font fontGillSansBold = new Font("Gill Sans MT", Font.BOLD, 12);
 	public static final Font fontButton = new Font("Verdana", Font.BOLD, 13);
+	public static final Font fontPassejants = new Font("Kristen ITC", Font.BOLD, 35);
 	public static final Font fontCooper = new Font("Cooper Black", Font.BOLD, 14);
 	public static final Font fontBradleyBig = new Font("Bradley Hand ITC", Font.BOLD, 18);
 	public static final Font fontArialRoundedBig = new Font("Arial Rounded MT Bold", Font.BOLD, 18);

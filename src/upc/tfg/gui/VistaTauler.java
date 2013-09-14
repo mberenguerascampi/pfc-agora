@@ -3,6 +3,7 @@ package upc.tfg.gui;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -15,6 +16,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Timer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -41,6 +43,11 @@ public class VistaTauler extends DefaultView{
 	private static final int CARTA_WIDTH = 74;
 	private static final int CARTA_HEIGHT = 105;
 	
+	private int taulerX;
+	private int taulerY;
+	private boolean draggingPassejant = false;
+	private VistaPassejant passejantEstatic;
+	
 	private VistaInformacio infoView;
 	private int[][]map;
 	
@@ -54,7 +61,24 @@ public class VistaTauler extends DefaultView{
 		listener = tListener;
 		setLayout(null);
 		setSize(Constants.width, Constants.height);
+		taulerX = Constants.paddingX + (Constants.width/2) - (IMG_TAULER_WIDTH/2);
+	    taulerY = Constants.paddingY + (Constants.height/2) - (IMG_TAULER_HEIGHT/2);
 		
+	    //Afegim el listener que ens detecti quin districte seleccionem
+	    MouseAdapter listener = new MouseAdapter() {
+	    	Point p = null;
+			   
+	        @Override
+	        public void mousePressed(MouseEvent e) {
+	          p = e.getLocationOnScreen();
+	          System.out.println("Mouse pressed");
+	          int x = p.x-tauler_img.getBounds().x;
+	          int y = p.y-tauler_img.getBounds().y;
+	          selectDistrict(x, y);
+	        }
+		};
+		addMouseListener(listener);
+	    
 		//Llegim la matriu guardada que ens mapeja els districtes dins la imatge del tauler
 		//readMapMatrix();
 		try {
@@ -80,6 +104,48 @@ public class VistaTauler extends DefaultView{
 		infoView = new VistaInformacio();
 		infoView.setBounds(Constants.width - VistaInformacio.INFORMATION_WIDTH, 150, VistaInformacio.INFORMATION_WIDTH, VistaInformacio.INFORMATION_HEIGHT);
 		add(infoView);	
+	}
+	
+	/**
+	 * Afegeix un número determinat de passejants a la vista del tauler
+	 * @param numPassejants
+	 * @param jugadorID
+	 */
+	public void afegeixPassejants(int numPassejants, int jugadorID){
+		final VistaPassejant vp = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, numPassejants);
+		Rectangle frame = new Rectangle(taulerX+IMG_TAULER_WIDTH-VistaPassejant.PASSEJANT_WIDTH, taulerY+IMG_TAULER_HEIGHT, 
+				VistaPassejant.PASSEJANT_WIDTH, VistaPassejant.PASSEJANT_HEIGHT);
+		vp.setBounds(frame);
+		passejantEstatic = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, numPassejants);
+		passejantEstatic.setBounds(frame);
+		
+		//Afegim el listener
+		MouseAdapter listener = new DragAndDropListener(vp);
+		vp.addMouseListener(listener);
+		vp.addMouseMotionListener(listener);
+		vp.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Accio acabada");
+				draggingPassejant = false;
+				if (previousDistrict == -1){
+					vp.setNum(passejantEstatic.getNum()+1);
+					//TODO: actualitzar la capa lògica 
+				}
+				else{
+					vp.setNum(passejantEstatic.getNum());
+					infoView.updatePassejants(infoView.tempNum+1);
+					//TODO: actualitzar la vista d'informacio
+				}
+				
+				//Posem el passejant a la posicio original
+				vp.setBounds(passejantEstatic.getBounds());
+				//AnimacioPassejant a = new AnimacioPassejant(vp, passejantEstatic.getLocation());
+				//a.run();
+			}
+		});
+		add(vp);
+		add(passejantEstatic);
 	}
 
 	/**
@@ -118,86 +184,11 @@ public class VistaTauler extends DefaultView{
 		});
 	    
 
-	    MouseAdapter listener = new MouseAdapter() {
-	    	 
-	        Point p = null;
-	   
-	        @Override
-	        public void mousePressed(MouseEvent e) {
-	          p = e.getLocationOnScreen();
-	          System.out.println("Mouse pressed");
-	        }
-	   
-	        @Override
-	        public void mouseDragged(MouseEvent e) {
-	          JComponent c = (JComponent) e.getSource();
-	          Point l = c.getLocation();
-	          Point here = e.getLocationOnScreen();
-	          c.setLocation(l.x + here.x - p.x, l.y + here.y - p.y);
-	          p = here;
-	          int x = here.x-tauler_img.getBounds().x;
-	          int y = here.y-tauler_img.getBounds().y;
-	          if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT){
-	        	  //System.out.println(map[y][x]);
-	        	  if(map[y][x] != previousDistrict){
-		        	  previousDistrict = map[y][x];
-		        	  districte_seleccionat_img.setVisible(true);
-		        	  switch(map[y][x]){
-		        	  	case Constants.LES_CORTS:
-		        	  		setDistrictedSelected("seleccionat_corts.png");
-		        	  		infoView.setNomDistricte("LES CORTS");
-		        	  		break;
-		        	  	case Constants.SARRIA_SANT_GERVASI:
-		        	  		setDistrictedSelected("seleccionat_sarria.png");
-		        	  		infoView.setNomDistricte("SARRIÀ SANT GERVASI");
-		        	  		break;
-		        	  	case Constants.GRACIA:
-		        	  		setDistrictedSelected("seleccionat_gracia.png");
-		        	  		infoView.setNomDistricte("GRACIA");
-		        	  		break;
-		        	  	case Constants.HORTA_GUINARDO:
-		        	  		setDistrictedSelected("seleccionat_horta.png");
-		        	  		infoView.setNomDistricte("HORTA GUINARDO");
-		        	  		break;
-		        	  	case Constants.NOU_BARIS:
-		        	  		setDistrictedSelected("seleccionat_nou.png");
-		        	  		infoView.setNomDistricte("NOU BARRIS");
-		        	  		break;
-		        	  	case Constants.SANT_ANDREU:
-		        	  		setDistrictedSelected("seleccionat_andreu.png");
-		        	  		infoView.setNomDistricte("SANT ANDREU");
-		        	  		break;
-		        	  	case Constants.SANTS_MONTJUIC:
-		        	  		setDistrictedSelected("seleccionat_sants.png");
-		        	  		infoView.setNomDistricte("SANTS MONTJUIC");
-		        	  		break;
-		        	  	case Constants.EIXAMPLE:
-		        	  		setDistrictedSelected("seleccionat_eixample.png");
-		        	  		infoView.setNomDistricte("EIXAMPLE");
-		        	  		break;
-		        	  	case Constants.SANT_MARTI:
-		        	  		setDistrictedSelected("seleccionat_marti.png");
-		        	  		infoView.setNomDistricte("SANT MARTI");
-		        	  		break;
-		        	  	case Constants.CIUTAT_VELLA:
-		        	  		setDistrictedSelected("seleccionat_vella.png");
-		        	  		infoView.setNomDistricte("CIUTAT VELLA");
-		        	  		break;
-		        	  	default:
-		        	  		districte_seleccionat_img.setVisible(false);
-		        	  		break;
-		        	  }
-	        	  }
-	          }
-	          else{
-	        	  districte_seleccionat_img.setVisible(false);
-	          }
-	          //System.out.println(here.x + " - " + here.y);
-	        }
-	      };
+	    MouseAdapter listener = new DragAndDropListener();
         //MouseListener listener = new DragMouseAdapter();
         carta.addMouseListener(listener);
         carta.addMouseMotionListener(listener);
+        //tauler_img.addMouseMotionListener(listener);
 
         carta.setTransferHandler(new TransferHandler("icon"));
 	    cartes.add(carta);
@@ -214,8 +205,8 @@ public class VistaTauler extends DefaultView{
 	private Posicio getCardPosition(int jugadorID, int posicio)
 	{
 		//Inicialitzem x i y a la posició (0,0) en el tauler
-		int x = Constants.paddingX + (Constants.width/2) - (IMG_TAULER_WIDTH/2);
-	    int y = Constants.paddingY + (Constants.height/2) - (IMG_TAULER_HEIGHT/2);
+		int x = taulerX;
+	    int y = taulerY;
 	    
 	    final int margin = 10;
 	    final int margin_between_cards = CARTA_WIDTH + 4;
@@ -223,12 +214,7 @@ public class VistaTauler extends DefaultView{
 	    switch(jugadorID){
 	    	case 1:
 	    		y += IMG_TAULER_HEIGHT + margin;
-	    		if (posicio <= 3){
-	    			x += margin_between_cards*(posicio-1);
-	    		}
-	    		else{
-	    			
-	    		}
+	    		x += margin_between_cards*(posicio-1);
 	    		break;
 	    	case 2:
 	    		x += IMG_TAULER_WIDTH + margin;
@@ -237,12 +223,7 @@ public class VistaTauler extends DefaultView{
 	    	case 3:
 	    		y -= margin + CARTA_HEIGHT;
 	    		x += IMG_TAULER_WIDTH - CARTA_WIDTH;
-	    		if (posicio <= 3){
-	    			x -= margin_between_cards*(posicio-1);
-	    		}
-	    		else{
-	    			
-	    		}
+	    		x -= margin_between_cards*(posicio-1);
 	    		break;
 	    	case 4:
 	    		x -= margin + CARTA_HEIGHT;
@@ -326,9 +307,7 @@ public class VistaTauler extends DefaultView{
 	    icon = new ImageIcon( newimg );
 	    
 	    //Coloquem el tauler al centre de la imatge
-	    int x = Constants.paddingX + (Constants.width/2) - (IMG_TAULER_WIDTH/2);
-	    int y = Constants.paddingY + (Constants.height/2) - (IMG_TAULER_HEIGHT/2);
-	    skin.setBounds(x, y, IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT);
+	    skin.setBounds(taulerX, taulerY, IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT);
 	    skin.setSize(IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT);
 	    skin.setIcon(icon);
 	    
@@ -346,6 +325,67 @@ public class VistaTauler extends DefaultView{
 	    //icon = new ImageIcon( newimg );
 	    
 	    districte_seleccionat_img.setIcon(icon);
+	}
+	
+	private void selectDistrict(int x, int y){
+		if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT){
+      	  //System.out.println(map[y][x]);
+      	  if(map[y][x] != previousDistrict){
+	        	  previousDistrict = map[y][x];
+	        	  districte_seleccionat_img.setVisible(true);
+	        	  switch(map[y][x]){
+	        	  	case Constants.LES_CORTS:
+	        	  		setDistrictedSelected("seleccionat_corts.png");
+	        	  		infoView.setNomDistricte("LES CORTS");
+	        	  		break;
+	        	  	case Constants.SARRIA_SANT_GERVASI:
+	        	  		setDistrictedSelected("seleccionat_sarria.png");
+	        	  		infoView.setNomDistricte("SARRIÀ SANT GERVASI");
+	        	  		break;
+	        	  	case Constants.GRACIA:
+	        	  		setDistrictedSelected("seleccionat_gracia.png");
+	        	  		infoView.setNomDistricte("GRACIA");
+	        	  		break;
+	        	  	case Constants.HORTA_GUINARDO:
+	        	  		setDistrictedSelected("seleccionat_horta.png");
+	        	  		infoView.setNomDistricte("HORTA GUINARDO");
+	        	  		break;
+	        	  	case Constants.NOU_BARIS:
+	        	  		setDistrictedSelected("seleccionat_nou.png");
+	        	  		infoView.setNomDistricte("NOU BARRIS");
+	        	  		break;
+	        	  	case Constants.SANT_ANDREU:
+	        	  		setDistrictedSelected("seleccionat_andreu.png");
+	        	  		infoView.setNomDistricte("SANT ANDREU");
+	        	  		break;
+	        	  	case Constants.SANTS_MONTJUIC:
+	        	  		setDistrictedSelected("seleccionat_sants.png");
+	        	  		infoView.setNomDistricte("SANTS MONTJUIC");
+	        	  		break;
+	        	  	case Constants.EIXAMPLE:
+	        	  		setDistrictedSelected("seleccionat_eixample.png");
+	        	  		infoView.setNomDistricte("EIXAMPLE");
+	        	  		break;
+	        	  	case Constants.SANT_MARTI:
+	        	  		setDistrictedSelected("seleccionat_marti.png");
+	        	  		infoView.setNomDistricte("SANT MARTI");
+	        	  		break;
+	        	  	case Constants.CIUTAT_VELLA:
+	        	  		setDistrictedSelected("seleccionat_vella.png");
+	        	  		infoView.setNomDistricte("CIUTAT VELLA");
+	        	  		break;
+	        	  	default:
+	        	  		districte_seleccionat_img.setVisible(false);
+	        	  		previousDistrict = -1;
+	        	  		break;
+	        	  }
+      	  }
+        }
+        else{
+      	  districte_seleccionat_img.setVisible(false);
+      	  previousDistrict = -1;
+        }
+        //System.out.println(here.x + " - " + here.y);
 	}
 	
 	private void readMapMatrix()
@@ -375,4 +415,69 @@ public class VistaTauler extends DefaultView{
 		}
 	}
 
+	class DragAndDropListener extends MouseAdapter {
+		Point p = null;
+		VistaPassejant vistaPassejants = null;
+		
+		public DragAndDropListener() {}
+		public DragAndDropListener(VistaPassejant vistaPassejants) {
+			this.vistaPassejants = vistaPassejants;
+		}
+		   
+        @Override
+        public void mousePressed(MouseEvent e) {
+          p = e.getLocationOnScreen();
+          System.out.println("Mouse pressed");
+          int x = p.x-taulerX;
+          int y = p.y-taulerY;
+          selectDistrict(x, y);
+        }
+   
+        @Override
+        public void mouseDragged(MouseEvent e) {
+          JComponent c = (JComponent) e.getSource();
+          Point l = c.getLocation();
+          Point here = e.getLocationOnScreen();
+          c.setLocation(l.x + here.x - p.x, l.y + here.y - p.y);
+          p = here;
+          int x = here.x-tauler_img.getBounds().x;
+          int y = here.y-tauler_img.getBounds().y;
+          selectDistrict(x, y);
+          
+          if(vistaPassejants != null && !draggingPassejant){
+        	  passejantEstatic.setNum(vistaPassejants.getNum()-1);
+        	  vistaPassejants.setNum(0);
+        	  draggingPassejant = true;
+          }
+        }
+	}
+	
+	class AnimacioPassejant implements Runnable{
+		VistaPassejant passejant;
+		Point goal;
+		
+		public AnimacioPassejant(VistaPassejant passejant, Point goal) {
+			this.passejant = passejant;
+			this.goal = goal;
+		}
+		
+		@Override
+		public void run() {
+			while (passejant.getLocation() != goal){
+				try
+				{
+					Thread.sleep(100);
+					Point current = passejant.getLocation();
+					int x = current.x;
+					int y = current.y;
+					if(x < goal.x) ++x;
+					else if (x > goal.x)--x;
+					if(y < goal.x) ++y;
+					else if (y > goal.x)--y;
+					passejant.setLocation(x,y);
+				}
+				catch(Exception e) {}
+			}
+		}
+	}
 }
