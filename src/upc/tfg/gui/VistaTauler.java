@@ -47,6 +47,7 @@ public class VistaTauler extends DefaultView{
 	private int taulerY;
 	private boolean draggingPassejant = false;
 	private VistaPassejant passejantEstatic;
+	private boolean animationOn = false;
 	
 	private VistaInformacio infoView;
 	private int[][]map;
@@ -128,18 +129,20 @@ public class VistaTauler extends DefaultView{
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Accio acabada");
 				draggingPassejant = false;
+				Thread t;
 				if (previousDistrict == -1){
-					vp.setNum(passejantEstatic.getNum()+1);
+					t = new Thread(new AnimacioPassejant(vp, passejantEstatic.getLocation(), false));
 					//TODO: actualitzar la capa lògica 
 				}
 				else{
-					vp.setNum(passejantEstatic.getNum());
-					infoView.updatePassejants(infoView.tempNum+1);
+					t = new Thread(new AnimacioPassejant(vp, infoView.getLocation(), true));
 					//TODO: actualitzar la vista d'informacio
 				}
 				
+				animationOn = true;
+				t.start();
 				//Posem el passejant a la posicio original
-				vp.setBounds(passejantEstatic.getBounds());
+				//vp.setBounds(passejantEstatic.getBounds());
 				//AnimacioPassejant a = new AnimacioPassejant(vp, passejantEstatic.getLocation());
 				//a.run();
 			}
@@ -455,28 +458,62 @@ public class VistaTauler extends DefaultView{
 	class AnimacioPassejant implements Runnable{
 		VistaPassejant passejant;
 		Point goal;
+		boolean toInfoView;
 		
-		public AnimacioPassejant(VistaPassejant passejant, Point goal) {
+		public AnimacioPassejant(VistaPassejant passejant, Point goal, boolean toInfoView) {
 			this.passejant = passejant;
 			this.goal = goal;
+			this.toInfoView = toInfoView;
 		}
 		
 		@Override
 		public void run() {
-			while (passejant.getLocation() != goal){
-				try
-				{
-					Thread.sleep(100);
-					Point current = passejant.getLocation();
-					int x = current.x;
-					int y = current.y;
-					if(x < goal.x) ++x;
-					else if (x > goal.x)--x;
-					if(y < goal.x) ++y;
-					else if (y > goal.x)--y;
-					passejant.setLocation(x,y);
+			System.out.println("Animacio");
+			if(animationOn){
+				int i = 0;
+				while (passejant.getLocation().x != goal.x || passejant.getLocation().y != goal.y){
+					try
+					{
+						Point current = passejant.getLocation();
+						int x = current.x;
+						int y = current.y;
+						//utilitzem la variable equilibra per tal que el passejant abanci de forma uniforma cap al seu objectiu
+						int equilibra = 0;
+						if(i%3 != 0){
+							if(Math.abs(x-goal.x) > Math.abs(y-goal.y)) equilibra = 1;
+							else if (Math.abs(y-goal.y) > Math.abs(x-goal.x)) equilibra = 2;
+						}
+						if(i%3 == 0)Thread.sleep(1);
+						if(x < goal.x) {
+							++x;
+							if(equilibra != 2 && goal.x - x > 4)x+=4;
+						}
+						else if (x > goal.x){
+							--x;
+							if (equilibra != 2 && x - goal.x > 4)x-=4;
+						}
+						if(y < goal.y){
+							++y;
+							if(equilibra != 1 && goal.y - y > 4)y+=4;
+						}
+						else if (y > goal.y){
+							--y;
+							if (equilibra != 1 && y - goal.y > 4)y-=4;
+						}
+						passejant.setLocation(x,y);
+						++i;
+					}
+					catch(Exception e) {}
 				}
-				catch(Exception e) {}
+				passejant.setBounds(passejantEstatic.getBounds());
+				animationOn = false;
+				if(!toInfoView){
+					passejant.setNum(passejantEstatic.getNum()+1);
+				}
+				else{
+					passejant.setNum(passejantEstatic.getNum());
+					infoView.updatePassejants(infoView.tempNum+1);
+				}
 			}
 		}
 	}
