@@ -37,6 +37,8 @@ public class VistaPassejant extends JButton {
 		setFocusPainted(false); 
 		setContentAreaFilled(false); 
 		setBorderPainted(false);
+		setRolloverEnabled(false);
+		repaint();
 		this.color = color;
 		this.num = num;
 		
@@ -47,7 +49,20 @@ public class VistaPassejant extends JButton {
 		numLabel.setFont(Constants.fontPassejants);
 		//numLabel.setAlignmentX(0.5f);
 		numLabel.setAlignmentY(0.5f);
-		numLabel.setForeground(Color.YELLOW);
+		Color foreground = null;
+		if (color.equals(PASSEJANT_BLAU)){
+			foreground = Color.YELLOW;
+		}
+		else if (color.equals(PASSEJANT_VERMELL)){
+			foreground = Color.GREEN;
+		}
+		else if (color.equals(PASSEJANT_GROC)){
+			foreground = Color.BLUE;
+		}
+		else {
+			foreground = Color.RED;
+		}
+		numLabel.setForeground(foreground);
 		add(numLabel);
 	}
 	
@@ -64,7 +79,8 @@ public class VistaPassejant extends JButton {
 	
 	public void paintComponent(Graphics graphics)
 	{
-	    super.paintComponent(graphics);
+		super.paintComponent(graphics);
+		
 	    URL urlImg = getClass().getResource(Constants.fileUrl+"passejants/passejant"+ color + ".png");
 	    Image img = null;
 		try {

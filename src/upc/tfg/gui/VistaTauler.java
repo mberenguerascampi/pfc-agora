@@ -50,6 +50,7 @@ public class VistaTauler extends DefaultView{
 	private boolean animationOn = false;
 	
 	private VistaInformacio infoView;
+	private VistaEstat stateView;
 	private int[][]map;
 	
 	TaulerListener listener;
@@ -62,8 +63,8 @@ public class VistaTauler extends DefaultView{
 		listener = tListener;
 		setLayout(null);
 		setSize(Constants.width, Constants.height);
-		taulerX = Constants.paddingX + (Constants.width/2) - (IMG_TAULER_WIDTH/2);
-	    taulerY = Constants.paddingY + (Constants.height/2) - (IMG_TAULER_HEIGHT/2);
+		taulerX = Constants.paddingX + (Constants.width/2) - (IMG_TAULER_WIDTH/2)-VistaInformacio.WIDTH/2;
+	    taulerY = Constants.paddingY + (Constants.height/2) - (IMG_TAULER_HEIGHT/2)-20;
 		
 	    //Afegim el listener que ens detecti quin districte seleccionem
 	    MouseAdapter listener = new MouseAdapter() {
@@ -76,6 +77,7 @@ public class VistaTauler extends DefaultView{
 	          int x = p.x-tauler_img.getBounds().x;
 	          int y = p.y-tauler_img.getBounds().y;
 	          selectDistrict(x, y);
+	          if(previousDistrict == -1)infoView.setVisible(false);
 	        }
 		};
 		addMouseListener(listener);
@@ -96,6 +98,7 @@ public class VistaTauler extends DefaultView{
 		if(visibility){
 			mostraCartes();
 			addDistrictInformationView();
+			addStateView();
 			addTauler();
 			addSkin("tauler_background.jpg");
 		}
@@ -103,8 +106,15 @@ public class VistaTauler extends DefaultView{
 	
 	private void addDistrictInformationView() {
 		infoView = new VistaInformacio();
-		infoView.setBounds(Constants.width - VistaInformacio.INFORMATION_WIDTH, 150, VistaInformacio.INFORMATION_WIDTH, VistaInformacio.INFORMATION_HEIGHT);
+		infoView.setBounds(Constants.paddingX+Constants.width - VistaInformacio.INFORMATION_WIDTH, 150, VistaInformacio.INFORMATION_WIDTH, VistaInformacio.INFORMATION_HEIGHT);
 		add(infoView);	
+		infoView.setVisible(false);
+	}
+	
+	private void addStateView(){
+		stateView = new VistaEstat();
+		stateView.setBounds(Constants.paddingX+Constants.width - VistaEstat.ESTAT_WIDTH, 0, VistaEstat.ESTAT_WIDTH, VistaEstat.ESTAT_HEIGHT);
+		add(stateView);	
 	}
 	
 	/**
@@ -221,7 +231,7 @@ public class VistaTauler extends DefaultView{
 	    		break;
 	    	case 2:
 	    		x += IMG_TAULER_WIDTH + margin;
-	    		y += IMG_TAULER_HEIGHT - CARTA_WIDTH;
+	    		y += IMG_TAULER_HEIGHT - CARTA_WIDTH - margin_between_cards*(posicio-1);
 	    		break;
 	    	case 3:
 	    		y -= margin + CARTA_HEIGHT;
@@ -230,6 +240,7 @@ public class VistaTauler extends DefaultView{
 	    		break;
 	    	case 4:
 	    		x -= margin + CARTA_HEIGHT;
+	    		y += margin_between_cards*(posicio-1);
 	    		break;
 	    }
 	    
@@ -333,6 +344,7 @@ public class VistaTauler extends DefaultView{
 	private void selectDistrict(int x, int y){
 		if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT){
       	  //System.out.println(map[y][x]);
+		  infoView.setVisible(true);
       	  if(map[y][x] != previousDistrict){
 	        	  previousDistrict = map[y][x];
 	        	  districte_seleccionat_img.setVisible(true);

@@ -15,12 +15,15 @@ public class VistaInformacio extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -7414583561006916256L;
-	public static final int INFORMATION_WIDTH = 210;
-	public static final int INFORMATION_HEIGHT = 210;
+	public static final int INFORMATION_WIDTH = 150;
+	public static final int INFORMATION_HEIGHT = 435;
 	
 	private JLabel nomDistricte;
 	Districte districte;
-	VistaPassejant vp;
+	VistaPassejant vpBlau;
+	VistaPassejant vpVermell;
+	VistaPassejant vpGroc;
+	VistaPassejant vpVerd;
 	public int tempNum = 2;
 	
 	public VistaInformacio() {
@@ -34,13 +37,12 @@ public class VistaInformacio extends JPanel {
 		nomDistricte.setBounds(10, 10, INFORMATION_WIDTH-20, 15);
 		nomDistricte.setFont(Constants.fontBradleyBig);
 		nomDistricte.setForeground(Color.WHITE);
+		nomDistricte.setOpaque(false);
 		add(nomDistricte);
 		
 		//Afegim els passejants
-		vp = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, 2);
-		Rectangle frame = new Rectangle(10, 30, 95, 102);
-		vp.setBounds(frame);
-		add(vp);
+		addPassejants();
+		repaint();
 	}
 	
 	public void setDistricte(Districte districte){
@@ -53,7 +55,33 @@ public class VistaInformacio extends JPanel {
 	}
 	
 	public void updatePassejants(int num){
-		vp.setNum(num);
+		vpBlau.setNum(num);
 		tempNum = num;
+	}
+	
+	private void addPassejants(){
+		vpBlau = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, 2);
+		vpBlau.setEnabled(false);
+		Rectangle frame = new Rectangle(10, 30, 95, 102);
+		vpBlau.setBounds(frame);
+		add(vpBlau);
+		
+		vpVermell = new VistaPassejant(VistaPassejant.PASSEJANT_VERMELL, 2);
+		vpVermell.setEnabled(false);
+		frame = new Rectangle(10, 130, 95, 102);
+		vpVermell.setBounds(frame);
+		add(vpVermell);
+		
+		vpGroc = new VistaPassejant(VistaPassejant.PASSEJANT_GROC, 2);
+		vpGroc.setEnabled(false);
+		frame = new Rectangle(10, 230, 95, 102);
+		vpGroc.setBounds(frame);
+		add(vpGroc);
+		
+		vpVerd = new VistaPassejant(VistaPassejant.PASSEJANT_VERD, 2);
+		vpVerd.setEnabled(false);
+		frame = new Rectangle(10, 330, 95, 102);
+		vpVerd.setBounds(frame);
+		add(vpVerd);
 	}
 }
