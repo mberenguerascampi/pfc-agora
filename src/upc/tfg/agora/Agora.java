@@ -33,6 +33,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	VistaMenuPrincipal menuPrincipal;
 	VistaTauler tauler;
 	private JMenuBar menubar;
+	private static Agora instance = null;
 	
 	public Agora() throws IOException {
 		contentPane = getContentPane();
@@ -43,8 +44,14 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		initViews();
 		initMenu();
 		
+		Agora.instance = this;
 		//new ImageToNumberArray();
 		//pack();
+	}
+	
+	public Agora getInstance() throws IOException{
+		if(instance != null)return instance;
+		else return new Agora();
 	}
 	
 	@Override
@@ -142,7 +149,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 afegeixCarta(2, 5, 5);
 		 tauler.afegeixPassejants(7, 0);
 		 tauler.setVisible(true);
-		 //addMenu();
+		 addMenu();
 		 //cardLayout.next(contentPane);
 	}
 	

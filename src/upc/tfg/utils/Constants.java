@@ -42,4 +42,10 @@ public class Constants {
 	public static final int SANT_MARTI 				= 11;
 	public static final int CIUTAT_VELLA 			= 12;
 	
+	//Identificadors colors
+	public static final int BLAU 		= 1;
+	public static final int VERMELL 	= 2;
+	public static final int GROC	 	= 3;
+	public static final int VERD	 	= 4;
+	
 }
