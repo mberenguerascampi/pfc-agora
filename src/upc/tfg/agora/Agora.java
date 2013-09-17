@@ -20,6 +20,7 @@ import upc.tfg.gui.VistaMenuPrincipal;
 import upc.tfg.gui.VistaTauler;
 import upc.tfg.interfaces.MenuPrincipalListener;
 import upc.tfg.interfaces.TaulerListener;
+import upc.tfg.logic.ControladorLogic;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.ImageToNumberArray;
 
@@ -34,6 +35,8 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	VistaTauler tauler;
 	private JMenuBar menubar;
 	private static Agora instance = null;
+	private ControladorLogic logic;
+	public boolean finish = false;
 	
 	public Agora() throws IOException {
 		contentPane = getContentPane();
@@ -45,11 +48,14 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		initMenu();
 		
 		Agora.instance = this;
+		logic = new ControladorLogic(this);
+		logic.comencarPartida();
+		
 		//new ImageToNumberArray();
 		//pack();
 	}
 	
-	public Agora getInstance() throws IOException{
+	public static Agora getInstance() throws IOException{
 		if(instance != null)return instance;
 		else return new Agora();
 	}
@@ -147,6 +153,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 afegeixCarta(2, 3, 3);
 		 afegeixCarta(2, 4, 4);
 		 afegeixCarta(2, 5, 5);
+		 //tauler.comencaIntercanviCartes();
 		 tauler.afegeixPassejants(7, 0);
 		 tauler.setVisible(true);
 		 addMenu();
@@ -160,6 +167,12 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	public void cartaSeleccionada(int jugadorID, int cartaID)
 	{
 		System.out.println("Carta seleccionada");
+		finish=true;
+	}
+	
+	
+	public void passejantMogut(int idJugador, String nomDistricte){
+		logic.mouPassejantADistricte(nomDistricte, idJugador);
 	}
 	
 	//FUNCIONS PÜBLIQUES PER MODIFiCAR LA CAPA DE PRESENTACIÓ

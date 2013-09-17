@@ -18,4 +18,14 @@ public class Tauler {
 	public void reiniciar(){
 		
 	}
+	
+	//Getters & setters
+
+	public Districte[] getDistrictes() {
+		return districtes;
+	}
+
+	public void setDistrictes(Districte[] districtes) {
+		this.districtes = districtes;
+	}
 }

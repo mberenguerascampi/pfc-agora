@@ -17,7 +17,7 @@ public class Jugador {
 		passejants = new ArrayList<Passejant>();
 		
 		for(int i = 0; i < totalPassejants; ++i){
-			passejants.set(i,  new Passejant(this.color, false));
+			passejants.add(new Passejant(this.color, false));
 		}
 	}
 	

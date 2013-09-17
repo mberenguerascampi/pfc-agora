@@ -26,6 +26,7 @@ public class VistaPassejant extends JButton {
 	private String color;
 	private int num;
 	private JLabel numLabel;
+	private boolean showZero;
 	/**
 	 * 
 	 */
@@ -63,6 +64,7 @@ public class VistaPassejant extends JButton {
 			foreground = Color.RED;
 		}
 		numLabel.setForeground(foreground);
+		updateText();
 		add(numLabel);
 	}
 	
@@ -72,7 +74,7 @@ public class VistaPassejant extends JButton {
 	
 	private void updateText(){
 		numLabel.setText(String.valueOf(num));
-		if (num == 0) numLabel.setVisible(false);
+		if (num == 0 && !showZero) numLabel.setVisible(false);
 		else numLabel.setVisible(true);
 		if (num < 0) setVisible(false);
 	}
@@ -107,5 +109,13 @@ public class VistaPassejant extends JButton {
 		public void setNum(int num) {
 			this.num = num;
 			updateText();
+		}
+
+		public boolean isShowZero() {
+			return showZero;
+		}
+
+		public void setShowZero(boolean showZero) {
+			this.showZero = showZero;
 		}
 }

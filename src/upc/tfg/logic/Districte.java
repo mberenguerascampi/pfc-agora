@@ -51,25 +51,19 @@ public class Districte {
 		
 	}
 	
-	public boolean removePassejant(int color){
+	public Passejant removePassejant(int color){
 		switch (color){
 			case Constants.BLAU:
-				passejantsBlaus.remove(0);
-				break;
+				return passejantsBlaus.remove(0);
 			case Constants.VERMELL:
-				passejantsVermells.remove(0);
-				break;
+				return passejantsVermells.remove(0);
 			case Constants.GROC:
-				passejantsGrocs.remove(0);
-				break;
+				return passejantsGrocs.remove(0);
 			case Constants.VERD:
-				passejantsVerds.remove(0);
-				break;
+				return passejantsVerds.remove(0);
 			default:
-				return false;
+				return null;
 		}
-		
-		return true;
 	}
 	
 	public boolean tePassejantsDisponibles(int color){
@@ -91,6 +85,22 @@ public class Districte {
 			}
 		}
 		return true;
+	}
+	
+	public int getNumPassejantsBlaus(){
+		return passejantsBlaus.size();
+	}
+	
+	public int getNumPassejantsVermells(){
+		return passejantsVermells.size();
+	}
+	
+	public int getNumPassejantsVerds(){
+		return passejantsVerds.size();
+	}
+	
+	public int getNumPassejantsGrocs(){
+		return passejantsGrocs.size();
 	}
 	
 	private ArrayList<Passejant> getArray(int color){

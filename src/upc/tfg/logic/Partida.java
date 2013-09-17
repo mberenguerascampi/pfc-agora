@@ -1,15 +1,35 @@
 package upc.tfg.logic;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Partida {
 	private String nom;
 	private Date data;
 	private int torn;
 	private int pas;
+	private int idJugadorActual;
+	private Tauler tauler;
+	private ArrayList<Jugador> jugadors;
+	private static Partida instance = null;
 	
 	public Partida() {
 		
+	}
+	
+	public Partida(String nom, Date data, int torn, int pas) {
+		this.nom = nom;
+		this.data = data;
+		this.torn = torn;
+		this.pas = pas;
+		jugadors = new ArrayList<Jugador>();
+		tauler = new Tauler();
+		instance = this;
+	}
+	
+	public static Partida getInstance(){
+		if(instance != null)return instance;
+		else return new Partida();
 	}
 	
 	//Public Methods
@@ -30,10 +50,12 @@ public class Partida {
 	}
 	
 	public boolean avancarPas(){
+		++pas;
 		return true;
 	}
 	
 	public boolean avancarTorn(){
+		++torn;
 		return true;
 	}
 	
@@ -41,7 +63,8 @@ public class Partida {
 		return true;
 	}
 	
-	public boolean afegirJugador(){
+	public boolean afegirJugador(Jugador jugador){
+		jugadors.add(jugador);
 		return true;
 	}
 	
@@ -79,6 +102,32 @@ public class Partida {
 	public void setPas(int pas) {
 		this.pas = pas;
 	}
+
+	public Tauler getTauler() {
+		return tauler;
+	}
+
+	public void setTauler(Tauler tauler) {
+		this.tauler = tauler;
+	}
 	
+	public Jugador getJugador(int id){
+		for(int i = 0; i < jugadors.size(); ++i){
+			if(jugadors.get(i).getId() == id){
+				return jugadors.get(i);
+			}
+		}
+		return null;
+	}
+	
+	public Districte getDistricte(String nom){
+		Districte[] districtes = tauler.getDistrictes();
+		for(Districte districte:districtes){
+			if(districte.getNom().equalsIgnoreCase(nom)){
+				return districte;
+			}
+		}
+		return null;
+	}
 	
 }

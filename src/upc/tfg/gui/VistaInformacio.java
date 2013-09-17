@@ -24,7 +24,6 @@ public class VistaInformacio extends JPanel {
 	VistaPassejant vpVermell;
 	VistaPassejant vpGroc;
 	VistaPassejant vpVerd;
-	public int tempNum = 2;
 	
 	public VistaInformacio() {
 		setLayout(null);
@@ -48,6 +47,10 @@ public class VistaInformacio extends JPanel {
 	public void setDistricte(Districte districte){
 		this.districte = districte;
 		setNomDistricte(districte.getNom());
+		vpBlau.setNum(districte.getNumPassejantsBlaus());
+		vpVermell.setNum(districte.getNumPassejantsVermells());
+		vpVerd.setNum(districte.getNumPassejantsVerds());
+		vpGroc.setNum(districte.getNumPassejantsGrocs());
 	}
 	
 	public void setNomDistricte(String nom) {
@@ -56,31 +59,41 @@ public class VistaInformacio extends JPanel {
 	
 	public void updatePassejants(int num){
 		vpBlau.setNum(num);
-		tempNum = num;
+	}
+	
+	public void update(){
+		vpBlau.setNum(districte.getNumPassejantsBlaus());
+		vpVermell.setNum(districte.getNumPassejantsVermells());
+		vpVerd.setNum(districte.getNumPassejantsVerds());
+		vpGroc.setNum(districte.getNumPassejantsGrocs());
 	}
 	
 	private void addPassejants(){
-		vpBlau = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, 2);
+		vpBlau = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, 0);
 		vpBlau.setEnabled(false);
 		Rectangle frame = new Rectangle(10, 30, 95, 102);
 		vpBlau.setBounds(frame);
+		vpBlau.setShowZero(true);
 		add(vpBlau);
 		
-		vpVermell = new VistaPassejant(VistaPassejant.PASSEJANT_VERMELL, 2);
+		vpVermell = new VistaPassejant(VistaPassejant.PASSEJANT_VERMELL, 0);
 		vpVermell.setEnabled(false);
 		frame = new Rectangle(10, 130, 95, 102);
 		vpVermell.setBounds(frame);
+		vpVermell.setShowZero(true);
 		add(vpVermell);
 		
-		vpGroc = new VistaPassejant(VistaPassejant.PASSEJANT_GROC, 2);
+		vpGroc = new VistaPassejant(VistaPassejant.PASSEJANT_GROC, 0);
 		vpGroc.setEnabled(false);
 		frame = new Rectangle(10, 230, 95, 102);
+		vpGroc.setShowZero(true);
 		vpGroc.setBounds(frame);
 		add(vpGroc);
 		
-		vpVerd = new VistaPassejant(VistaPassejant.PASSEJANT_VERD, 2);
+		vpVerd = new VistaPassejant(VistaPassejant.PASSEJANT_VERD, 0);
 		vpVerd.setEnabled(false);
 		frame = new Rectangle(10, 330, 95, 102);
+		vpVerd.setShowZero(true);
 		vpVerd.setBounds(frame);
 		add(vpVerd);
 	}

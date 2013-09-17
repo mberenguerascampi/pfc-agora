@@ -27,6 +27,8 @@ import javax.swing.JTextField;
 import javax.swing.TransferHandler;
 
 import upc.tfg.interfaces.TaulerListener;
+import upc.tfg.logic.Districte;
+import upc.tfg.logic.Partida;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.ImageToNumberArray;
 import upc.tfg.utils.Posicio;
@@ -48,6 +50,7 @@ public class VistaTauler extends DefaultView{
 	private boolean draggingPassejant = false;
 	private VistaPassejant passejantEstatic;
 	private boolean animationOn = false;
+	private String nomDistricteSeleccionat;
 	
 	private VistaInformacio infoView;
 	private VistaEstat stateView;
@@ -57,6 +60,7 @@ public class VistaTauler extends DefaultView{
 	ArrayList<JButton> cartes = new ArrayList<JButton>();
 	JLabel tauler_img;
 	JLabel districte_seleccionat_img;
+	JButton marcCarta;
 	private int previousDistrict = -1;
 	
 	public VistaTauler(TaulerListener tListener) {
@@ -74,8 +78,8 @@ public class VistaTauler extends DefaultView{
 	        public void mousePressed(MouseEvent e) {
 	          p = e.getLocationOnScreen();
 	          System.out.println("Mouse pressed");
-	          int x = p.x-tauler_img.getBounds().x;
-	          int y = p.y-tauler_img.getBounds().y;
+	          int x = p.x-tauler_img.getLocationOnScreen().x;
+	          int y = p.y-tauler_img.getLocationOnScreen().y;
 	          selectDistrict(x, y);
 	          if(previousDistrict == -1)infoView.setVisible(false);
 	        }
@@ -343,7 +347,7 @@ public class VistaTauler extends DefaultView{
 	
 	private void selectDistrict(int x, int y){
 		if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT){
-      	  //System.out.println(map[y][x]);
+      	  System.out.println(map[y][x]);
 		  infoView.setVisible(true);
       	  if(map[y][x] != previousDistrict){
 	        	  previousDistrict = map[y][x];
@@ -351,49 +355,52 @@ public class VistaTauler extends DefaultView{
 	        	  switch(map[y][x]){
 	        	  	case Constants.LES_CORTS:
 	        	  		setDistrictedSelected("seleccionat_corts.png");
-	        	  		infoView.setNomDistricte("LES CORTS");
+	        	  		nomDistricteSeleccionat = "LES CORTS";
 	        	  		break;
 	        	  	case Constants.SARRIA_SANT_GERVASI:
 	        	  		setDistrictedSelected("seleccionat_sarria.png");
-	        	  		infoView.setNomDistricte("SARRIÀ SANT GERVASI");
+	        	  		nomDistricteSeleccionat = "SARRIÀ SANT GERVASI";
 	        	  		break;
 	        	  	case Constants.GRACIA:
 	        	  		setDistrictedSelected("seleccionat_gracia.png");
-	        	  		infoView.setNomDistricte("GRACIA");
+	        	  		nomDistricteSeleccionat = "GRÀCIA";
 	        	  		break;
 	        	  	case Constants.HORTA_GUINARDO:
 	        	  		setDistrictedSelected("seleccionat_horta.png");
-	        	  		infoView.setNomDistricte("HORTA GUINARDO");
+	        	  		nomDistricteSeleccionat = "HORTA GUINARDO";
 	        	  		break;
 	        	  	case Constants.NOU_BARIS:
 	        	  		setDistrictedSelected("seleccionat_nou.png");
-	        	  		infoView.setNomDistricte("NOU BARRIS");
+	        	  		nomDistricteSeleccionat = "NOU BARRIS";
 	        	  		break;
 	        	  	case Constants.SANT_ANDREU:
 	        	  		setDistrictedSelected("seleccionat_andreu.png");
-	        	  		infoView.setNomDistricte("SANT ANDREU");
+	        	  		nomDistricteSeleccionat = "SANT ANDREU";
 	        	  		break;
 	        	  	case Constants.SANTS_MONTJUIC:
 	        	  		setDistrictedSelected("seleccionat_sants.png");
-	        	  		infoView.setNomDistricte("SANTS MONTJUIC");
+	        	  		nomDistricteSeleccionat = "SANTS MONTJUIC";
 	        	  		break;
 	        	  	case Constants.EIXAMPLE:
 	        	  		setDistrictedSelected("seleccionat_eixample.png");
-	        	  		infoView.setNomDistricte("EIXAMPLE");
+	        	  		nomDistricteSeleccionat = "EIXAMPLE";
 	        	  		break;
 	        	  	case Constants.SANT_MARTI:
 	        	  		setDistrictedSelected("seleccionat_marti.png");
-	        	  		infoView.setNomDistricte("SANT MARTI");
+	        	  		nomDistricteSeleccionat = "SANT MARTÍ";
 	        	  		break;
 	        	  	case Constants.CIUTAT_VELLA:
 	        	  		setDistrictedSelected("seleccionat_vella.png");
-	        	  		infoView.setNomDistricte("CIUTAT VELLA");
+	        	  		nomDistricteSeleccionat = "CIUTAT VELLA";
 	        	  		break;
 	        	  	default:
 	        	  		districte_seleccionat_img.setVisible(false);
 	        	  		previousDistrict = -1;
 	        	  		break;
 	        	  }
+	        	  
+	        	  Districte d = Partida.getInstance().getDistricte(nomDistricteSeleccionat);
+	        	  if(d!=null)infoView.setDistricte(d);
       	  }
         }
         else{
@@ -401,6 +408,21 @@ public class VistaTauler extends DefaultView{
       	  previousDistrict = -1;
         }
         //System.out.println(here.x + " - " + here.y);
+	}
+	
+	public void comencaIntercanviCartes(){
+		marcCarta = new JButton("");
+		marcCarta.setOpaque(false);
+		marcCarta.setLayout(null);
+		marcCarta.setFocusPainted(false); 
+		marcCarta.setContentAreaFilled(false); 
+		marcCarta.setBorderPainted(false);
+		marcCarta.setBounds(taulerX+(IMG_TAULER_WIDTH/2)-240, taulerY+IMG_TAULER_HEIGHT-120-10
+				, 240, 120);
+		URL urlImg = getClass().getResource(Constants.fileUrl+"cartes/marcCarta.png");
+	    ImageIcon icon = new ImageIcon(urlImg);
+	    marcCarta.setIcon(icon);
+	    add(marcCarta);
 	}
 	
 	private void readMapMatrix()
@@ -443,8 +465,8 @@ public class VistaTauler extends DefaultView{
         public void mousePressed(MouseEvent e) {
           p = e.getLocationOnScreen();
           System.out.println("Mouse pressed");
-          int x = p.x-taulerX;
-          int y = p.y-taulerY;
+          int x = p.x-tauler_img.getLocationOnScreen().x;
+          int y = p.y-tauler_img.getLocationOnScreen().y;
           selectDistrict(x, y);
         }
    
@@ -455,8 +477,8 @@ public class VistaTauler extends DefaultView{
           Point here = e.getLocationOnScreen();
           c.setLocation(l.x + here.x - p.x, l.y + here.y - p.y);
           p = here;
-          int x = here.x-tauler_img.getBounds().x;
-          int y = here.y-tauler_img.getBounds().y;
+          int x = here.x-tauler_img.getLocationOnScreen().x;
+          int y = here.y-tauler_img.getLocationOnScreen().y;
           selectDistrict(x, y);
           
           if(vistaPassejants != null && !draggingPassejant){
@@ -524,7 +546,8 @@ public class VistaTauler extends DefaultView{
 				}
 				else{
 					passejant.setNum(passejantEstatic.getNum());
-					infoView.updatePassejants(infoView.tempNum+1);
+					listener.passejantMogut(1, nomDistricteSeleccionat);
+					infoView.update();
 				}
 			}
 		}
