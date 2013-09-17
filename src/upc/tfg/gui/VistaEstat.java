@@ -19,6 +19,7 @@ public class VistaEstat extends JPanel{
 	private int numPas;
 	private JLabel tornLabel;
 	private JLabel pasLabel;
+	private String pasText = "";
 	
 	public VistaEstat() {
 		setLayout(null);
@@ -52,4 +53,37 @@ public class VistaEstat extends JPanel{
 		add(pasLabel);
 		
 	}
+	
+	public void actualitzaEstat(){
+		tornLabel.setText("TORN " + String.valueOf(numTorn));
+		pasLabel.setText("<html> PAS " + String.valueOf(numPas) + pasText + " </html>");
+	}
+	
+	//Getters & setters
+
+	public int getNumTorn() {
+		return numTorn;
+	}
+
+	public void setNumTorn(int numTorn) {
+		this.numTorn = numTorn;
+	}
+
+	public int getNumPas() {
+		return numPas;
+	}
+
+	public void setNumPas(int numPas) {
+		this.numPas = numPas;
+	}
+
+	public String getPasText() {
+		return pasText;
+	}
+
+	public void setPasText(String pasText) {
+		this.pasText = pasText;
+	}
+	
+	
 }

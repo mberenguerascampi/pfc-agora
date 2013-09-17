@@ -1,6 +1,13 @@
 package upc.tfg.logic;
 
 import java.awt.Image;
+import java.io.IOException;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
+
+import upc.tfg.utils.CartesBD;
+import upc.tfg.utils.Constants;
 
 public class Carta {
 	private String nom;
@@ -11,6 +18,18 @@ public class Carta {
 	
 	public Carta() {
 		
+	}
+	
+	public Carta(String nom, int valor) {
+		this.nom = nom;
+		this.valor = valor;
+		districte = Partida.getInstance().getDistricte(CartesBD.mapdDistrictes.get(nom.subSequence(0, 2)));
+		URL urlImg = getClass().getResource(Constants.fileUrl+"cartes/"+ nom + ".png");
+		try {
+			this.image = ImageIO.read(urlImg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//Public Methods

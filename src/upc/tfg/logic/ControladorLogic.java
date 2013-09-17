@@ -36,10 +36,11 @@ public class ControladorLogic {
 		for(Districte districte:districtes){
 			if(districte.getNom().equalsIgnoreCase(nomDistricte)){
 				districte.afegeixPassejant(p);
-				System.out.println("BLAUS: "+districte.getNumPassejantsBlaus());
+				partida.decrementaPassejantsAMoure();
 				return;
 			}
 		}
+		
 	}
 	
 	public void mouPassejantsEntreDistrictes(String nomDistricteA, String nomDistricteB, int color){
@@ -60,5 +61,12 @@ public class ControladorLogic {
 			districteB.afegeixPassejant(p);
 		}
 	}
-
+	
+	public Carta[] getCartes(int numCartes){
+		return partida.getBaralla().getCartes(numCartes);
+	}
+	
+	public void cartaSeleccionada(Carta carta){
+		partida.setPassejantsAMoure(carta.getValor());
+	}
 }

@@ -20,6 +20,7 @@ import upc.tfg.gui.VistaMenuPrincipal;
 import upc.tfg.gui.VistaTauler;
 import upc.tfg.interfaces.MenuPrincipalListener;
 import upc.tfg.interfaces.TaulerListener;
+import upc.tfg.logic.Carta;
 import upc.tfg.logic.ControladorLogic;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.ImageToNumberArray;
@@ -132,27 +133,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	public void playPressed() {
 		System.out.println("You clicked the button");
 		 menuPrincipal.setVisible(false);
-		 //TODO: Dades hardcoded 
-		 afegeixCarta(4, 1, 1);
-		 afegeixCarta(4, 2, 2);
-		 afegeixCarta(4, 3, 3);
-		 afegeixCarta(4, 4, 4);
-		 afegeixCarta(4, 5, 5);
-		 afegeixCarta(1, 1, 1);
-		 afegeixCarta(1, 2, 2);
-		 afegeixCarta(1, 3, 3);
-		 afegeixCarta(1, 4, 4);
-		 afegeixCarta(1, 5, 5);
-		 afegeixCarta(3, 1, 1);
-		 afegeixCarta(3, 2, 2);
-		 afegeixCarta(3, 3, 3);
-		 afegeixCarta(3, 4, 4);
-		 afegeixCarta(3, 5, 5);
-		 afegeixCarta(2, 1, 1);
-		 afegeixCarta(2, 2, 2);
-		 afegeixCarta(2, 3, 3);
-		 afegeixCarta(2, 4, 4);
-		 afegeixCarta(2, 5, 5);
+		 afegeixCartesJugador(1);
+		 afegeixCartesJugador(2);
+		 afegeixCartesJugador(3);
+		 afegeixCartesJugador(4);
 		 //tauler.comencaIntercanviCartes();
 		 tauler.afegeixPassejants(7, 0);
 		 tauler.setVisible(true);
@@ -160,14 +144,21 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 //cardLayout.next(contentPane);
 	}
 	
+	private void afegeixCartesJugador(int jugadorID){
+		Carta[] cartes = logic.getCartes(5);
+		 for(int i = 0; i < 5; ++i){
+			 afegeixCarta(jugadorID, i+1, cartes[i]);
+		 }
+	}
+	
 	//FUNCIONS QUE IMPLEMENTEN EL LITENER DEL TAULER
 	/**
 	 * Funció cridada quan el jugador prem una carta en el tauler
 	 */
-	public void cartaSeleccionada(int jugadorID, int cartaID)
+	public void cartaSeleccionada(int jugadorID, Carta cartaEntity)
 	{
-		System.out.println("Carta seleccionada");
-		finish=true;
+		System.out.println("Carta seleccionada ->" + cartaEntity.getValor());
+		logic.cartaSeleccionada(cartaEntity);
 	}
 	
 	
@@ -183,9 +174,9 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	 * @param cartaID identificador de la carta
 	 * @param posicio posició que ocupa la carta dintre del conjunt de cartes del jugador
 	 */
-	public void afegeixCarta(int jugadorID, int posicio, int cartaID)
+	public void afegeixCarta(int jugadorID, int posicio, Carta cartaEntity)
 	{
-		tauler.afegeixCarta(jugadorID, posicio, cartaID);
+		tauler.afegeixCarta(jugadorID, posicio, cartaEntity);
 	}
 }
 

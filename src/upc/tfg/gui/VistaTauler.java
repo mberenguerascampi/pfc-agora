@@ -27,6 +27,7 @@ import javax.swing.JTextField;
 import javax.swing.TransferHandler;
 
 import upc.tfg.interfaces.TaulerListener;
+import upc.tfg.logic.Carta;
 import upc.tfg.logic.Districte;
 import upc.tfg.logic.Partida;
 import upc.tfg.utils.Constants;
@@ -172,7 +173,7 @@ public class VistaTauler extends DefaultView{
 	 * @param cartaID identificador de la carta
 	 * @param posicio posició que ocupa la carta dintre del conjunt de cartes del jugador
 	 */
-	public void afegeixCarta(int jugadorID, int posicio, int cartaID)
+	public void afegeixCarta(int jugadorID, int posicio, final Carta cartaEntity)
 	{
 		JButton carta = new JButton();
 		carta.setOpaque(false);
@@ -186,16 +187,15 @@ public class VistaTauler extends DefaultView{
 		carta.setBorderPainted(false);
 		
 		//Afegim la imatge de la carta al butó
-		addImageCard(carta, cartaID, jugadorID);
+		addImageCard(carta, cartaEntity, jugadorID);
 	    
 	    //Si pulsem la carta es crida el mètode corresponent
 	    final int jugadorSeleccionat = jugadorID;
-	    final int cartaSeleccionada = cartaID;
 	    carta.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				listener.cartaSeleccionada(jugadorSeleccionat, cartaSeleccionada);
+				listener.cartaSeleccionada(jugadorSeleccionat, cartaEntity);
 				//TODO: Comprovar si la carta ha estat deixada en una posició vàlida
 			}
 		});
@@ -251,13 +251,16 @@ public class VistaTauler extends DefaultView{
 	    return new Posicio(x, y);
 	}
 	
-	private void addImageCard(JButton carta, int cartaID, int jugadorID)
-	{
-		URL urlImg = getClass().getResource(Constants.fileUrl+"agora.png");
-	    ImageIcon icon = new ImageIcon(urlImg);
-	    Image tempImg = icon.getImage() ;  
-	    Image newimg = tempImg.getScaledInstance(CARTA_WIDTH, CARTA_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
-	    icon = new ImageIcon(newimg);
+	private void addImageCard(JButton carta, Carta cartaEntity, int jugadorID)
+	{ 
+	    Image img = null;
+	    if(jugadorID == 1){
+	    	img = cartaEntity.getImage().getScaledInstance(CARTA_WIDTH, CARTA_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
+	    }
+	    else{
+	    	img = cartaEntity.getDistricte().getImage().getScaledInstance(CARTA_WIDTH, CARTA_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ; 
+	    }
+	    ImageIcon icon = new ImageIcon(img);
 	    RotatedIcon rIcon = null;
 	    
 	    switch(jugadorID){
@@ -472,6 +475,7 @@ public class VistaTauler extends DefaultView{
    
         @Override
         public void mouseDragged(MouseEvent e) {
+        	if(Partida.getInstance().getIdJugadorActual() != 1)return;
           JComponent c = (JComponent) e.getSource();
           Point l = c.getLocation();
           Point here = e.getLocationOnScreen();

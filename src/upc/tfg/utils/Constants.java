@@ -8,6 +8,7 @@ public class Constants {
 	//Paths
 	public static final String fileUrl = "/resources/images/";
 	public static final String fileTextsUrl = "/resources/text/";
+	public static final String fileAudioUrl = "/resources/audio/";
 	
 	//Colors
 	public static final Color colorGreen = new Color(51, 255, 0);

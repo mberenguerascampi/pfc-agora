@@ -9,8 +9,11 @@ public class Partida {
 	private int torn;
 	private int pas;
 	private int idJugadorActual;
+	private int passejantsAMoure;
 	private Tauler tauler;
 	private ArrayList<Jugador> jugadors;
+	private Baralla baralla;
+	private Baralla baralla2;
 	private static Partida instance = null;
 	
 	public Partida() {
@@ -18,13 +21,16 @@ public class Partida {
 	}
 	
 	public Partida(String nom, Date data, int torn, int pas) {
+		instance = this;
 		this.nom = nom;
 		this.data = data;
 		this.torn = torn;
 		this.pas = pas;
+		idJugadorActual = 1;
 		jugadors = new ArrayList<Jugador>();
 		tauler = new Tauler();
-		instance = this;
+		baralla = new Baralla();
+		baralla.barrejar();
 	}
 	
 	public static Partida getInstance(){
@@ -57,6 +63,15 @@ public class Partida {
 	public boolean avancarTorn(){
 		++torn;
 		return true;
+	}
+	
+	public void avancarJugador(){
+		if(idJugadorActual == 4){
+			avancarPas();
+		}
+		else{
+			++idJugadorActual;
+		}
 	}
 	
 	public boolean finalitzarPartida(){
@@ -129,5 +144,42 @@ public class Partida {
 		}
 		return null;
 	}
+
+	public Baralla getBaralla() {
+		return baralla;
+	}
+
+	public void setBaralla(Baralla baralla) {
+		this.baralla = baralla;
+	}
 	
+	public Baralla getBaralla2() {
+		return baralla2;
+	}
+
+	public void setBaralla2(Baralla baralla) {
+		this.baralla2 = baralla;
+	}
+
+	public int getIdJugadorActual() {
+		return idJugadorActual;
+	}
+
+	public void setIdJugadorActual(int idJugadorActual) {
+		this.idJugadorActual = idJugadorActual;
+	}
+
+	public int getPassejantsAMoure() {
+		return passejantsAMoure;
+	}
+
+	public void setPassejantsAMoure(int passejantsAMoure) {
+		this.passejantsAMoure = passejantsAMoure;
+	}
+	
+	public void decrementaPassejantsAMoure(){
+		System.out.println("Passejants: "+passejantsAMoure);
+		--passejantsAMoure;
+		if(passejantsAMoure == 0)avancarJugador();
+	}
 }

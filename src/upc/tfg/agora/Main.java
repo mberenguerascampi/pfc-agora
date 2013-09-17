@@ -6,6 +6,7 @@ import javax.swing.UIManager;
 
 import upc.tfg.logic.ControladorLogic;
 import upc.tfg.logic.GameLoop;
+import upc.tfg.utils.AudioPlayer;
 
 public class Main {
 	static Agora agora;
@@ -20,6 +21,8 @@ public class Main {
 	            public void run() {  
 	            	try {
 	            		agora = new Agora();
+	            		AudioPlayer ap = new AudioPlayer();
+	            		ap.startPlayback();
 	            		gameLoop();
 					} catch (IOException e) {
 						e.printStackTrace();
