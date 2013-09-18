@@ -1,10 +1,12 @@
 package upc.tfg.gui;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import upc.tfg.logic.Partida;
 import upc.tfg.utils.Constants;
 
 public class VistaEstat extends JPanel{
@@ -14,7 +16,7 @@ public class VistaEstat extends JPanel{
 	 */
 	private static final long serialVersionUID = 7692685726322664996L;
 	public static final int ESTAT_WIDTH = 250;
-	public static final int ESTAT_HEIGHT = 150;
+	public static final int ESTAT_HEIGHT = 170;
 	private int numTorn;
 	private int numPas;
 	private JLabel tornLabel;
@@ -41,23 +43,36 @@ public class VistaEstat extends JPanel{
 		add(tornLabel);
 		
 		numPas = 1;
-		
+		createPasLabel();
+	}
+	
+	private void createPasLabel(){
+		if (pasLabel != null)remove(pasLabel);
 		pasLabel = new JLabel("");
-		pasLabel.setText("<html> PAS " + String.valueOf(numPas) + "<br>El jugador 1 ha de robar <br> una carta el jugador 2 </html>");
-		pasLabel.setBounds(10, 45, ESTAT_WIDTH, 80);
+		pasText = Partida.getInstance().getTextPas();
+		pasLabel.setText(pasText);
+		pasLabel.setBounds(10, 45, ESTAT_WIDTH, 125);
 		pasLabel.setFont(Constants.fontKristenSmall);
 		pasLabel.setForeground(Color.WHITE);
 		//pasLabel.setAlignmentX(0.5f);
 		pasLabel.setAlignmentY(0.5f);
 		pasLabel.setOpaque(false);
 		add(pasLabel);
-		
 	}
 	
 	public void actualitzaEstat(){
-		tornLabel.setText("TORN " + String.valueOf(numTorn));
-		pasLabel.setText("<html> PAS " + String.valueOf(numPas) + pasText + " </html>");
+		pasText = Partida.getInstance().getTextPas();
+		pasLabel.setText(pasText);
 	}
+	
+	@Override
+	 public void paintComponent(Graphics g)
+	 {
+		 	g.clearRect(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
+	        g.setColor( getBackground() );
+	        g.fillRect(0, 0, getWidth(), getHeight());
+	        super.paintComponent(g);
+	    }
 	
 	//Getters & setters
 
@@ -84,6 +99,4 @@ public class VistaEstat extends JPanel{
 	public void setPasText(String pasText) {
 		this.pasText = pasText;
 	}
-	
-	
 }

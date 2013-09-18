@@ -12,7 +12,15 @@ public class Baralla {
 	public Baralla(){
 		cartes = new ArrayList<Carta>();
 		for(int i = 0; i < CartesBD.nomsCartes.length; ++i){
-			cartes.add(new Carta(CartesBD.nomsCartes[i], CartesBD.valorsCartes[i]));
+			cartes.add(new Carta(CartesBD.nomsCartes[i], CartesBD.valorsCartes[i], CartesBD.nomsCartesComplets[i]));
+		}
+	}
+	
+	public Baralla(Carta[] cartes){
+		this.cartes = new ArrayList<Carta>();
+		if(cartes == null) return;
+		for(Carta carta:cartes){
+			this.cartes.add(carta);
 		}
 	}
 	
@@ -38,5 +46,13 @@ public class Baralla {
 		}
 		
 		return cartesADonar;
+	}
+	
+	public ArrayList<Carta> getCartes(){
+		return this.cartes;
+	}
+	
+	public int getNumCartes(){
+		return cartes.size();
 	}
 }

@@ -16,7 +16,7 @@ public class ControladorLogic {
 	}
 	
 	public void comencarPartida(){
-		partida = new Partida("hola",null,0,0);
+		partida = new Partida("hola",null,1,2);
 		Jugador j1 = new Jugador("J1",1,Constants.BLAU);
 		Jugador j2 = new Jugador("J2",2,Constants.VERMELL);
 		Jugador j3 = new Jugador("J3",3,Constants.VERD);
@@ -36,7 +36,10 @@ public class ControladorLogic {
 		for(Districte districte:districtes){
 			if(districte.getNom().equalsIgnoreCase(nomDistricte)){
 				districte.afegeixPassejant(p);
-				partida.decrementaPassejantsAMoure();
+				if(partida.decrementaPassejantsAMoure()){
+					agora.updateView();
+					//TODO: Treure la carta for del tauler
+				}
 				return;
 			}
 		}
@@ -68,5 +71,10 @@ public class ControladorLogic {
 	
 	public void cartaSeleccionada(Carta carta){
 		partida.setPassejantsAMoure(carta.getValor());
+		partida.setCartaSeleccionada(carta);
+	}
+	
+	public void divideixBaralla(){
+		partida.divideixBaralla();
 	}
 }

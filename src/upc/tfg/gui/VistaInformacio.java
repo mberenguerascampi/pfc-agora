@@ -28,7 +28,7 @@ public class VistaInformacio extends JPanel {
 	public VistaInformacio() {
 		setLayout(null);
 		//setOpaque(false);
-		setBackground(new Color(0,0,0,64));
+		setBackground(new Color(0,0,0,94));
 		
 		//Afegim els labels
 		nomDistricte = new JLabel();

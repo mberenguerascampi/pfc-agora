@@ -15,6 +15,7 @@ public class Partida {
 	private Baralla baralla;
 	private Baralla baralla2;
 	private static Partida instance = null;
+	private Carta cartaSeleccionada = null;
 	
 	public Partida() {
 		
@@ -70,6 +71,7 @@ public class Partida {
 			avancarPas();
 		}
 		else{
+			cartaSeleccionada.girar();
 			++idJugadorActual;
 		}
 	}
@@ -83,6 +85,11 @@ public class Partida {
 		return true;
 	}
 	
+	public void divideixBaralla(){
+		baralla2 = new Baralla(baralla.getCartes(baralla.getNumCartes()/2));
+		baralla.barrejar();
+		baralla2.barrejar();
+	}
 	
 	//Getters & Setters
 
@@ -165,6 +172,14 @@ public class Partida {
 		return idJugadorActual;
 	}
 
+	public Carta getCartaSeleccionada() {
+		return cartaSeleccionada;
+	}
+
+	public void setCartaSeleccionada(Carta cartaSeleccionada) {
+		this.cartaSeleccionada = cartaSeleccionada;
+	}
+
 	public void setIdJugadorActual(int idJugadorActual) {
 		this.idJugadorActual = idJugadorActual;
 	}
@@ -177,9 +192,39 @@ public class Partida {
 		this.passejantsAMoure = passejantsAMoure;
 	}
 	
-	public void decrementaPassejantsAMoure(){
+	/**
+	 * Funcio que decrementa el nombre restant de passejants que pot moure un jugador
+	 * @return true si s'ha acabat el torn del jugador
+	 */
+	public boolean decrementaPassejantsAMoure(){
 		System.out.println("Passejants: "+passejantsAMoure);
 		--passejantsAMoure;
-		if(passejantsAMoure == 0)avancarJugador();
+		if(passejantsAMoure == 0){
+			avancarJugador();
+			return true;
+		}
+		return false;
+	}
+	
+	public String getTextPas(){
+		String text = "<html> PAS " + pas + "<br>";
+		switch(pas){
+			case 1:
+				text = text +  "El jugador " + idJugadorActual + " ha de robar <br> una carta al jugador " + (idJugadorActual-1);
+				break;
+			case 2:
+				text = text + "El jugador " + idJugadorActual + " ha de seleccionar <br> una carta i moure tants passejants"+
+							" al districte <br> corresponent com punts tingui <br> la plaça";
+				//text = "<html> PAS " + pas + "<br>El jugador 1 ha de robar <br> una carta el jugador 2 </html>";
+				break;
+			case 3:
+				text = text + "El jugador " + idJugadorActual + " ha de moure dos passejants a un districte adjacent";
+				break;
+			case 4:
+				text = text + "El jugador " + idJugadorActual + " ha de robar una carta de la pila que vulgui";
+				break;
+		}
+		text = text + " </html>";
+		return text;
 	}
 }

@@ -20,8 +20,8 @@ public class Carta {
 		
 	}
 	
-	public Carta(String nom, int valor) {
-		this.nom = nom;
+	public Carta(String nom, int valor, String nomcomplert) {
+		this.nom = nomcomplert;
 		this.valor = valor;
 		districte = Partida.getInstance().getDistricte(CartesBD.mapdDistrictes.get(nom.subSequence(0, 2)));
 		URL urlImg = getClass().getResource(Constants.fileUrl+"cartes/"+ nom + ".png");
@@ -34,7 +34,7 @@ public class Carta {
 	
 	//Public Methods
 	public void girar(){
-		
+		showing = !showing;
 	}
 
 	

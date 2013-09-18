@@ -16,12 +16,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import upc.tfg.gui.VistaBaralla;
 import upc.tfg.gui.VistaMenuPrincipal;
 import upc.tfg.gui.VistaTauler;
 import upc.tfg.interfaces.MenuPrincipalListener;
 import upc.tfg.interfaces.TaulerListener;
 import upc.tfg.logic.Carta;
 import upc.tfg.logic.ControladorLogic;
+import upc.tfg.logic.Partida;
+import upc.tfg.logic.Tauler;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.ImageToNumberArray;
 
@@ -131,12 +134,12 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 
 	@Override
 	public void playPressed() {
-		System.out.println("You clicked the button");
 		 menuPrincipal.setVisible(false);
 		 afegeixCartesJugador(1);
 		 afegeixCartesJugador(2);
 		 afegeixCartesJugador(3);
 		 afegeixCartesJugador(4);
+		 mostraBaralla();
 		 //tauler.comencaIntercanviCartes();
 		 tauler.afegeixPassejants(7, 0);
 		 tauler.setVisible(true);
@@ -149,6 +152,11 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 for(int i = 0; i < 5; ++i){
 			 afegeixCarta(jugadorID, i+1, cartes[i]);
 		 }
+	}
+	
+	private void mostraBaralla(){
+		logic.divideixBaralla();
+		tauler.afegeixBaralles();
 	}
 	
 	//FUNCIONS QUE IMPLEMENTEN EL LITENER DEL TAULER
@@ -176,7 +184,12 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	 */
 	public void afegeixCarta(int jugadorID, int posicio, Carta cartaEntity)
 	{
+		if(jugadorID == 1)cartaEntity.setShowing(true);
 		tauler.afegeixCarta(jugadorID, posicio, cartaEntity);
+	}
+	
+	public void updateView(){
+		tauler.updateView();
 	}
 }
 

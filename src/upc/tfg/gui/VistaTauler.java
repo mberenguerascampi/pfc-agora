@@ -43,25 +43,33 @@ public class VistaTauler extends DefaultView{
 	private static final long serialVersionUID = -5693342904886251734L;
 	private static final int IMG_TAULER_WIDTH = 508;
 	private static final int IMG_TAULER_HEIGHT = 401;
-	private static final int CARTA_WIDTH = 74;
-	private static final int CARTA_HEIGHT = 105;
+	public static final int CARTA_WIDTH = 74;
+	public static final int CARTA_HEIGHT = 105;
 	
 	private int taulerX;
 	private int taulerY;
 	private boolean draggingPassejant = false;
 	private VistaPassejant passejantEstatic;
 	private boolean animationOn = false;
+	private boolean cartaSeleccionada = false;
+	private Carta cartaEntitySeleccionada = null;
+	private VistaCarta vistaCartaSeleccionada = null;
 	private String nomDistricteSeleccionat;
 	
 	private VistaInformacio infoView;
+	private VistaInformacioCarta cardInfoView;
 	private VistaEstat stateView;
 	private int[][]map;
 	
-	TaulerListener listener;
-	ArrayList<JButton> cartes = new ArrayList<JButton>();
-	JLabel tauler_img;
-	JLabel districte_seleccionat_img;
-	JButton marcCarta;
+	private TaulerListener listener;
+	private ArrayList<JButton> cartes = new ArrayList<JButton>();
+	private JLabel tauler_img;
+	private JLabel districte_seleccionat_img;
+	private JButton marcCarta;
+	private VistaBaralla vBaralla1;
+	private VistaBaralla vBaralla2;
+	private VistaCarta vCartaBaralla1;
+	private VistaCarta vCartaBaralla2;
 	private int previousDistrict = -1;
 	
 	public VistaTauler(TaulerListener tListener) {
@@ -78,7 +86,6 @@ public class VistaTauler extends DefaultView{
 	        @Override
 	        public void mousePressed(MouseEvent e) {
 	          p = e.getLocationOnScreen();
-	          System.out.println("Mouse pressed");
 	          int x = p.x-tauler_img.getLocationOnScreen().x;
 	          int y = p.y-tauler_img.getLocationOnScreen().y;
 	          selectDistrict(x, y);
@@ -103,6 +110,7 @@ public class VistaTauler extends DefaultView{
 		if(visibility){
 			mostraCartes();
 			addDistrictInformationView();
+			addCartaInformationview();
 			addStateView();
 			addTauler();
 			addSkin("tauler_background.jpg");
@@ -111,9 +119,16 @@ public class VistaTauler extends DefaultView{
 	
 	private void addDistrictInformationView() {
 		infoView = new VistaInformacio();
-		infoView.setBounds(Constants.paddingX+Constants.width - VistaInformacio.INFORMATION_WIDTH, 150, VistaInformacio.INFORMATION_WIDTH, VistaInformacio.INFORMATION_HEIGHT);
+		infoView.setBounds(Constants.paddingX+Constants.width - VistaInformacio.INFORMATION_WIDTH, VistaEstat.ESTAT_HEIGHT, VistaInformacio.INFORMATION_WIDTH, VistaInformacio.INFORMATION_HEIGHT);
 		add(infoView);	
 		infoView.setVisible(false);
+	}
+	
+	private void addCartaInformationview(){
+		cardInfoView = new VistaInformacioCarta();
+		cardInfoView.setBounds(Constants.paddingX+Constants.width - VistaInformacio.INFORMATION_WIDTH, VistaEstat.ESTAT_HEIGHT, VistaInformacio.INFORMATION_WIDTH, VistaInformacio.INFORMATION_HEIGHT);
+		add(cardInfoView);	
+		cardInfoView.setVisible(false);
 	}
 	
 	private void addStateView(){
@@ -142,14 +157,14 @@ public class VistaTauler extends DefaultView{
 		vp.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Accio acabada");
 				draggingPassejant = false;
 				Thread t;
-				if (previousDistrict == -1){
+				if (previousDistrict == -1 || cartaEntitySeleccionada.getDistricte().getDistricteID() != previousDistrict){
 					t = new Thread(new AnimacioPassejant(vp, passejantEstatic.getLocation(), false));
 					//TODO: actualitzar la capa lògica 
 				}
 				else{
+					
 					t = new Thread(new AnimacioPassejant(vp, infoView.getLocation(), true));
 					//TODO: actualitzar la vista d'informacio
 				}
@@ -175,31 +190,37 @@ public class VistaTauler extends DefaultView{
 	 */
 	public void afegeixCarta(int jugadorID, int posicio, final Carta cartaEntity)
 	{
-		JButton carta = new JButton();
-		carta.setOpaque(false);
-		carta.setLayout(null);
+		final VistaCarta carta = new VistaCarta(cartaEntity, jugadorID);
 		Posicio pos = getCardPosition(jugadorID, posicio);
 		int x = pos.x;
 		int y = pos.y;
 		setCardSize(x, y, carta, jugadorID);
-		carta.setFocusPainted(false); 
-		carta.setContentAreaFilled(false); 
-		carta.setBorderPainted(false);
-		
-		//Afegim la imatge de la carta al butó
-		addImageCard(carta, cartaEntity, jugadorID);
 	    
 	    //Si pulsem la carta es crida el mètode corresponent
 	    final int jugadorSeleccionat = jugadorID;
-	    carta.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				listener.cartaSeleccionada(jugadorSeleccionat, cartaEntity);
-				//TODO: Comprovar si la carta ha estat deixada en una posició vàlida
-			}
-		});
-	    
+	    if(jugadorID == 1){
+	    	carta.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(!cartaSeleccionada){
+						listener.cartaSeleccionada(jugadorSeleccionat, cartaEntity);
+						Rectangle rect = carta.getBounds();
+						carta.setBounds(rect.x, rect.y-25, rect.width, rect.height);
+						cartaSeleccionada = true;
+						cartaEntitySeleccionada = cartaEntity;
+						vistaCartaSeleccionada = carta;
+						cardInfoView.setCarta(cartaEntity);
+						infoView.setVisible(false);
+						cardInfoView.setVisible(true);
+					}
+					else if(cartaEntitySeleccionada == cartaEntity){
+						infoView.setVisible(false);
+						cardInfoView.setVisible(true);
+					}
+				}
+			});
+	    }
 
 	    MouseAdapter listener = new DragAndDropListener();
         //MouseListener listener = new DragMouseAdapter();
@@ -251,36 +272,7 @@ public class VistaTauler extends DefaultView{
 	    return new Posicio(x, y);
 	}
 	
-	private void addImageCard(JButton carta, Carta cartaEntity, int jugadorID)
-	{ 
-	    Image img = null;
-	    if(jugadorID == 1){
-	    	img = cartaEntity.getImage().getScaledInstance(CARTA_WIDTH, CARTA_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
-	    }
-	    else{
-	    	img = cartaEntity.getDistricte().getImage().getScaledInstance(CARTA_WIDTH, CARTA_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ; 
-	    }
-	    ImageIcon icon = new ImageIcon(img);
-	    RotatedIcon rIcon = null;
-	    
-	    switch(jugadorID){
-	    	case 1:
-	    		carta.setIcon(icon);
-	    		break;
-	    	case 2:
-	    		rIcon = new RotatedIcon(icon, -90);
-	    		carta.setIcon(rIcon);
-	    		break;
-	    	case 3:
-	    		rIcon = new RotatedIcon(icon, 180);
-	    		carta.setIcon(rIcon);
-	    		break;
-	    	case 4:
-	    		rIcon = new RotatedIcon(icon, 90);
-	    		carta.setIcon(rIcon);
-	    		break;
-	    }
-	}
+	
 	
 	private void setCardSize(int x, int y, JButton carta, int jugadorID)
 	{
@@ -351,6 +343,7 @@ public class VistaTauler extends DefaultView{
 	private void selectDistrict(int x, int y){
 		if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT){
       	  System.out.println(map[y][x]);
+      	  cardInfoView.setVisible(false);
 		  infoView.setVisible(true);
       	  if(map[y][x] != previousDistrict){
 	        	  previousDistrict = map[y][x];
@@ -428,6 +421,34 @@ public class VistaTauler extends DefaultView{
 	    add(marcCarta);
 	}
 	
+	public void afegeixBaralles(){
+		vCartaBaralla1 = new VistaCarta(Partida.getInstance().getBaralla().getCartes().get(0), 1);
+		vCartaBaralla1.setBounds(20, 120, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		DragAndDropListener listener = new DragAndDropListener();
+		vCartaBaralla1.addMouseListener(listener);
+		vCartaBaralla1.addMouseMotionListener(listener);
+		add(vCartaBaralla1);
+		
+		vBaralla1 = new VistaBaralla(Partida.getInstance().getBaralla());
+		vBaralla1.setBounds(20, 120, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		add(vBaralla1);
+		
+		vCartaBaralla2 = new VistaCarta(Partida.getInstance().getBaralla2().getCartes().get(0), 1);
+		vCartaBaralla2.setBounds(20, 260, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		vCartaBaralla2.addMouseListener(listener);
+		vCartaBaralla2.addMouseMotionListener(listener);
+		add(vCartaBaralla2);
+		
+		vBaralla2 = new VistaBaralla(Partida.getInstance().getBaralla2());
+		vBaralla2.setBounds(20, 260, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		add(vBaralla2);
+	}
+	
+	public void updateView(){
+		vistaCartaSeleccionada.updateView();
+		stateView.actualitzaEstat();
+	}
+	
 	private void readMapMatrix()
 	{
 		BufferedReader br;
@@ -467,7 +488,6 @@ public class VistaTauler extends DefaultView{
         @Override
         public void mousePressed(MouseEvent e) {
           p = e.getLocationOnScreen();
-          System.out.println("Mouse pressed");
           int x = p.x-tauler_img.getLocationOnScreen().x;
           int y = p.y-tauler_img.getLocationOnScreen().y;
           selectDistrict(x, y);
@@ -475,21 +495,21 @@ public class VistaTauler extends DefaultView{
    
         @Override
         public void mouseDragged(MouseEvent e) {
-        	if(Partida.getInstance().getIdJugadorActual() != 1)return;
-          JComponent c = (JComponent) e.getSource();
-          Point l = c.getLocation();
-          Point here = e.getLocationOnScreen();
-          c.setLocation(l.x + here.x - p.x, l.y + here.y - p.y);
-          p = here;
-          int x = here.x-tauler_img.getLocationOnScreen().x;
-          int y = here.y-tauler_img.getLocationOnScreen().y;
-          selectDistrict(x, y);
-          
-          if(vistaPassejants != null && !draggingPassejant){
-        	  passejantEstatic.setNum(vistaPassejants.getNum()-1);
-        	  vistaPassejants.setNum(0);
-        	  draggingPassejant = true;
-          }
+        	  if(Partida.getInstance().getIdJugadorActual() != 1)return;
+	          JComponent c = (JComponent) e.getSource();
+	          Point l = c.getLocation();
+	          Point here = e.getLocationOnScreen();
+	          c.setLocation(l.x + here.x - p.x, l.y + here.y - p.y);
+	          p = here;
+	          int x = here.x-tauler_img.getLocationOnScreen().x;
+	          int y = here.y-tauler_img.getLocationOnScreen().y;
+	          selectDistrict(x, y);
+	          
+	          if(vistaPassejants != null && !draggingPassejant){
+	        	  passejantEstatic.setNum(vistaPassejants.getNum()-1);
+	        	  vistaPassejants.setNum(0);
+	        	  draggingPassejant = true;
+	          }
         }
 	}
 	
@@ -506,7 +526,6 @@ public class VistaTauler extends DefaultView{
 		
 		@Override
 		public void run() {
-			System.out.println("Animacio");
 			if(animationOn){
 				int i = 0;
 				while (passejant.getLocation().x != goal.x || passejant.getLocation().y != goal.y){

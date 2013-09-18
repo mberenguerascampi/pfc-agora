@@ -9,6 +9,7 @@ public class Districte {
 	private String nom;
 	private int valor;
 	private Image image;
+	private int districteID;
 	private ArrayList<Passejant> passejantsBlaus;
 	private ArrayList<Passejant> passejantsVermells;
 	private ArrayList<Passejant> passejantsVerds;
@@ -21,10 +22,11 @@ public class Districte {
 		passejantsGrocs = new ArrayList<Passejant>();
 	}
 	
-	public Districte(String nom, int valor, Image imatge) {
+	public Districte(String nom, int valor, Image imatge, int districteID) {
 		this.nom = nom;
 		this.valor = valor;
 		this.image = imatge;
+		this.districteID = districteID;
 		passejantsBlaus = new ArrayList<Passejant>();
 		passejantsVermells = new ArrayList<Passejant>();
 		passejantsVerds = new ArrayList<Passejant>();
@@ -143,5 +145,13 @@ public class Districte {
 	}
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public int getDistricteID() {
+		return districteID;
+	}
+
+	public void setDistricteID(int districteID) {
+		this.districteID = districteID;
 	}
 }

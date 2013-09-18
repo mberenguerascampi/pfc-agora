@@ -16,6 +16,7 @@ public class Tauler {
 		String[] noms = {"Les Corts", "Sarrià Sant Gervasi", "Gràcia", "Horta Guinardo", "Nou Barris", "Sant Andreu", "Sants Montjuic", "Eixample", "Sant Martí", "Ciutat Vella"};
 		int valors[] = {7,8,7,9,6,7,7,10,7,8};
 		String[] nomsImatges = {"LesCorts", "sarriaSantGervasi", "gracia", "horta-guinardo", "nouBarris", "santAndreu", "sant_marti", "eixample", "sant_marti", "ciutat_vella"};
+		int[] districtesID = {Constants.LES_CORTS, Constants.SARRIA_SANT_GERVASI, Constants.GRACIA, Constants.HORTA_GUINARDO, Constants.NOU_BARIS, Constants.SANT_ANDREU, Constants.SANTS_MONTJUIC, Constants.EIXAMPLE, Constants.SANT_MARTI, Constants.CIUTAT_VELLA};
 		
 		for (int i = 0; i < 10; ++i){
 			//TODO: Afegir imatge districte
@@ -26,7 +27,7 @@ public class Tauler {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			districtes[i] = new Districte(noms[i], valors[i], img);
+			districtes[i] = new Districte(noms[i], valors[i], img, districtesID[i]);
 		}
 	}
 	
