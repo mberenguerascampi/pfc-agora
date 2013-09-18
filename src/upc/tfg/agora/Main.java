@@ -2,6 +2,8 @@ package upc.tfg.agora;
 
 import java.io.IOException;
 
+import javax.media.CannotRealizeException;
+import javax.media.NoPlayerException;
 import javax.swing.UIManager;
 
 import upc.tfg.logic.ControladorLogic;
@@ -27,6 +29,10 @@ public class Main {
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {
+						e.printStackTrace();}
+					catch (NoPlayerException e) {
+						e.printStackTrace();
+					} catch (CannotRealizeException e) {
 						e.printStackTrace();
 					}  
 	            }  

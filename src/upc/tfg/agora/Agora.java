@@ -174,6 +174,11 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		logic.mouPassejantADistricte(nomDistricte, idJugador);
 	}
 	
+	public void nextPlayer(){
+		Partida.getInstance().avancarJugador();
+		updateView();
+	}
+	
 	//FUNCIONS PÜBLIQUES PER MODIFiCAR LA CAPA DE PRESENTACIÓ
 	/**
 	 * Mostra en la pantalla del tauler la carta amb identificador cartaID en les cartes del jugador amb 

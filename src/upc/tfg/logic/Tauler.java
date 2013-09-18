@@ -15,7 +15,7 @@ public class Tauler {
 		districtes = new Districte[10];
 		String[] noms = {"Les Corts", "Sarrià Sant Gervasi", "Gràcia", "Horta Guinardo", "Nou Barris", "Sant Andreu", "Sants Montjuic", "Eixample", "Sant Martí", "Ciutat Vella"};
 		int valors[] = {7,8,7,9,6,7,7,10,7,8};
-		String[] nomsImatges = {"LesCorts", "sarriaSantGervasi", "gracia", "horta-guinardo", "nouBarris", "santAndreu", "sant_marti", "eixample", "sant_marti", "ciutat_vella"};
+		String[] nomsImatges = {"lesCorts", "sarriaSantGervasi", "gracia", "horta-guinardo", "nouBarris", "santAndreu", "sant_marti", "eixample", "sant_marti", "ciutat_vella"};
 		int[] districtesID = {Constants.LES_CORTS, Constants.SARRIA_SANT_GERVASI, Constants.GRACIA, Constants.HORTA_GUINARDO, Constants.NOU_BARIS, Constants.SANT_ANDREU, Constants.SANTS_MONTJUIC, Constants.EIXAMPLE, Constants.SANT_MARTI, Constants.CIUTAT_VELLA};
 		
 		for (int i = 0; i < 10; ++i){
@@ -23,6 +23,7 @@ public class Tauler {
 			URL urlImg = getClass().getResource(Constants.fileUrl+"cartes/"+ nomsImatges[i] + ".png");
 			Image img = null;
 			try {
+				//System.out.println(nomsImatges[i]);
 				img = ImageIO.read(urlImg);
 			} catch (IOException e) {
 				e.printStackTrace();

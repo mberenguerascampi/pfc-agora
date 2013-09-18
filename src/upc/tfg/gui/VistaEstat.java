@@ -34,7 +34,7 @@ public class VistaEstat extends JPanel{
 		
 		tornLabel = new JLabel("");
 		tornLabel.setLayout(null);
-		tornLabel.setText("TORN " + String.valueOf(numTorn));
+		tornLabel.setText("TORN " + String.valueOf(Partida.getInstance().getTorn()));
 		tornLabel.setBounds(10, 10, ESTAT_WIDTH, 30);
 		tornLabel.setFont(Constants.fontKristen);
 		tornLabel.setForeground(Color.YELLOW);
@@ -63,6 +63,7 @@ public class VistaEstat extends JPanel{
 	public void actualitzaEstat(){
 		pasText = Partida.getInstance().getTextPas();
 		pasLabel.setText(pasText);
+		tornLabel.setText("TORN " + String.valueOf(Partida.getInstance().getTorn()));
 	}
 	
 	@Override

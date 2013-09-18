@@ -9,6 +9,7 @@ public class Partida {
 	private int torn;
 	private int pas;
 	private int idJugadorActual;
+	private int idJugadorInici;
 	private int passejantsAMoure;
 	private Tauler tauler;
 	private ArrayList<Jugador> jugadors;
@@ -27,7 +28,8 @@ public class Partida {
 		this.data = data;
 		this.torn = torn;
 		this.pas = pas;
-		idJugadorActual = 1;
+		idJugadorInici = 1;
+		idJugadorActual = idJugadorInici;
 		jugadors = new ArrayList<Jugador>();
 		tauler = new Tauler();
 		baralla = new Baralla();
@@ -57,12 +59,20 @@ public class Partida {
 	}
 	
 	public boolean avancarPas(){
+		idJugadorActual = idJugadorInici;
 		++pas;
+		if (pas > 4){
+			pas = 1;
+			avancarTorn();
+		}
 		return true;
 	}
 	
 	public boolean avancarTorn(){
 		++torn;
+		if(torn > 12){
+			return false;
+		}
 		return true;
 	}
 	

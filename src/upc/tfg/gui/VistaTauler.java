@@ -102,6 +102,20 @@ public class VistaTauler extends DefaultView{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		//TODO: Botó per fer proves
+		JButton button = new JButton();
+		button.setLayout(null);
+		button.setBounds(0, 0, 110, 50);
+		button.setText("Passar al següent jugaodor");
+		button.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				VistaTauler.this.listener.nextPlayer();
+			}
+		});
+		add(button);
 	}
 	
 	public void setVisible(boolean visibility)
@@ -342,7 +356,6 @@ public class VistaTauler extends DefaultView{
 	
 	private void selectDistrict(int x, int y){
 		if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT){
-      	  System.out.println(map[y][x]);
       	  cardInfoView.setVisible(false);
 		  infoView.setVisible(true);
       	  if(map[y][x] != previousDistrict){
@@ -422,25 +435,50 @@ public class VistaTauler extends DefaultView{
 	}
 	
 	public void afegeixBaralles(){
+		ActionListener aListener = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				animationOn = true;
+				Point goal = vBaralla1.getLocation();
+				goal.x += 10;
+				Thread t = new Thread(new AnimacioCartes(vCartaBaralla1, goal));
+				t.start();
+			}
+		};
+		
+		ActionListener aListener2 = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				animationOn = true;
+				Point goal = vBaralla2.getLocation();
+				goal.x += 10;
+				Thread t = new Thread(new AnimacioCartes(vCartaBaralla2, goal));
+				t.start();
+			}
+		};
+		
 		vCartaBaralla1 = new VistaCarta(Partida.getInstance().getBaralla().getCartes().get(0), 1);
-		vCartaBaralla1.setBounds(20, 120, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		vCartaBaralla1.setBounds(30, 120, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
 		DragAndDropListener listener = new DragAndDropListener();
+		listener.shouldSelectDistrict = false;
 		vCartaBaralla1.addMouseListener(listener);
 		vCartaBaralla1.addMouseMotionListener(listener);
+		vCartaBaralla1.addActionListener(aListener);
 		add(vCartaBaralla1);
 		
 		vBaralla1 = new VistaBaralla(Partida.getInstance().getBaralla());
-		vBaralla1.setBounds(20, 120, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		vBaralla1.setBounds(20, 120, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
 		add(vBaralla1);
 		
 		vCartaBaralla2 = new VistaCarta(Partida.getInstance().getBaralla2().getCartes().get(0), 1);
-		vCartaBaralla2.setBounds(20, 260, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		vCartaBaralla2.setBounds(30, 260, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
 		vCartaBaralla2.addMouseListener(listener);
 		vCartaBaralla2.addMouseMotionListener(listener);
+		vCartaBaralla2.addActionListener(aListener2);
 		add(vCartaBaralla2);
 		
 		vBaralla2 = new VistaBaralla(Partida.getInstance().getBaralla2());
-		vBaralla2.setBounds(20, 260, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		vBaralla2.setBounds(20, 260, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
 		add(vBaralla2);
 	}
 	
@@ -479,6 +517,7 @@ public class VistaTauler extends DefaultView{
 	class DragAndDropListener extends MouseAdapter {
 		Point p = null;
 		VistaPassejant vistaPassejants = null;
+		public boolean shouldSelectDistrict = true;
 		
 		public DragAndDropListener() {}
 		public DragAndDropListener(VistaPassejant vistaPassejants) {
@@ -490,12 +529,12 @@ public class VistaTauler extends DefaultView{
           p = e.getLocationOnScreen();
           int x = p.x-tauler_img.getLocationOnScreen().x;
           int y = p.y-tauler_img.getLocationOnScreen().y;
-          selectDistrict(x, y);
+          if(shouldSelectDistrict)selectDistrict(x, y);
         }
    
         @Override
         public void mouseDragged(MouseEvent e) {
-        	  if(Partida.getInstance().getIdJugadorActual() != 1)return;
+        	  if(vistaPassejants != null && Partida.getInstance().getIdJugadorActual() != 1)return;
 	          JComponent c = (JComponent) e.getSource();
 	          Point l = c.getLocation();
 	          Point here = e.getLocationOnScreen();
@@ -503,7 +542,7 @@ public class VistaTauler extends DefaultView{
 	          p = here;
 	          int x = here.x-tauler_img.getLocationOnScreen().x;
 	          int y = here.y-tauler_img.getLocationOnScreen().y;
-	          selectDistrict(x, y);
+	          if(shouldSelectDistrict)selectDistrict(x, y);
 	          
 	          if(vistaPassejants != null && !draggingPassejant){
 	        	  passejantEstatic.setNum(vistaPassejants.getNum()-1);
@@ -571,6 +610,57 @@ public class VistaTauler extends DefaultView{
 					passejant.setNum(passejantEstatic.getNum());
 					listener.passejantMogut(1, nomDistricteSeleccionat);
 					infoView.update();
+				}
+			}
+		}
+	}
+	
+	class AnimacioCartes implements Runnable{
+		VistaCarta carta;
+		Point goal;
+		
+		public AnimacioCartes(VistaCarta carta, Point goal) {
+			this.carta = carta;
+			this.goal = goal;
+		}
+		
+		@Override
+		public void run() {
+			if(animationOn){
+				int i = 0;
+				while (carta.getLocation().x != goal.x || carta.getLocation().y != goal.y){
+					try
+					{
+						Point current = carta.getLocation();
+						int x = current.x;
+						int y = current.y;
+						//utilitzem la variable equilibra per tal que el passejant abanci de forma uniforma cap al seu objectiu
+						int equilibra = 0;
+						if(i%3 != 0){
+							if(Math.abs(x-goal.x) > Math.abs(y-goal.y)) equilibra = 1;
+							else if (Math.abs(y-goal.y) > Math.abs(x-goal.x)) equilibra = 2;
+						}
+						if(i%3 == 0)Thread.sleep(2);
+						if(x < goal.x) {
+							++x;
+							if(equilibra != 2 && goal.x - x > 4)x+=4;
+						}
+						else if (x > goal.x){
+							--x;
+							if (equilibra != 2 && x - goal.x > 4)x-=4;
+						}
+						if(y < goal.y){
+							++y;
+							if(equilibra != 1 && goal.y - y > 4)y+=4;
+						}
+						else if (y > goal.y){
+							--y;
+							if (equilibra != 1 && y - goal.y > 4)y-=4;
+						}
+						carta.setLocation(x,y);
+						++i;
+					}
+					catch(Exception e) {}
 				}
 			}
 		}
