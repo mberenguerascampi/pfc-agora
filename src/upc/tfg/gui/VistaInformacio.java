@@ -3,6 +3,7 @@ package upc.tfg.gui;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,11 +20,15 @@ public class VistaInformacio extends JPanel {
 	public static final int INFORMATION_HEIGHT = 435;
 	
 	private JLabel nomDistricte;
-	Districte districte;
-	VistaPassejant vpBlau;
-	VistaPassejant vpVermell;
-	VistaPassejant vpGroc;
-	VistaPassejant vpVerd;
+	private Districte districte;
+	private Districte draggingDistrict;
+	public VistaPassejant vpBlau;
+	public VistaPassejant vpVermell;
+	public VistaPassejant vpGroc;
+	public VistaPassejant vpVerd;
+	
+	public VistaPassejant vpBlauDinamic;
+	private boolean draggingPassejant = false;
 	
 	public VistaInformacio() {
 		setLayout(null);
@@ -47,22 +52,28 @@ public class VistaInformacio extends JPanel {
 	public void setDistricte(Districte districte){
 		this.districte = districte;
 		setNomDistricte(districte.getNom());
-		vpBlau.setNum(districte.getNumPassejantsBlaus());
-		vpVermell.setNum(districte.getNumPassejantsVermells());
-		vpVerd.setNum(districte.getNumPassejantsVerds());
-		vpGroc.setNum(districte.getNumPassejantsGrocs());
+//		vpBlau.setNum(districte.getNumPassejantsBlaus());
+//		vpBlauDinamic.setNum(districte.getNumPassejantsBlaus());
+//		vpVermell.setNum(districte.getNumPassejantsVermells());
+//		vpVerd.setNum(districte.getNumPassejantsVerds());
+//		vpGroc.setNum(districte.getNumPassejantsGrocs());
+		update();
 	}
 	
 	public void setNomDistricte(String nom) {
 		nomDistricte.setText(nom);
 	}
 	
-	public void updatePassejants(int num){
-		vpBlau.setNum(num);
-	}
-	
 	public void update(){
 		vpBlau.setNum(districte.getNumPassejantsBlaus());
+		
+		if(!draggingPassejant){
+			vpBlauDinamic.setNum(districte.getNumPassejantsBlaus());
+		}
+		else if (districte == draggingDistrict){
+			vpBlau.setNum(districte.getNumPassejantsBlaus()-1);
+		}
+		
 		vpVermell.setNum(districte.getNumPassejantsVermells());
 		vpVerd.setNum(districte.getNumPassejantsVerds());
 		vpGroc.setNum(districte.getNumPassejantsGrocs());
@@ -75,6 +86,10 @@ public class VistaInformacio extends JPanel {
 		vpBlau.setBounds(frame);
 		vpBlau.setShowZero(true);
 		add(vpBlau);
+		
+		vpBlauDinamic = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, 0);
+		vpBlauDinamic.setEnabled(true);
+		vpBlauDinamic.setShowZero(true);
 		
 		vpVermell = new VistaPassejant(VistaPassejant.PASSEJANT_VERMELL, 0);
 		vpVermell.setEnabled(false);
@@ -96,5 +111,26 @@ public class VistaInformacio extends JPanel {
 		vpVerd.setShowZero(true);
 		vpVerd.setBounds(frame);
 		add(vpVerd);
+	}
+	
+	public void setVisible(boolean visibility){
+		super.setVisible(visibility);
+		vpBlauDinamic.setVisible(visibility);
+	}
+
+	public boolean isDraggingPassejant() {
+		return draggingPassejant;
+	}
+
+	public void setDraggingPassejant(boolean draggingPassejant) {
+		this.draggingPassejant = draggingPassejant;
+		if(draggingPassejant){
+			draggingDistrict = districte;
+			vpBlauDinamic.setShowZero(false);
+		}
+		else{
+			vpBlauDinamic.setShowZero(true);
+			draggingDistrict = null;
+		}
 	}
 }

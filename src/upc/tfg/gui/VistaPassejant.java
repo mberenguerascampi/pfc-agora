@@ -117,5 +117,6 @@ public class VistaPassejant extends JButton {
 
 		public void setShowZero(boolean showZero) {
 			this.showZero = showZero;
+			numLabel.setVisible(showZero);
 		}
 }

@@ -47,21 +47,17 @@ public class ControladorLogic {
 	}
 	
 	public void mouPassejantsEntreDistrictes(String nomDistricteA, String nomDistricteB, int color){
-		Districte districteA = null;
-		Districte districteB = null;
-		Districte[] districtes = partida.getTauler().getDistrictes();
-		for(Districte districte:districtes){
-			if(districte.getNom().equals(nomDistricteA)){
-				districteA = districte;
-			}
-			else if(districte.getNom().equals(nomDistricteA)){
-				districteB = districte;
-			}
-		}
+		Districte districteA = partida.getDistricte(nomDistricteA);
+		Districte districteB = partida.getDistricte(nomDistricteB);
 		
 		if(districteA != null && districteB != null){
 			Passejant p = districteA.removePassejant(color);
 			districteB.afegeixPassejant(p);
+			
+			if(partida.decrementaPassejantsAMoure()){
+				agora.updateView();
+				//TODO: Treure la carta for del tauler
+			}
 		}
 	}
 	

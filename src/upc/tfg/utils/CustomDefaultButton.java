@@ -53,6 +53,7 @@ public class CustomDefaultButton extends JButton {
 		setVerticalTextPosition(CENTER);
 		setHorizontalTextPosition(CENTER);
 		setFont(Constants.fontButton);
+		//setFont(Constants.fontKristenSmall);
 		setForeground(Color.WHITE);
 	}
 

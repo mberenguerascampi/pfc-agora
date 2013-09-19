@@ -2,6 +2,9 @@ package upc.tfg.logic;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
+
+import upc.tfg.utils.Constants;
 
 public class Partida {
 	private String nom;
@@ -65,6 +68,9 @@ public class Partida {
 			pas = 1;
 			avancarTorn();
 		}
+		else if(pas == 3){
+			passejantsAMoure = 2;
+		}
 		return true;
 	}
 	
@@ -81,7 +87,7 @@ public class Partida {
 			avancarPas();
 		}
 		else{
-			cartaSeleccionada.girar();
+			if(cartaSeleccionada != null)cartaSeleccionada.girar();
 			++idJugadorActual;
 		}
 	}
@@ -99,6 +105,16 @@ public class Partida {
 		baralla2 = new Baralla(baralla.getCartes(baralla.getNumCartes()/2));
 		baralla.barrejar();
 		baralla2.barrejar();
+	}
+	
+	public boolean potMoure(String districte1, String districte2){
+		Districte d1 = getDistricte(districte1);
+		Districte d2 = getDistricte(districte2);
+		List<Integer> districtesAdjacents = Constants.grafDistrictes.get(d1.getDistricteID());
+		for(int i = 0; i < districtesAdjacents.size(); ++i){
+			if(districtesAdjacents.get(i) == d2.getDistricteID())return true;
+		}
+		return false;
 	}
 	
 	//Getters & Setters

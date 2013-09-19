@@ -55,6 +55,7 @@ public class VistaTauler extends DefaultView{
 	private Carta cartaEntitySeleccionada = null;
 	private VistaCarta vistaCartaSeleccionada = null;
 	private String nomDistricteSeleccionat;
+	private String nomAnteriorDistricteSeleccionat;
 	
 	private VistaInformacio infoView;
 	private VistaInformacioCarta cardInfoView;
@@ -134,6 +135,32 @@ public class VistaTauler extends DefaultView{
 	private void addDistrictInformationView() {
 		infoView = new VistaInformacio();
 		infoView.setBounds(Constants.paddingX+Constants.width - VistaInformacio.INFORMATION_WIDTH, VistaEstat.ESTAT_HEIGHT, VistaInformacio.INFORMATION_WIDTH, VistaInformacio.INFORMATION_HEIGHT);
+		DragAndDropListener ddListener = new DragAndDropListener(infoView.vpBlauDinamic, infoView.vpBlau);
+		ddListener.betweenDistricts = true;
+		final Rectangle rect = new Rectangle(infoView.getLocation().x+infoView.vpBlau.getLocation().x,
+				infoView.getLocation().y+infoView.vpBlau.getLocation().y, 95, 102);
+		infoView.vpBlauDinamic.addMouseListener(ddListener);
+		infoView.vpBlauDinamic.addMouseMotionListener(ddListener);
+		infoView.vpBlauDinamic.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				draggingPassejant = false;
+				infoView.setDraggingPassejant(false);
+				Thread t;
+				if (previousDistrict == -1 || !(Partida.getInstance().potMoure(nomAnteriorDistricteSeleccionat, nomDistricteSeleccionat))){
+					t = new Thread(new AnimacioPassejant(infoView.vpBlauDinamic, infoView.vpBlau, rect.getLocation(), rect, false, true));
+					infoView.setDraggingPassejant(false);
+				}
+				else{
+					t = new Thread(new AnimacioPassejant(infoView.vpBlauDinamic, infoView.vpBlau, rect.getLocation(), rect, true, true));
+				}
+				
+				animationOn = true;
+				t.start();
+			}
+		});
+		infoView.vpBlauDinamic.setBounds(rect);
+		add(infoView.vpBlauDinamic);
 		add(infoView);	
 		infoView.setVisible(false);
 	}
@@ -165,7 +192,7 @@ public class VistaTauler extends DefaultView{
 		passejantEstatic.setBounds(frame);
 		
 		//Afegim el listener
-		MouseAdapter listener = new DragAndDropListener(vp);
+		MouseAdapter listener = new DragAndDropListener(vp, passejantEstatic);
 		vp.addMouseListener(listener);
 		vp.addMouseMotionListener(listener);
 		vp.addActionListener(new ActionListener() {
@@ -174,12 +201,12 @@ public class VistaTauler extends DefaultView{
 				draggingPassejant = false;
 				Thread t;
 				if (previousDistrict == -1 || cartaEntitySeleccionada.getDistricte().getDistricteID() != previousDistrict){
-					t = new Thread(new AnimacioPassejant(vp, passejantEstatic.getLocation(), false));
+					t = new Thread(new AnimacioPassejant(vp, passejantEstatic, passejantEstatic.getLocation(), passejantEstatic.getBounds(), false, false));
 					//TODO: actualitzar la capa lògica 
 				}
 				else{
 					
-					t = new Thread(new AnimacioPassejant(vp, infoView.getLocation(), true));
+					t = new Thread(new AnimacioPassejant(vp, passejantEstatic, infoView.getLocation(), passejantEstatic.getBounds(), true, false));
 					//TODO: actualitzar la vista d'informacio
 				}
 				
@@ -517,11 +544,14 @@ public class VistaTauler extends DefaultView{
 	class DragAndDropListener extends MouseAdapter {
 		Point p = null;
 		VistaPassejant vistaPassejants = null;
+		 VistaPassejant vistaPassejantEstatic = null;
 		public boolean shouldSelectDistrict = true;
+		public boolean betweenDistricts = false;
 		
 		public DragAndDropListener() {}
-		public DragAndDropListener(VistaPassejant vistaPassejants) {
+		public DragAndDropListener(VistaPassejant vistaPassejants, VistaPassejant vistaPassejantEstatic) {
 			this.vistaPassejants = vistaPassejants;
+			this.vistaPassejantEstatic = vistaPassejantEstatic;
 		}
 		   
         @Override
@@ -529,13 +559,20 @@ public class VistaTauler extends DefaultView{
           p = e.getLocationOnScreen();
           int x = p.x-tauler_img.getLocationOnScreen().x;
           int y = p.y-tauler_img.getLocationOnScreen().y;
+          if(betweenDistricts && previousDistrict != -1)nomAnteriorDistricteSeleccionat = nomDistricteSeleccionat;
           if(shouldSelectDistrict)selectDistrict(x, y);
         }
    
         @Override
         public void mouseDragged(MouseEvent e) {
-        	  if(vistaPassejants != null && Partida.getInstance().getIdJugadorActual() != 1)return;
-	          JComponent c = (JComponent) e.getSource();
+        	  if(vistaPassejants != null && (Partida.getInstance().getIdJugadorActual() != 1 || !cartaSeleccionada))return;
+	          if(betweenDistricts){
+	        	  if(Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).getNumPassejantsBlaus() == 0 || Partida.getInstance().getPas() != 3) return;
+	          }
+	          else {
+	        	  if(Partida.getInstance().getPas() != 2)return;
+	          }
+        	  JComponent c = (JComponent) e.getSource();
 	          Point l = c.getLocation();
 	          Point here = e.getLocationOnScreen();
 	          c.setLocation(l.x + here.x - p.x, l.y + here.y - p.y);
@@ -543,24 +580,31 @@ public class VistaTauler extends DefaultView{
 	          int x = here.x-tauler_img.getLocationOnScreen().x;
 	          int y = here.y-tauler_img.getLocationOnScreen().y;
 	          if(shouldSelectDistrict)selectDistrict(x, y);
-	          
 	          if(vistaPassejants != null && !draggingPassejant){
-	        	  passejantEstatic.setNum(vistaPassejants.getNum()-1);
+	        	  vistaPassejantEstatic.setNum(vistaPassejants.getNum()-1);
 	        	  vistaPassejants.setNum(0);
+	        	  vistaPassejants.setShowZero(false);
 	        	  draggingPassejant = true;
+	        	  if(betweenDistricts)infoView.setDraggingPassejant(true);
 	          }
         }
 	}
 	
 	class AnimacioPassejant implements Runnable{
 		VistaPassejant passejant;
+		VistaPassejant vPassejantEstatic;
 		Point goal;
 		boolean toInfoView;
+		Rectangle finalPosition;
+		public boolean betweenDistricts = false;
 		
-		public AnimacioPassejant(VistaPassejant passejant, Point goal, boolean toInfoView) {
+		public AnimacioPassejant(VistaPassejant passejant, VistaPassejant vPassejantEstatic, Point goal, Rectangle finalPosition, boolean toInfoView, boolean betweenDistricts) {
 			this.passejant = passejant;
 			this.goal = goal;
 			this.toInfoView = toInfoView;
+			this.finalPosition = finalPosition;
+			this.vPassejantEstatic = vPassejantEstatic;
+			this.betweenDistricts = betweenDistricts;
 		}
 		
 		@Override
@@ -601,15 +645,28 @@ public class VistaTauler extends DefaultView{
 					}
 					catch(Exception e) {}
 				}
-				passejant.setBounds(passejantEstatic.getBounds());
+				passejant.setBounds(finalPosition);
 				animationOn = false;
 				if(!toInfoView){
-					passejant.setNum(passejantEstatic.getNum()+1);
+					if(!betweenDistricts){
+						passejant.setNum(vPassejantEstatic.getNum()+1);
+					}
+					else{
+						passejant.setNum(vPassejantEstatic.getNum());
+					}
 				}
 				else{
-					passejant.setNum(passejantEstatic.getNum());
-					listener.passejantMogut(1, nomDistricteSeleccionat);
-					infoView.update();
+					if(!betweenDistricts){
+						passejant.setNum(vPassejantEstatic.getNum());
+						listener.passejantMogut(1, nomDistricteSeleccionat);
+						infoView.update();
+					}
+					else{
+						passejant.setNum(Partida.getInstance().getDistricte(nomDistricteSeleccionat).getNumPassejantsBlaus()+1);
+						System.out.println(nomAnteriorDistricteSeleccionat + " -> " + nomDistricteSeleccionat);
+						listener.passejantMogutEntreDistrictes(nomAnteriorDistricteSeleccionat, nomDistricteSeleccionat);
+						infoView.update();
+					}
 				}
 			}
 		}

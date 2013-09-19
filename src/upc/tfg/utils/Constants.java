@@ -3,6 +3,9 @@ package upc.tfg.utils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class Constants {
 	//Paths
@@ -15,7 +18,7 @@ public class Constants {
 	
 	//Fonts
 	public static final Font fontGillSansBold = new Font("Gill Sans MT", Font.BOLD, 12);
-	public static final Font fontButton = new Font("Verdana", Font.BOLD, 13);
+	public static final Font fontButton = new Font("Kristen ITC", Font.CENTER_BASELINE, 11);//("Verdana", Font.BOLD, 13);
 	public static final Font fontPassejants = new Font("Kristen ITC", Font.BOLD, 35);
 	public static final Font fontCooper = new Font("Cooper Black", Font.BOLD, 14);
 	public static final Font fontBradleyBig = new Font("Bradley Hand ITC", Font.BOLD, 18);
@@ -48,5 +51,77 @@ public class Constants {
 	public static final int VERMELL 	= 2;
 	public static final int GROC	 	= 3;
 	public static final int VERD	 	= 4;
+	
+	//Graf dels districtes adjacents
+	private static final List<Integer> valuesCorts = new ArrayList<Integer>(){{
+		add(SANTS_MONTJUIC);
+		add(SARRIA_SANT_GERVASI);
+		add(EIXAMPLE);
+	}};
+	private static final List<Integer> valuesSants = new ArrayList<Integer>(){{
+		add(LES_CORTS);
+		add(EIXAMPLE);
+		add(CIUTAT_VELLA);
+	}};
+	private static final List<Integer> valuesSarria = new ArrayList<Integer>(){{
+		add(LES_CORTS);
+		add(EIXAMPLE);
+		add(GRACIA);
+		add(HORTA_GUINARDO);
+	}};
+	private static final List<Integer> valuesEixample = new ArrayList<Integer>(){{
+		add(SANTS_MONTJUIC);
+		add(LES_CORTS);
+		add(SARRIA_SANT_GERVASI);
+		add(GRACIA);
+		add(HORTA_GUINARDO);
+		add(SANT_MARTI);
+		add(CIUTAT_VELLA);
+	}};
+	private static final List<Integer> valuesCiutatVella = new ArrayList<Integer>(){{
+		add(SANTS_MONTJUIC);
+		add(EIXAMPLE);
+		add(SANT_MARTI);
+	}};
+	private static final List<Integer> valuesGracia = new ArrayList<Integer>(){{
+		add(SARRIA_SANT_GERVASI);
+		add(HORTA_GUINARDO);
+		add(EIXAMPLE);
+	}};
+	private static final List<Integer> valuesHorta = new ArrayList<Integer>(){{
+		add(SARRIA_SANT_GERVASI);
+		add(GRACIA);
+		add(NOU_BARIS);
+		add(SANT_ANDREU);
+		add(EIXAMPLE);
+		add(SANT_MARTI);
+	}};
+	private static final List<Integer> valuesSantMarti = new ArrayList<Integer>(){{
+		add(CIUTAT_VELLA);
+		add(EIXAMPLE);
+		add(HORTA_GUINARDO);
+		add(SANT_ANDREU);
+	}};
+	private static final List<Integer> valuesNouBarris = new ArrayList<Integer>(){{
+		add(HORTA_GUINARDO);
+		add(SANT_ANDREU);
+	}};
+	private static final List<Integer> valuesSantAndreu = new ArrayList<Integer>(){{
+		add(NOU_BARIS);
+		add(HORTA_GUINARDO);
+		add(SANT_MARTI);
+	}};
+	public static final HashMap<Integer,List<Integer>> grafDistrictes  = new HashMap<Integer, List<Integer>>(){{
+        put(LES_CORTS, valuesCorts);
+        put(SANTS_MONTJUIC, valuesSants);
+        put(SARRIA_SANT_GERVASI, valuesSarria);
+        put(EIXAMPLE, valuesEixample);
+        put(CIUTAT_VELLA, valuesCiutatVella);
+        put(GRACIA, valuesGracia);
+        put(HORTA_GUINARDO, valuesHorta);
+        put(SANT_MARTI, valuesSantMarti);
+        put(NOU_BARIS, valuesNouBarris);
+        put(SANT_ANDREU, valuesSantAndreu);
+    }};
 	
 }
