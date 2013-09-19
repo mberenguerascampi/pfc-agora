@@ -1,5 +1,6 @@
 package upc.tfg.utils;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -47,18 +48,15 @@ public class AudioPlayer extends Thread {
 	}
 	
 	public void startPlayback() throws NoPlayerException, CannotRealizeException, MalformedURLException, IOException {
-		// Take the path of the audio file from command line	 
-		 //URL url = getClass().getResource(Constants.fileAudioUrl+ "Downstream.mp3");
-		 // Create a Player object that realizes the audio
-		 //p=Manager.createRealizedPlayer(url);
-		 AudioInputStream audioInputStream = null;
-		try {
-			audioInputStream = AudioSystem.getAudioInputStream(getClass().getResourceAsStream(Constants.fileAudioUrl+ "QuickSilver.wav"));
-		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}//Pass inputStream to AudioSystem
 		
+		BufferedInputStream myStream = new BufferedInputStream(getClass().getResourceAsStream(Constants.fileAudioUrl+ "QuickSilver.wav")); 
+		AudioInputStream audio2 = null;
+		try {
+			audio2 = AudioSystem.getAudioInputStream(myStream);
+		} catch (UnsupportedAudioFileException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 //		InputStream stream=new FileInputStream(Constants.fileAudioUrl+ "QuickSilver.wav");
 //		 AudioInputStream as = new AudioInputStream(stream, null, 1000);
 		 Clip clip = null;
@@ -69,7 +67,7 @@ public class AudioPlayer extends Thread {
 			e.printStackTrace();
 		}
 		 try {
-			clip.open(audioInputStream);
+			clip.open(audio2);
 		} catch (LineUnavailableException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

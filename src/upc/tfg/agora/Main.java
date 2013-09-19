@@ -24,17 +24,17 @@ public class Main {
 	            	try {
 	            		agora = new Agora();
 	            		AudioPlayer ap = new AudioPlayer();
-	            		//ap.startPlayback();
+	            		ap.startPlayback();
 	            		gameLoop();
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {
 						e.printStackTrace();}
-//					catch (NoPlayerException e) {
-//						e.printStackTrace();
-//					} catch (CannotRealizeException e) {
-//						e.printStackTrace();
-//					}  
+					catch (NoPlayerException e) {
+						e.printStackTrace();
+					} catch (CannotRealizeException e) {
+						e.printStackTrace();
+					}  
 	            }  
 	        });  
 	}
