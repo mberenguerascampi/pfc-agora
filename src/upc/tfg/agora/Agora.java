@@ -174,8 +174,8 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		logic.mouPassejantADistricte(nomDistricte, idJugador);
 	}
 	
-	public void passejantMogutEntreDistrictes(String districtName1, String districtName2){
-		logic.mouPassejantsEntreDistrictes(districtName1, districtName2, Constants.BLAU);
+	public void passejantMogutEntreDistrictes(String districtName1, String districtName2, int color){
+		logic.mouPassejantsEntreDistrictes(districtName1, districtName2, color);
 	}
 	
 	public void nextPlayer(){

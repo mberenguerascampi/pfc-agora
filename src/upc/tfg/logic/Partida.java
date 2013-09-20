@@ -107,14 +107,30 @@ public class Partida {
 		baralla2.barrejar();
 	}
 	
-	public boolean potMoure(String districte1, String districte2){
+	public boolean potMoure(String districte1, String districte2, int color){
 		Districte d1 = getDistricte(districte1);
 		Districte d2 = getDistricte(districte2);
+		if(!potAfegirPassejant(d2, color)) return false;
+		if(!potTreurePassejant(d1, color)) return false;
 		List<Integer> districtesAdjacents = Constants.grafDistrictes.get(d1.getDistricteID());
 		for(int i = 0; i < districtesAdjacents.size(); ++i){
 			if(districtesAdjacents.get(i) == d2.getDistricteID())return true;
 		}
 		return false;
+	}
+	
+	public boolean potAfegirPassejant(Districte districte, int color){
+		if(passejantsAMoure == 1){
+			return districte.potAfegirPassejant(color);
+		}
+		return true;
+	}
+	
+	public boolean potTreurePassejant(Districte districte, int color){
+		if(passejantsAMoure == 1){
+			return districte.potTreurePassejant(color);
+		}
+		return true;
 	}
 	
 	//Getters & Setters

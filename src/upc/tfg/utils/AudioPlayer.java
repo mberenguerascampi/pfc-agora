@@ -22,7 +22,6 @@ import com.sun.media.MediaPlayer;
 public class AudioPlayer extends Thread {
 	private static AudioPlayer instance = null;
 	Player p;
-	private static final String MEDIA_URL = "http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv";
 	
 	public AudioPlayer() {
 		instance = this;
@@ -49,35 +48,26 @@ public class AudioPlayer extends Thread {
 	
 	public void startPlayback() throws NoPlayerException, CannotRealizeException, MalformedURLException, IOException {
 		
-		BufferedInputStream myStream = new BufferedInputStream(getClass().getResourceAsStream(Constants.fileAudioUrl+ "QuickSilver.wav")); 
+		BufferedInputStream myStream = new BufferedInputStream(getClass().getResourceAsStream(Constants.fileAudioUrl+ "Downstream.wav")); 
 		AudioInputStream audio2 = null;
 		try {
 			audio2 = AudioSystem.getAudioInputStream(myStream);
 		} catch (UnsupportedAudioFileException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-//		InputStream stream=new FileInputStream(Constants.fileAudioUrl+ "QuickSilver.wav");
-//		 AudioInputStream as = new AudioInputStream(stream, null, 1000);
-		 Clip clip = null;
+		
+		Clip clip = null;
 		try {
 			clip = AudioSystem.getClip();
 		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		 try {
 			clip.open(audio2);
 		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		 clip.start();
-//		
-		//MediaLocator ml = new MediaLocator(url);
-		//p = Manager.createPlayer(ml);
-		// Start the music
-		//p.start();
+		clip.start();
 	}
 	
 	public void stopPlayBack(){

@@ -31,6 +31,17 @@ public class Districte {
 		passejantsVermells = new ArrayList<Passejant>();
 		passejantsVerds = new ArrayList<Passejant>();
 		passejantsGrocs = new ArrayList<Passejant>();
+		
+		Passejant p = new Passejant(Constants.VERMELL, false);
+		afegeixPassejant(p);
+		Passejant p2 = new Passejant(Constants.VERMELL, false);
+		afegeixPassejant(p2);
+		Passejant p3 = new Passejant(Constants.VERD, false);
+		afegeixPassejant(p3);
+		Passejant p4 = new Passejant(Constants.GROC, false);
+		afegeixPassejant(p4);
+		Passejant p5 = new Passejant(Constants.VERMELL, false);
+		afegeixPassejant(p5);
 	}
 	
 	public void afegeixPassejant(Passejant passejant){
@@ -89,6 +100,29 @@ public class Districte {
 		return true;
 	}
 	
+	public boolean potTreurePassejant(int color){
+		ArrayList<Passejant>temp = getArray(color);
+		ArrayList<Passejant>temp2 = getMaxArray();
+		if(!temp.equals(temp2)) return true;
+		else {
+			int newSize = temp.size()-1;
+			if(passejantsBlaus.size() == newSize || passejantsVermells.size() == newSize 
+					|| passejantsGrocs.size() == newSize || passejantsVerds.size() == newSize){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private ArrayList<Passejant> getMaxArray(){
+		int maxSize = Math.max(Math.max(passejantsBlaus.size(), passejantsVermells.size()), 
+					Math.max(passejantsGrocs.size(), passejantsVerds.size()));
+		if(maxSize == passejantsBlaus.size()) return passejantsBlaus;
+		else if(maxSize == passejantsVermells.size()) return passejantsVermells;
+		else if(maxSize == passejantsGrocs.size()) return passejantsGrocs;
+		else return passejantsVerds;
+	}
+	
 	public int getNumPassejantsBlaus(){
 		return passejantsBlaus.size();
 	}
@@ -103,6 +137,21 @@ public class Districte {
 	
 	public int getNumPassejantsGrocs(){
 		return passejantsGrocs.size();
+	}
+	
+	public int getNumPassejants(int color){
+		switch (color){
+			case Constants.BLAU:
+				return getNumPassejantsBlaus();
+			case Constants.VERMELL:
+				return getNumPassejantsVermells();
+			case Constants.GROC:
+				return getNumPassejantsGrocs();
+			case Constants.VERD:
+				return getNumPassejantsVerds();
+			default:
+				return 0;
+		}
 	}
 	
 	private ArrayList<Passejant> getArray(int color){

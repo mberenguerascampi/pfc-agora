@@ -24,9 +24,11 @@ public class VistaPassejant extends JButton {
 	public static final int NUM_HEIGHT	 			= 40;
 	
 	private String color;
+	private int iColor;
 	private int num;
 	private JLabel numLabel;
 	private boolean showZero;
+	private boolean draggingPassejant;
 	/**
 	 * 
 	 */
@@ -53,15 +55,19 @@ public class VistaPassejant extends JButton {
 		Color foreground = null;
 		if (color.equals(PASSEJANT_BLAU)){
 			foreground = Color.YELLOW;
+			iColor = Constants.BLAU;
 		}
 		else if (color.equals(PASSEJANT_VERMELL)){
 			foreground = Color.GREEN;
+			iColor = Constants.VERMELL;
 		}
 		else if (color.equals(PASSEJANT_GROC)){
 			foreground = Color.BLUE;
+			iColor = Constants.GROC;
 		}
 		else {
 			foreground = Color.RED;
+			iColor = Constants.VERD;
 		}
 		numLabel.setForeground(foreground);
 		updateText();
@@ -118,5 +124,21 @@ public class VistaPassejant extends JButton {
 		public void setShowZero(boolean showZero) {
 			this.showZero = showZero;
 			numLabel.setVisible(showZero);
+		}
+
+		public boolean isDraggingPassejant() {
+			return draggingPassejant;
+		}
+
+		public void setDraggingPassejant(boolean draggingPassejant) {
+			this.draggingPassejant = draggingPassejant;
+		}
+
+		public int getiColor() {
+			return iColor;
+		}
+
+		public void setiColor(int iColor) {
+			this.iColor = iColor;
 		}
 }

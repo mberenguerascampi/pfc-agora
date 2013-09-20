@@ -26,8 +26,13 @@ public class VistaInformacio extends JPanel {
 	public VistaPassejant vpVermell;
 	public VistaPassejant vpGroc;
 	public VistaPassejant vpVerd;
+	private VistaPassejant[] passejants = {vpBlau, vpVermell, vpVerd, vpGroc};
 	
 	public VistaPassejant vpBlauDinamic;
+	public VistaPassejant vpVermellDinamic;
+	public VistaPassejant vpGrocDinamic;
+	public VistaPassejant vpVerdDinamic;
+	private VistaPassejant[] passejantsDinamics = {vpBlauDinamic, vpVermellDinamic, vpVerdDinamic, vpGrocDinamic};
 	private boolean draggingPassejant = false;
 	
 	public VistaInformacio() {
@@ -52,11 +57,6 @@ public class VistaInformacio extends JPanel {
 	public void setDistricte(Districte districte){
 		this.districte = districte;
 		setNomDistricte(districte.getNom());
-//		vpBlau.setNum(districte.getNumPassejantsBlaus());
-//		vpBlauDinamic.setNum(districte.getNumPassejantsBlaus());
-//		vpVermell.setNum(districte.getNumPassejantsVermells());
-//		vpVerd.setNum(districte.getNumPassejantsVerds());
-//		vpGroc.setNum(districte.getNumPassejantsGrocs());
 		update();
 	}
 	
@@ -66,17 +66,39 @@ public class VistaInformacio extends JPanel {
 	
 	public void update(){
 		vpBlau.setNum(districte.getNumPassejantsBlaus());
+		vpVermell.setNum(districte.getNumPassejantsVermells());
+		vpVerd.setNum(districte.getNumPassejantsVerds());
+		vpGroc.setNum(districte.getNumPassejantsGrocs());
 		
-		if(!draggingPassejant){
+		//Si no estem arrossegant el passejant li posem el numero de passejants del districte, sino si estem
+		//arrossegant i estem en el districte que estem arrossegant li restem un.
+		if(!vpBlauDinamic.isDraggingPassejant()){
 			vpBlauDinamic.setNum(districte.getNumPassejantsBlaus());
 		}
 		else if (districte == draggingDistrict){
 			vpBlau.setNum(districte.getNumPassejantsBlaus()-1);
 		}
 		
-		vpVermell.setNum(districte.getNumPassejantsVermells());
-		vpVerd.setNum(districte.getNumPassejantsVerds());
-		vpGroc.setNum(districte.getNumPassejantsGrocs());
+		if(!vpVermellDinamic.isDraggingPassejant()){
+			vpVermellDinamic.setNum(districte.getNumPassejantsVermells());
+		}
+		else if (districte == draggingDistrict){
+			vpVermell.setNum(districte.getNumPassejantsVermells()-1);
+		}
+		
+		if(!vpVerdDinamic.isDraggingPassejant()){
+			vpVerdDinamic.setNum(districte.getNumPassejantsVerds());
+		}
+		else if (districte == draggingDistrict){
+			vpVerd.setNum(districte.getNumPassejantsVerds()-1);
+		}
+		
+		if(!vpGrocDinamic.isDraggingPassejant()){
+			vpGrocDinamic.setNum(districte.getNumPassejantsGrocs());
+		}
+		else if (districte == draggingDistrict){
+			vpGroc.setNum(districte.getNumPassejantsGrocs()-1);
+		}
 	}
 	
 	private void addPassejants(){
@@ -98,6 +120,10 @@ public class VistaInformacio extends JPanel {
 		vpVermell.setShowZero(true);
 		add(vpVermell);
 		
+		vpVermellDinamic = new VistaPassejant(VistaPassejant.PASSEJANT_VERMELL, 0);
+		vpVermellDinamic.setEnabled(true);
+		vpVermellDinamic.setShowZero(true);
+		
 		vpGroc = new VistaPassejant(VistaPassejant.PASSEJANT_GROC, 0);
 		vpGroc.setEnabled(false);
 		frame = new Rectangle(10, 230, 95, 102);
@@ -105,32 +131,60 @@ public class VistaInformacio extends JPanel {
 		vpGroc.setBounds(frame);
 		add(vpGroc);
 		
+		vpGrocDinamic = new VistaPassejant(VistaPassejant.PASSEJANT_GROC, 0);
+		vpGrocDinamic.setEnabled(true);
+		vpGrocDinamic.setShowZero(true);
+		
 		vpVerd = new VistaPassejant(VistaPassejant.PASSEJANT_VERD, 0);
 		vpVerd.setEnabled(false);
 		frame = new Rectangle(10, 330, 95, 102);
 		vpVerd.setShowZero(true);
 		vpVerd.setBounds(frame);
 		add(vpVerd);
+		
+		vpVerdDinamic = new VistaPassejant(VistaPassejant.PASSEJANT_VERD, 0);
+		vpVerdDinamic.setEnabled(true);
+		vpVerdDinamic.setShowZero(true);
 	}
 	
 	public void setVisible(boolean visibility){
 		super.setVisible(visibility);
 		vpBlauDinamic.setVisible(visibility);
+		vpVermellDinamic.setVisible(visibility);
+		vpVerdDinamic.setVisible(visibility);
+		vpGrocDinamic.setVisible(visibility);
 	}
 
 	public boolean isDraggingPassejant() {
 		return draggingPassejant;
 	}
 
-	public void setDraggingPassejant(boolean draggingPassejant) {
+	public void setDraggingPassejant(boolean draggingPassejant, int color) {
 		this.draggingPassejant = draggingPassejant;
+		VistaPassejant temp = getVistaPassejant(color);
+		temp.setDraggingPassejant(draggingPassejant);
 		if(draggingPassejant){
 			draggingDistrict = districte;
-			vpBlauDinamic.setShowZero(false);
+			temp.setShowZero(false);
 		}
 		else{
-			vpBlauDinamic.setShowZero(true);
+			temp.setShowZero(true);
 			draggingDistrict = null;
+		}
+	}
+	
+	private VistaPassejant getVistaPassejant(int color){
+		switch(color){
+			case Constants.BLAU:
+				return vpBlauDinamic;
+			case Constants.VERMELL:
+				return vpVermellDinamic;
+			case Constants.VERD:
+				return vpVerdDinamic;
+			case Constants.GROC:
+				return vpGrocDinamic;
+			default:
+				return null;
 		}
 	}
 }

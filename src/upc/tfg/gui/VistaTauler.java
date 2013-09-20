@@ -135,34 +135,34 @@ public class VistaTauler extends DefaultView{
 	private void addDistrictInformationView() {
 		infoView = new VistaInformacio();
 		infoView.setBounds(Constants.paddingX+Constants.width - VistaInformacio.INFORMATION_WIDTH, VistaEstat.ESTAT_HEIGHT, VistaInformacio.INFORMATION_WIDTH, VistaInformacio.INFORMATION_HEIGHT);
-		DragAndDropListener ddListener = new DragAndDropListener(infoView.vpBlauDinamic, infoView.vpBlau);
-		ddListener.betweenDistricts = true;
-		final Rectangle rect = new Rectangle(infoView.getLocation().x+infoView.vpBlau.getLocation().x,
-				infoView.getLocation().y+infoView.vpBlau.getLocation().y, 95, 102);
-		infoView.vpBlauDinamic.addMouseListener(ddListener);
-		infoView.vpBlauDinamic.addMouseMotionListener(ddListener);
-		infoView.vpBlauDinamic.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				draggingPassejant = false;
-				infoView.setDraggingPassejant(false);
-				Thread t;
-				if (previousDistrict == -1 || !(Partida.getInstance().potMoure(nomAnteriorDistricteSeleccionat, nomDistricteSeleccionat))){
-					t = new Thread(new AnimacioPassejant(infoView.vpBlauDinamic, infoView.vpBlau, rect.getLocation(), rect, false, true));
-					infoView.setDraggingPassejant(false);
-				}
-				else{
-					t = new Thread(new AnimacioPassejant(infoView.vpBlauDinamic, infoView.vpBlau, rect.getLocation(), rect, true, true));
-				}
-				
-				animationOn = true;
-				t.start();
-			}
-		});
-		infoView.vpBlauDinamic.setBounds(rect);
+		
+		//Afegim els listeners als passejants del districte
+		configuraPassejantsDistrictes(infoView.vpBlau, infoView.vpBlauDinamic, Constants.BLAU);
+		configuraPassejantsDistrictes(infoView.vpVermell, infoView.vpVermellDinamic, Constants.VERMELL);
+		configuraPassejantsDistrictes(infoView.vpVerd, infoView.vpVerdDinamic, Constants.VERD);
+		configuraPassejantsDistrictes(infoView.vpGroc, infoView.vpGrocDinamic, Constants.GROC);
+		
 		add(infoView.vpBlauDinamic);
+		add(infoView.vpVermellDinamic);
+		add(infoView.vpVerdDinamic);
+		add(infoView.vpGrocDinamic);
 		add(infoView);	
 		infoView.setVisible(false);
+	}
+	
+	
+	private void configuraPassejantsDistrictes(VistaPassejant vpEstatic, VistaPassejant vpDinamic, int color){
+		DragAndDropListener ddListener = new DragAndDropListener(vpDinamic, vpEstatic);
+		ddListener.betweenDistricts = true;
+		PassejantsDistricteListener pdlistener = new PassejantsDistricteListener(vpEstatic, vpDinamic);
+		final Rectangle rect = new Rectangle(infoView.getLocation().x+vpEstatic.getLocation().x,
+				infoView.getLocation().y+vpEstatic.getLocation().y, 95, 102);
+		vpDinamic.addMouseListener(ddListener);
+		vpDinamic.addMouseMotionListener(ddListener);
+		pdlistener.color = color;
+		pdlistener.rect = rect;
+		vpDinamic.addActionListener(pdlistener);
+		vpDinamic.setBounds(rect);
 	}
 	
 	private void addCartaInformationview(){
@@ -567,7 +567,7 @@ public class VistaTauler extends DefaultView{
         public void mouseDragged(MouseEvent e) {
         	  if(vistaPassejants != null && (Partida.getInstance().getIdJugadorActual() != 1 || !cartaSeleccionada))return;
 	          if(betweenDistricts){
-	        	  if(Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).getNumPassejantsBlaus() == 0 || Partida.getInstance().getPas() != 3) return;
+	        	  if(Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).getNumPassejants(vistaPassejantEstatic.getiColor()) == 0 || Partida.getInstance().getPas() != 3) return;
 	          }
 	          else {
 	        	  if(Partida.getInstance().getPas() != 2)return;
@@ -585,10 +585,38 @@ public class VistaTauler extends DefaultView{
 	        	  vistaPassejants.setNum(0);
 	        	  vistaPassejants.setShowZero(false);
 	        	  draggingPassejant = true;
-	        	  if(betweenDistricts)infoView.setDraggingPassejant(true);
+	        	  if(betweenDistricts)infoView.setDraggingPassejant(true, vistaPassejantEstatic.getiColor());
 	          }
         }
 	}
+	
+	class PassejantsDistricteListener implements ActionListener{
+		public Rectangle rect;
+		public int color;
+		VistaPassejant vpEstatic;
+		VistaPassejant vpDinamic;
+		
+		public PassejantsDistricteListener(VistaPassejant vpEstatic, VistaPassejant vpDinamic) {
+			this.vpEstatic = vpEstatic;
+			this.vpDinamic = vpDinamic;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			draggingPassejant = false;
+			infoView.setDraggingPassejant(false, color);
+			Thread t;
+			if (previousDistrict == -1 || !(Partida.getInstance().potMoure(nomAnteriorDistricteSeleccionat, nomDistricteSeleccionat, vpEstatic.getiColor()))){
+				t = new Thread(new AnimacioPassejant(vpDinamic, vpEstatic, rect.getLocation(), rect, false, true));
+			}
+			else{
+				t = new Thread(new AnimacioPassejant(vpDinamic, vpEstatic, rect.getLocation(), rect, true, true));
+			}
+			
+			animationOn = true;
+			t.start();
+		}
+	};
 	
 	class AnimacioPassejant implements Runnable{
 		VistaPassejant passejant;
@@ -662,13 +690,31 @@ public class VistaTauler extends DefaultView{
 						infoView.update();
 					}
 					else{
-						passejant.setNum(Partida.getInstance().getDistricte(nomDistricteSeleccionat).getNumPassejantsBlaus()+1);
+						int numPassejants = getNumPassejants();
+						passejant.setNum(numPassejants);
 						System.out.println(nomAnteriorDistricteSeleccionat + " -> " + nomDistricteSeleccionat);
-						listener.passejantMogutEntreDistrictes(nomAnteriorDistricteSeleccionat, nomDistricteSeleccionat);
+						listener.passejantMogutEntreDistrictes(nomAnteriorDistricteSeleccionat, nomDistricteSeleccionat, passejant.getiColor());
 						infoView.update();
 					}
 				}
 			}
+		}
+		
+		private int getNumPassejants(){
+			int numPassejants = 0;
+			if(vPassejantEstatic.getColor().equals(VistaPassejant.PASSEJANT_BLAU)){
+				numPassejants = Partida.getInstance().getDistricte(nomDistricteSeleccionat).getNumPassejantsBlaus()+1;
+			}
+			else if(vPassejantEstatic.getColor().equals(VistaPassejant.PASSEJANT_VERMELL)){
+				numPassejants = Partida.getInstance().getDistricte(nomDistricteSeleccionat).getNumPassejantsVermells()+1;
+			}
+			else if(vPassejantEstatic.getColor().equals(VistaPassejant.PASSEJANT_VERD)){
+				numPassejants = Partida.getInstance().getDistricte(nomDistricteSeleccionat).getNumPassejantsVerds()+1;
+			}
+			else if(vPassejantEstatic.getColor().equals(VistaPassejant.PASSEJANT_GROC)){
+				numPassejants = Partida.getInstance().getDistricte(nomDistricteSeleccionat).getNumPassejantsGrocs()+1;
+			}
+			return numPassejants;
 		}
 	}
 	
