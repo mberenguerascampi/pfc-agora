@@ -112,9 +112,18 @@ public class Partida {
 		Districte d2 = getDistricte(districte2);
 		if(!potAfegirPassejant(d2, color)) return false;
 		if(!potTreurePassejant(d1, color)) return false;
+		if(hiHaDistricteAmbMateixNombrePassejants(d1, d2))return false;
 		List<Integer> districtesAdjacents = Constants.grafDistrictes.get(d1.getDistricteID());
 		for(int i = 0; i < districtesAdjacents.size(); ++i){
 			if(districtesAdjacents.get(i) == d2.getDistricteID())return true;
+		}
+		return false;
+	}
+	
+	public boolean hiHaDistricteAmbMateixNombrePassejants(Districte excepcio1, Districte excepcio2){
+		if(passejantsAMoure != 1) return false;
+		for (Districte d:tauler.getDistrictes()){
+			if (d != excepcio1 && d != excepcio2 && d.teMateixNombreMaxPassejants())return true;
 		}
 		return false;
 	}
@@ -268,5 +277,13 @@ public class Partida {
 		}
 		text = text + " </html>";
 		return text;
+	}
+
+	public int getIdJugadorInici() {
+		return idJugadorInici;
+	}
+
+	public void setIdJugadorInici(int idJugadorInici) {
+		this.idJugadorInici = idJugadorInici;
 	}
 }

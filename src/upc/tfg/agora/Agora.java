@@ -197,6 +197,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		tauler.afegeixCarta(jugadorID, posicio, cartaEntity);
 	}
 	
+	public void treureCartaSeleccionada(){
+		tauler.treureCartaSeleccionada();
+	}
+	
 	public void updateView(){
 		tauler.updateView();
 	}

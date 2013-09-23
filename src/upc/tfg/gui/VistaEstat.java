@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 import upc.tfg.logic.Partida;
 import upc.tfg.utils.Constants;
 
-public class VistaEstat extends JPanel{
+public class VistaEstat extends TransparentView{
 
 	/**
 	 * 
@@ -25,10 +25,9 @@ public class VistaEstat extends JPanel{
 	
 	public VistaEstat() {
 		setLayout(null);
-		//setOpaque(false);
+		setOpaque(false);
 		setFocusable(false);
 		setCursor(null);
-		setBackground(new Color(0,0,0,94));
 		
 		numTorn = 1;
 		
@@ -65,15 +64,6 @@ public class VistaEstat extends JPanel{
 		pasLabel.setText(pasText);
 		tornLabel.setText("TORN " + String.valueOf(Partida.getInstance().getTorn()));
 	}
-	
-	@Override
-	 public void paintComponent(Graphics g)
-	 {
-		 	g.clearRect(getBounds().x, getBounds().y, getBounds().width, getBounds().height);
-	        g.setColor( getBackground() );
-	        g.fillRect(0, 0, getWidth(), getHeight());
-	        super.paintComponent(g);
-	    }
 	
 	//Getters & setters
 

@@ -37,8 +37,8 @@ public class ControladorLogic {
 			if(districte.getNom().equalsIgnoreCase(nomDistricte)){
 				districte.afegeixPassejant(p);
 				if(partida.decrementaPassejantsAMoure()){
+					agora.treureCartaSeleccionada();
 					agora.updateView();
-					//TODO: Treure la carta for del tauler
 				}
 				return;
 			}
@@ -55,8 +55,8 @@ public class ControladorLogic {
 			districteB.afegeixPassejant(p);
 			
 			if(partida.decrementaPassejantsAMoure()){
+				//agora.treureCartaSeleccionada();
 				agora.updateView();
-				//TODO: Treure la carta for del tauler
 			}
 		}
 	}

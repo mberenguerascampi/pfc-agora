@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="src/libs/mediaplayer.jar"/>
 	<classpathentry kind="lib" path="src/libs/multiplayer.jar"/>
 	<classpathentry kind="lib" path="src/libs/sound.jar"/>
+	<classpathentry kind="lib" path="src/libs/mp3plugin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

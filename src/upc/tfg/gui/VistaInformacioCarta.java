@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import upc.tfg.logic.Carta;
 import upc.tfg.utils.Constants;
 
-public class VistaInformacioCarta extends JPanel {
+public class VistaInformacioCarta extends TransparentView {
 	/**
 	 * 
 	 */
@@ -22,8 +22,7 @@ public class VistaInformacioCarta extends JPanel {
 	
 	public VistaInformacioCarta() {
 		setLayout(null);
-		//setOpaque(false);
-		setBackground(new Color(0,0,0,94));
+		setOpaque(false);
 		
 		//Afegim els labels
 		nomCarta = new JLabel();

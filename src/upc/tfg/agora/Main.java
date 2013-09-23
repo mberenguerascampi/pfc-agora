@@ -30,11 +30,6 @@ public class Main {
 						e.printStackTrace();
 					} catch (InterruptedException e) {
 						e.printStackTrace();}
-					catch (NoPlayerException e) {
-						e.printStackTrace();
-					} catch (CannotRealizeException e) {
-						e.printStackTrace();
-					}  
 	            }  
 	        });  
 	}
