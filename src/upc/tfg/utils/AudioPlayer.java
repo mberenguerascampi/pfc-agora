@@ -44,7 +44,7 @@ public class AudioPlayer extends Thread {
 	
 	public void startPlayback() throws IOException {
 		
-		BufferedInputStream myStream = new BufferedInputStream(getClass().getResourceAsStream(Constants.fileAudioUrl+ "Downstream.wav")); 
+		BufferedInputStream myStream = new BufferedInputStream(getClass().getResourceAsStream(Constants.fileAudioUrl+ "QuickSilver.wav")); 
 		AudioInputStream audio2 = null;
 		try {
 			audio2 = AudioSystem.getAudioInputStream(myStream);

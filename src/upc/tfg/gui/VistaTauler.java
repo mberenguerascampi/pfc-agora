@@ -63,7 +63,7 @@ public class VistaTauler extends DefaultView{
 	private ArrayList<JButton> cartes = new ArrayList<JButton>();
 	private JLabel tauler_img;
 	private JLabel districte_seleccionat_img;
-	private JButton marcCarta;
+	private JLabel marcCarta;
 	private VistaBaralla vBaralla1;
 	private VistaBaralla vBaralla2;
 	private VistaCarta vCartaBaralla1;
@@ -124,6 +124,7 @@ public class VistaTauler extends DefaultView{
 			addDistrictInformationView();
 			addCartaInformationview();
 			addStateView();
+			afegeixMarcCarta();
 			addTauler();
 			addSkin("tauler_background.jpg");
 		}
@@ -244,6 +245,29 @@ public class VistaTauler extends DefaultView{
 							rect = vistaCartaSeleccionada.getBounds();
 							vistaCartaSeleccionada.setBounds(rect.x, rect.y+25, rect.width, rect.height);
 						}
+						cartaEntitySeleccionada = cartaEntity;
+						vistaCartaSeleccionada = carta;
+						cardInfoView.setCarta(cartaEntity);
+						infoView.setVisible(false);
+						cardInfoView.setVisible(true);
+					}
+					else if(cartaEntitySeleccionada == cartaEntity){
+						infoView.setVisible(false);
+						cardInfoView.setVisible(true);
+					}
+				}
+			});
+	    }
+	    
+	    else{
+	    		carta.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					//TODO: Comprovar que les condicions son les adequades
+					if(Partida.getInstance().getPas() != 1) return;
+					if(!cartaSeleccionada){
+						listener.cartaSeleccionada(jugadorSeleccionat, cartaEntity);
 						cartaEntitySeleccionada = cartaEntity;
 						vistaCartaSeleccionada = carta;
 						cardInfoView.setCarta(cartaEntity);
@@ -433,19 +457,22 @@ public class VistaTauler extends DefaultView{
         }
 	}
 	
-	public void comencaIntercanviCartes(){
-		marcCarta = new JButton("");
+	public void afegeixMarcCarta(){
+		marcCarta = new JLabel("");
 		marcCarta.setOpaque(false);
 		marcCarta.setLayout(null);
-		marcCarta.setFocusPainted(false); 
-		marcCarta.setContentAreaFilled(false); 
-		marcCarta.setBorderPainted(false);
-		marcCarta.setBounds(taulerX+(IMG_TAULER_WIDTH/2)-240, taulerY+IMG_TAULER_HEIGHT-120-10
-				, 240, 120);
 		URL urlImg = getClass().getResource(Constants.fileUrl+"cartes/marcCarta.png");
 	    ImageIcon icon = new ImageIcon(urlImg);
 	    marcCarta.setIcon(icon);
+	    marcCarta.setVisible(false);
 	    add(marcCarta);
+	}
+	
+	public void visualitzaMarcCarta(VistaCarta carta){
+		Rectangle rect = carta.getBounds();
+		rect.y += 25;
+		marcCarta.setBounds(rect);
+		marcCarta.setVisible(true);
 	}
 	
 	public void afegeixBaralles(){
@@ -475,6 +502,7 @@ public class VistaTauler extends DefaultView{
 		vCartaBaralla1.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
 		DragAndDropListener listener = new DragAndDropListener();
 		listener.shouldSelectDistrict = false;
+		listener.isCartaBaralla = true;
 		vCartaBaralla1.addMouseListener(listener);
 		vCartaBaralla1.addMouseMotionListener(listener);
 		vCartaBaralla1.addActionListener(aListener);
@@ -497,6 +525,7 @@ public class VistaTauler extends DefaultView{
 	}
 	
 	public void treureCartaSeleccionada(){
+		visualitzaMarcCarta(vistaCartaSeleccionada);
 		Point goal = new Point(CARTA_DESCARTADA_X, CARTA_DESCARTADA_Y);
 		animationOn = true;
 		Thread t = new Thread(new AnimacioCartes(vistaCartaSeleccionada, goal));
@@ -507,7 +536,12 @@ public class VistaTauler extends DefaultView{
 	}
 	
 	public void updateView(){
-		vistaCartaSeleccionada.updateView();
+		if(vistaCartaSeleccionada != null){
+			vistaCartaSeleccionada.updateView();
+			vistaCartaSeleccionada.setSeleccionada(false);
+			vistaCartaSeleccionada.setEnabled(false);
+			vistaCartaSeleccionada = null;
+		}
 		stateView.actualitzaEstat();
 	}
 	
@@ -544,6 +578,7 @@ public class VistaTauler extends DefaultView{
 		 VistaPassejant vistaPassejantEstatic = null;
 		public boolean shouldSelectDistrict = true;
 		public boolean betweenDistricts = false;
+		public boolean isCartaBaralla = false;
 		
 		public DragAndDropListener() {}
 		public DragAndDropListener(VistaPassejant vistaPassejants, VistaPassejant vistaPassejantEstatic) {
@@ -566,9 +601,15 @@ public class VistaTauler extends DefaultView{
 	          if(betweenDistricts){
 	        	  if(Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).getNumPassejants(vistaPassejantEstatic.getiColor()) == 0 || Partida.getInstance().getPas() != 3) return;
 	          }
+	          else if(isCartaBaralla){
+	        	  if(Partida.getInstance().getPas() != 4)return;
+	        	  cartaSeleccionada = true;
+	        	  if(vistaCartaSeleccionada!=null)vistaCartaSeleccionada.setSeleccionada(cartaSeleccionada);
+	          }
 	          else {
 	        	  if(Partida.getInstance().getPas() != 2)return;
 	        	  cartaSeleccionada = true;
+	        	  if(vistaCartaSeleccionada!=null)vistaCartaSeleccionada.setSeleccionada(cartaSeleccionada);
 	          }
         	  JComponent c = (JComponent) e.getSource();
 	          Point l = c.getLocation();
