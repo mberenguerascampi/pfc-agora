@@ -29,6 +29,9 @@ public class VistaPassejant extends JButton {
 	private JLabel numLabel;
 	private boolean showZero;
 	private boolean draggingPassejant;
+	private boolean bloquejat = false;
+	private Image img = null;
+	private Image imgBloquejat = null;
 	/**
 	 * 
 	 */
@@ -88,15 +91,26 @@ public class VistaPassejant extends JButton {
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-		
-	    URL urlImg = getClass().getResource(Constants.fileUrl+"passejants/passejant"+ color + ".png");
-	    Image img = null;
-		try {
-			img = ImageIO.read(urlImg);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (img == null){
+			URL urlImg = getClass().getResource(Constants.fileUrl+"passejants/passejant"+ color + ".png");
+			try {
+				img = ImageIO.read(urlImg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	    graphics.drawImage(img, 0, 0, null);
+	    if(bloquejat){
+			if (imgBloquejat == null){
+				URL urlImg = getClass().getResource(Constants.fileUrl+"passejants/passejantBloquejat.png");
+				try {
+					imgBloquejat = ImageIO.read(urlImg);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			graphics.drawImage(imgBloquejat, 0, 0, null);
+		}
 	}
 	
 	//Getter & setters
@@ -140,5 +154,13 @@ public class VistaPassejant extends JButton {
 
 		public void setiColor(int iColor) {
 			this.iColor = iColor;
+		}
+
+		public boolean isBloquejat() {
+			return bloquejat;
+		}
+
+		public void setBloquejat(boolean bloquejat) {
+			this.bloquejat = bloquejat;
 		}
 }

@@ -671,6 +671,7 @@ public class VistaTauler extends DefaultView{
 	          if(betweenDistricts){
 	        	  if(Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).getNumPassejants(vistaPassejantEstatic.getiColor()) == 0 || Partida.getInstance().getPas() != 3) return;
 	        	  if(Partida.getInstance().esUltimTorn() && vistaPassejantEstatic.getiColor() != Partida.getInstance().getColorJugadorActual())return;
+	        	  if(!Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).tePassejantsDisponibles(vistaPassejantEstatic.getiColor()))return;
 	          }
 	          else if(isCartaBaralla){
 	        	  if(Partida.getInstance().getPas() != 4)return;

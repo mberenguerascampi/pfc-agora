@@ -52,6 +52,7 @@ public class ControladorLogic {
 		
 		if(districteA != null && districteB != null){
 			Passejant p = districteA.removePassejant(color);
+			p.bloquejar();
 			districteB.afegeixPassejant(p);
 			
 			if(partida.decrementaPassejantsAMoure()){

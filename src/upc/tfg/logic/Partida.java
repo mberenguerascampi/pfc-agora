@@ -74,6 +74,9 @@ public class Partida {
 		else if(pas == 3){
 			passejantsAMoure = 2;
 		}
+		else if(pas == 4){
+			restartPassejantsBloquejats();
+		}
 		return true;
 	}
 	
@@ -90,6 +93,11 @@ public class Partida {
 	public boolean avancarTorn(){
 		++torn;
 		if(torn > 12){
+			int[] puntuacio = getPuntuacioFinal();
+			System.out.println("RESULTATS: (BLAU, VERMELL, VERD, GROC)");
+			for (int p:puntuacio){
+				System.out.print(p + ", ");
+			}
 			return false;
 		}
 		return true;
@@ -153,6 +161,63 @@ public class Partida {
 			return districte.potTreurePassejant(color);
 		}
 		return true;
+	}
+	
+	public void restartPassejantsBloquejats(){
+		for (Districte d:tauler.getDistrictes()){
+			d.restartPassejants();
+		}
+	}
+	
+	public int[] getPuntuacioFinal(){
+		int puntsBlau, puntsVermell, puntsVerd, puntsGroc, distBlau, distVermell, distVerd, distGroc;
+		puntsBlau = puntsVermell = puntsVerd = puntsGroc = 0;
+		distBlau = distVermell = distVerd = distGroc = 0;
+		for(Districte d:tauler.getDistrictes()){
+			int colorGuanyador = d.getColorGuanyador();
+			if(colorGuanyador == Constants.BLAU){
+				++distBlau;
+				puntsBlau += d.getValor();
+			}
+			else if(colorGuanyador == Constants.VERMELL){
+				++distVermell;
+				puntsVermell += d.getValor();
+			}
+			else if(colorGuanyador == Constants.VERD){
+				++distVerd;
+				puntsVerd += d.getValor();
+			}
+			else if(colorGuanyador == Constants.GROC){
+				++distGroc;
+				puntsGroc += d.getValor();
+			}
+		}
+		int[] resultatsFinals = {puntsBlau, puntsVermell, puntsVerd, puntsGroc};
+		int[] totalDistrictes = {distBlau, distVermell, distVerd, distGroc};
+		int colorGuanyador = getColorGuanyador(resultatsFinals, totalDistrictes);
+		return resultatsFinals;
+	}
+	
+	private int getColorGuanyador(int[] resultatsFinals, int[] totalDistrictes){
+		int colors[] = {Constants.BLAU, Constants.VERMELL, Constants.VERD, Constants.GROC};
+		int max = Math.max(Math.max(resultatsFinals[0],  resultatsFinals[1]), Math.max(resultatsFinals[2],  resultatsFinals[3]));
+		int colorGuanyador = 0;
+		int indexAux = 0;
+		for(int i = 0; i < resultatsFinals.length; ++i){
+			if(resultatsFinals[i] == max) {
+				if(colorGuanyador == 0){
+					colorGuanyador = colors[i];
+					indexAux = i;
+				}
+				else {
+					if(totalDistrictes[i] > totalDistrictes[indexAux]) {
+						colorGuanyador = colors[i];
+						indexAux = i;
+					}
+				}
+			}
+		}
+		return colorGuanyador;
 	}
 	
 	//Getters & Setters

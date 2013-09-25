@@ -78,12 +78,14 @@ public class VistaInformacio extends TransparentView {
 		//arrossegant i estem en el districte que estem arrossegant li restem un.
 		if(!vpBlauDinamic.isDraggingPassejant()){
 			vpBlauDinamic.setNum(districte.getNumPassejantsBlaus());
+			vpBlauDinamic.setBloquejat(!districte.tePassejantsDisponibles(Constants.BLAU));
 		}
 		else if (districte == draggingDistrict){
 			vpBlau.setNum(districte.getNumPassejantsBlaus()-1);
 		}
 		
 		if(!vpVermellDinamic.isDraggingPassejant()){
+			vpVermellDinamic.setBloquejat(!districte.tePassejantsDisponibles(Constants.VERMELL));
 			vpVermellDinamic.setNum(districte.getNumPassejantsVermells());
 		}
 		else if (districte == draggingDistrict){
@@ -91,6 +93,7 @@ public class VistaInformacio extends TransparentView {
 		}
 		
 		if(!vpVerdDinamic.isDraggingPassejant()){
+			vpVerdDinamic.setBloquejat(!districte.tePassejantsDisponibles(Constants.VERD));
 			vpVerdDinamic.setNum(districte.getNumPassejantsVerds());
 		}
 		else if (districte == draggingDistrict){
@@ -99,10 +102,17 @@ public class VistaInformacio extends TransparentView {
 		
 		if(!vpGrocDinamic.isDraggingPassejant()){
 			vpGrocDinamic.setNum(districte.getNumPassejantsGrocs());
+			vpGrocDinamic.setBloquejat(!districte.tePassejantsDisponibles(Constants.GROC));
 		}
 		else if (districte == draggingDistrict){
 			vpGroc.setNum(districte.getNumPassejantsGrocs()-1);
 		}
+		
+		vpBlau.setBloquejat(!districte.tePassejantsDisponibles(Constants.BLAU));
+		vpVerd.setBloquejat(!districte.tePassejantsDisponibles(Constants.VERD));
+		vpVermell.setBloquejat(!districte.tePassejantsDisponibles(Constants.VERMELL));
+		vpGroc.setBloquejat(!districte.tePassejantsDisponibles(Constants.GROC));
+		repaint();
 	}
 	
 	private void addPassejants(){

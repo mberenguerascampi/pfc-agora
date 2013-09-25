@@ -186,6 +186,23 @@ public class Districte {
 		return temp;
 	}
 	
+	public void restartPassejants(){
+		for(Passejant p:passejantsBlaus)p.desbloquejar();
+		for(Passejant p:passejantsVermells)p.desbloquejar();
+		for(Passejant p:passejantsVerds)p.desbloquejar();
+		for(Passejant p:passejantsGrocs)p.desbloquejar();
+	}
+	
+	public int getColorGuanyador(){
+		int sizes[] = {passejantsBlaus.size(), passejantsVermells.size(), passejantsVerds.size(), passejantsGrocs.size()};
+		int colors[] = {Constants.BLAU, Constants.VERMELL, Constants.VERD, Constants.GROC};
+		int max = Math.max(Math.max(sizes[0],  sizes[1]), Math.max(sizes[2],  sizes[3]));
+		for(int i = 0; i < sizes.length; ++i){
+			if(sizes[i] == max) return colors[i];
+		}
+		return 0;
+	}
+	
 	//Getters & Setters
 	
 	public String getNom() {
