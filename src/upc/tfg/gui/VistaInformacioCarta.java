@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -19,6 +20,7 @@ public class VistaInformacioCarta extends TransparentView {
 	private JLabel nomCarta;
 	private JLabel imatgeCarta;
 	private Carta carta;
+	public JButton selectButton;
 	
 	public VistaInformacioCarta() {
 		setLayout(null);
@@ -46,12 +48,21 @@ public class VistaInformacioCarta extends TransparentView {
 		imatgeCarta.setBounds(20, 70, VistaTauler.CARTA_WIDTH+25, VistaTauler.CARTA_HEIGHT+30);
 		imatgeCarta.setOpaque(false);
 		add(imatgeCarta);
+		
+		selectButton = new JButton();
+		selectButton.setLayout(null);
+		selectButton.setBounds(imatgeCarta.getLocation().x, imatgeCarta.getLocation().y+imatgeCarta.getBounds().height+30, 100,30);
+		selectButton.setText("Seleccionar");
+		selectButton.setVisible(false);
+		add(selectButton);
 	}
 	
 	private void updateView(){
 		nomCarta.setText(carta.getNom());
 		nomDistricte.setText(carta.getDistricte().getNom());
-	    ImageIcon icon = new ImageIcon(carta.getImage().getScaledInstance(VistaTauler.CARTA_WIDTH+25, VistaTauler.CARTA_HEIGHT+30,  java.awt.Image.SCALE_SMOOTH));
+	    ImageIcon icon = null;
+	    if(carta.isShowing())icon = new ImageIcon(carta.getImage().getScaledInstance(VistaTauler.CARTA_WIDTH+25, VistaTauler.CARTA_HEIGHT+30,  java.awt.Image.SCALE_SMOOTH));
+	    else icon = new ImageIcon(carta.getDistricte().getImage().getScaledInstance(VistaTauler.CARTA_WIDTH+25, VistaTauler.CARTA_HEIGHT+30,  java.awt.Image.SCALE_SMOOTH));
 	    imatgeCarta.setIcon(icon);
 	}
 
@@ -62,6 +73,11 @@ public class VistaInformacioCarta extends TransparentView {
 	public void setCarta(Carta carta) {
 		this.carta = carta;
 		updateView();
+	}
+	
+	public void setSelectVisible(boolean visibility){
+		selectButton.setVisible(visibility);
+		nomCarta.setVisible(!visibility);
 	}
 
 }

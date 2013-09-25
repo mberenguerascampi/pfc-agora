@@ -38,10 +38,10 @@ public class VistaTauler extends DefaultView{
 	private static final int IMG_TAULER_HEIGHT = 401;
 	public static final int CARTA_WIDTH = 74;
 	public static final int CARTA_HEIGHT = 105;
-	public static final int CARTA_DESCARTADA_X = 30;
+	public static final int CARTA_DESCARTADA_X = Constants.paddingX+50;
 	public static final int CARTA_DESCARTADA_Y = Constants.paddingY+Constants.height-300;
-	public static final int BARALLA_MARGIN_X = 30;
-	public static final int BARALLA_MARGIN_Y = 120;
+	public static final int BARALLA_MARGIN_X = Constants.paddingX+50;
+	public static final int BARALLA_MARGIN_Y = Constants.paddingY+Constants.height/2-200;
 	
 	private int taulerX;
 	private int taulerY;
@@ -58,9 +58,10 @@ public class VistaTauler extends DefaultView{
 	private VistaInformacioCarta cardInfoView;
 	private VistaEstat stateView;
 	private int[][]map;
+	private VistaCarta[] cartesIntercanvi = new VistaCarta[4];
 	
 	private TaulerListener listener;
-	private ArrayList<JButton> cartes = new ArrayList<JButton>();
+	private ArrayList<VistaCarta> cartes = new ArrayList<VistaCarta>();
 	private JLabel tauler_img;
 	private JLabel districte_seleccionat_img;
 	private JLabel marcCarta;
@@ -68,6 +69,7 @@ public class VistaTauler extends DefaultView{
 	private VistaBaralla vBaralla2;
 	private VistaCarta vCartaBaralla1;
 	private VistaCarta vCartaBaralla2;
+	private VistaCarta cartesDescartades;
 	private int previousDistrict = -1;
 	
 	public VistaTauler(TaulerListener tListener) {
@@ -126,7 +128,8 @@ public class VistaTauler extends DefaultView{
 			addStateView();
 			afegeixMarcCarta();
 			addTauler();
-			addSkin("tauler_background.jpg");
+			setBackgroundName("tauler_background.jpg");
+			//addSkin("tauler_background.jpg");
 		}
 	}
 	
@@ -198,7 +201,7 @@ public class VistaTauler extends DefaultView{
 			public void actionPerformed(ActionEvent e) {
 				draggingPassejant = false;
 				Thread t;
-				if (previousDistrict == -1 || cartaEntitySeleccionada.getDistricte().getDistricteID() != previousDistrict){
+				if (previousDistrict == -1 || (cartaEntitySeleccionada != null && cartaEntitySeleccionada.getDistricte().getDistricteID() != previousDistrict)){
 					t = new Thread(new AnimacioPassejant(vp, passejantEstatic, passejantEstatic.getLocation(), passejantEstatic.getBounds(), false, false));
 					//TODO: actualitzar la capa lògica 
 				}
@@ -224,20 +227,39 @@ public class VistaTauler extends DefaultView{
 	 */
 	public void afegeixCarta(int jugadorID, int posicio, final Carta cartaEntity)
 	{
-		final VistaCarta carta = new VistaCarta(cartaEntity, jugadorID);
+		final VistaCarta carta = new VistaCarta(cartaEntity, jugadorID, posicio);
 		Posicio pos = getCardPosition(jugadorID, posicio);
 		int x = pos.x;
 		int y = pos.y;
 		setCardSize(x, y, carta, jugadorID);
-	    
-	    //Si pulsem la carta es crida el mètode corresponent
+		afegeixListenerACarta(cartaEntity, jugadorID, carta);
+	    cartes.add(carta);
+	}
+	
+	public void afegeixCartaAPosicioBuida(int jugadorID, final Carta cartaEntity)
+	{
+		marcCarta.setVisible(false);
+		//afegeixCarta(jugadorID, Integer.valueOf(marcCarta.getName()), cartaEntity);
+		//add(cartes.get(cartes.size()-1));
+		if(jugadorID == 1){
+			vistaCartaSeleccionada.setBounds(marcCarta.getBounds());
+			vistaCartaSeleccionada.setCartaEntity(cartaEntity);
+			vistaCartaSeleccionada.setEnabled(true);
+			vistaCartaSeleccionada.setSeleccionada(false);
+			vistaCartaSeleccionada.removeActionListener(vistaCartaSeleccionada.getActionListeners()[0]);
+			afegeixListenerACarta(cartaEntity, jugadorID, vistaCartaSeleccionada);
+			vistaCartaSeleccionada = null;
+		}
+	}
+	
+	private void afegeixListenerACarta(final Carta cartaEntity, final int jugadorID, final VistaCarta carta){
+		 //Si pulsem la carta es crida el mètode corresponent
 	    final int jugadorSeleccionat = jugadorID;
 	    if(jugadorID == 1){
 	    	carta.addActionListener(new ActionListener() {
-				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if(!cartaSeleccionada){
+					if(!cartaSeleccionada && Partida.getInstance().getPas() == 2 && Partida.getInstance().getIdJugadorActual() == jugadorID){
 						listener.cartaSeleccionada(jugadorSeleccionat, cartaEntity);
 						Rectangle rect = carta.getBounds();
 						carta.setBounds(rect.x, rect.y-25, rect.width, rect.height);
@@ -261,18 +283,26 @@ public class VistaTauler extends DefaultView{
 	    
 	    else{
 	    		carta.addActionListener(new ActionListener() {
-				
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					//TODO: Comprovar que les condicions son les adequades
 					if(Partida.getInstance().getPas() != 1) return;
 					if(!cartaSeleccionada){
-						listener.cartaSeleccionada(jugadorSeleccionat, cartaEntity);
-						cartaEntitySeleccionada = cartaEntity;
-						vistaCartaSeleccionada = carta;
 						cardInfoView.setCarta(cartaEntity);
 						infoView.setVisible(false);
 						cardInfoView.setVisible(true);
+						cardInfoView.setSelectVisible(true);
+						for(ActionListener l:cardInfoView.selectButton.getActionListeners()){
+							cardInfoView.selectButton.removeActionListener(l);
+						}
+						cardInfoView.selectButton.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								cartesIntercanvi[0] = carta;
+								carta.setSeleccionada(true);
+								listener.cartaRobada(1, cartaEntity);
+							}
+						});
 					}
 					else if(cartaEntitySeleccionada == cartaEntity){
 						infoView.setVisible(false);
@@ -281,8 +311,6 @@ public class VistaTauler extends DefaultView{
 				}
 			});
 	    }
-
-	    cartes.add(carta);
 	}
 	
 	class DragMouseAdapter extends MouseAdapter {
@@ -386,20 +414,17 @@ public class VistaTauler extends DefaultView{
 		 //Agafem la imatge i la posem a la mida que volem
         URL urlTaulerImg = getClass().getResource(Constants.fileUrl+imageName);
         ImageIcon icon = new ImageIcon(urlTaulerImg);
-        //Image tempImg = icon.getImage();
-        //Image newimg = tempImg.getScaledInstance( IMG_TAULER_WIDTH, IMG_TAULER_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
-	    //icon = new ImageIcon( newimg );
-	    
 	    districte_seleccionat_img.setIcon(icon);
 	}
 	
 	private void selectDistrict(int x, int y){
 		if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT){
-      	  cardInfoView.setVisible(false);
-		  infoView.setVisible(true);
+	      if(cardInfoView.isVisible())cardInfoView.setVisible(false);
+	      if(!infoView.isVisible())infoView.setVisible(true);
       	  if(map[y][x] != previousDistrict){
 	        	  previousDistrict = map[y][x];
-	        	  districte_seleccionat_img.setVisible(true);
+	        	  //Configurem la visibilitat de les vistes
+	        	  if(!districte_seleccionat_img.isVisible())districte_seleccionat_img.setVisible(true);
 	        	  switch(map[y][x]){
 	        	  	case Constants.LES_CORTS:
 	        	  		setDistrictedSelected("seleccionat_corts.png");
@@ -473,32 +498,43 @@ public class VistaTauler extends DefaultView{
 		rect.y += 25;
 		marcCarta.setBounds(rect);
 		marcCarta.setVisible(true);
+		marcCarta.setName(String.valueOf(carta.getPosicio()));
 	}
 	
 	public void afegeixBaralles(){
 		ActionListener aListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				animationOn = true;
-				Point goal = vBaralla1.getLocation();
-				goal.x += 10;
-				Thread t = new Thread(new AnimacioCartes(vCartaBaralla1, goal));
-				t.start();
+				if(agafaCartaBaralla(vCartaBaralla1)){
+					listener.cartaAgafada(1, 1);
+				}
+				else{
+					animationOn = true;
+					Point goal = vBaralla1.getLocation();
+					goal.x += 10;
+					Thread t = new Thread(new AnimacioCartes(vCartaBaralla1, goal));
+					t.start();
+				}
 			}
 		};
 		
 		ActionListener aListener2 = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				animationOn = true;
-				Point goal = vBaralla2.getLocation();
-				goal.x += 10;
-				Thread t = new Thread(new AnimacioCartes(vCartaBaralla2, goal));
-				t.start();
+				if(agafaCartaBaralla(vCartaBaralla2)){
+					listener.cartaAgafada(1, 2);
+				}
+				else{
+					animationOn = true;
+					Point goal = vBaralla2.getLocation();
+					goal.x += 10;
+					Thread t = new Thread(new AnimacioCartes(vCartaBaralla2, goal));
+					t.start();
+				}
 			}
 		};
 		
-		vCartaBaralla1 = new VistaCarta(Partida.getInstance().getBaralla().getCartes().get(0), 1);
+		vCartaBaralla1 = new VistaCarta(Partida.getInstance().getBaralla().getCartes().get(0), 1, 0);
 		vCartaBaralla1.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
 		DragAndDropListener listener = new DragAndDropListener();
 		listener.shouldSelectDistrict = false;
@@ -512,7 +548,7 @@ public class VistaTauler extends DefaultView{
 		vBaralla1.setBounds(BARALLA_MARGIN_X-10, BARALLA_MARGIN_Y, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
 		add(vBaralla1);
 		
-		vCartaBaralla2 = new VistaCarta(Partida.getInstance().getBaralla2().getCartes().get(0), 1);
+		vCartaBaralla2 = new VistaCarta(Partida.getInstance().getBaralla2().getCartes().get(0), 1, 0);
 		vCartaBaralla2.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y+140, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
 		vCartaBaralla2.addMouseListener(listener);
 		vCartaBaralla2.addMouseMotionListener(listener);
@@ -522,17 +558,31 @@ public class VistaTauler extends DefaultView{
 		vBaralla2 = new VistaBaralla(Partida.getInstance().getBaralla2());
 		vBaralla2.setBounds(BARALLA_MARGIN_X-10, BARALLA_MARGIN_Y+140, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
 		add(vBaralla2);
+		
+		cartesDescartades = new VistaCarta();
+		cartesDescartades.setBounds(CARTA_DESCARTADA_X, CARTA_DESCARTADA_Y, CARTA_WIDTH, CARTA_HEIGHT);
+		cartesDescartades.setVisible(false);
+		cartesDescartades.setEnabled(false);
+		add(cartesDescartades);
+	}
+	
+	private boolean agafaCartaBaralla(VistaCarta carta){
+		Rectangle rect1 = carta.getBounds();
+		Rectangle rect2 = marcCarta.getBounds();
+		if(rect2.intersects(rect1))return true;
+		return false;
 	}
 	
 	public void treureCartaSeleccionada(){
 		visualitzaMarcCarta(vistaCartaSeleccionada);
 		Point goal = new Point(CARTA_DESCARTADA_X, CARTA_DESCARTADA_Y);
 		animationOn = true;
-		Thread t = new Thread(new AnimacioCartes(vistaCartaSeleccionada, goal));
-		t.run();
 		cartaSeleccionada = false;
-		//vistaCartaSeleccionada = null;
 		cartaEntitySeleccionada = null;
+		AnimacioCartes anim = new AnimacioCartes(vistaCartaSeleccionada, goal);
+		anim.descartada = true;
+		Thread t = new Thread(anim);
+		t.run();
 	}
 	
 	public void updateView(){
@@ -540,9 +590,29 @@ public class VistaTauler extends DefaultView{
 			vistaCartaSeleccionada.updateView();
 			vistaCartaSeleccionada.setSeleccionada(false);
 			vistaCartaSeleccionada.setEnabled(false);
-			vistaCartaSeleccionada = null;
 		}
 		stateView.actualitzaEstat();
+		vCartaBaralla1.setCartaEntity(Partida.getInstance().getBaralla().getCartes().get(0));
+		vCartaBaralla1.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		vCartaBaralla2.setCartaEntity(Partida.getInstance().getBaralla2().getCartes().get(0));
+		vCartaBaralla2.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y+140, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		vBaralla1.updateView();
+		vBaralla2.updateView();
+	}
+	
+	public void intercanviaCartes(){
+		cardInfoView.setSelectVisible(false);
+		cardInfoView.setVisible(false);
+		System.out.println("Intercanviem cartes");
+		//TODO: Descomentar quan hi hagi la IA
+//		int n = cartesIntercanvi.length;
+//		VistaCarta aux = cartesIntercanvi[n-1];
+//		for(int i = 0; i < n-1; ++i){
+//			cartesIntercanvi[i+1].setCartaEntity(cartesIntercanvi[i].getCartaEntity());
+//			cartesIntercanvi[i+1].setSeleccionada(false);
+//		}
+//		cartesIntercanvi[0].setCartaEntity(aux.getCartaEntity());
+		cartesIntercanvi[0].setSeleccionada(false);
 	}
 	
 	private void readMapMatrix()
@@ -600,10 +670,10 @@ public class VistaTauler extends DefaultView{
         	  if(vistaPassejants != null && (Partida.getInstance().getIdJugadorActual() != 1))return;
 	          if(betweenDistricts){
 	        	  if(Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).getNumPassejants(vistaPassejantEstatic.getiColor()) == 0 || Partida.getInstance().getPas() != 3) return;
+	        	  if(Partida.getInstance().esUltimTorn() && vistaPassejantEstatic.getiColor() != Partida.getInstance().getColorJugadorActual())return;
 	          }
 	          else if(isCartaBaralla){
 	        	  if(Partida.getInstance().getPas() != 4)return;
-	        	  cartaSeleccionada = true;
 	        	  if(vistaCartaSeleccionada!=null)vistaCartaSeleccionada.setSeleccionada(cartaSeleccionada);
 	          }
 	          else {
@@ -618,7 +688,9 @@ public class VistaTauler extends DefaultView{
 	          p = here;
 	          int x = here.x-tauler_img.getLocationOnScreen().x;
 	          int y = here.y-tauler_img.getLocationOnScreen().y;
-	          if(shouldSelectDistrict)selectDistrict(x, y);
+	          if(shouldSelectDistrict){
+	        	  selectDistrict(x, y);
+	          }
 	          if(vistaPassejants != null && !draggingPassejant){
 	        	  vistaPassejantEstatic.setNum(vistaPassejants.getNum()-1);
 	        	  vistaPassejants.setNum(0);
@@ -760,6 +832,7 @@ public class VistaTauler extends DefaultView{
 	class AnimacioCartes implements Runnable{
 		VistaCarta carta;
 		Point goal;
+		boolean descartada = false;
 		
 		public AnimacioCartes(VistaCarta carta, Point goal) {
 			this.carta = carta;
@@ -804,6 +877,10 @@ public class VistaTauler extends DefaultView{
 					}
 					catch(Exception e) {}
 				}
+			}
+			if(descartada){
+				cartesDescartades.setVisible(true);
+				cartesDescartades.setCartaEntity(carta.getCartaEntity());
 			}
 		}
 	}

@@ -68,10 +68,23 @@ public class Partida {
 			pas = 1;
 			avancarTorn();
 		}
+		else if(pas == 2){
+			intercanviarCartes();
+		}
 		else if(pas == 3){
 			passejantsAMoure = 2;
 		}
 		return true;
+	}
+	
+	public boolean cartaRobada(int jugadorID, Carta cartaEntity){
+		avancarJugador();
+		if(pas == 2)return true;
+		else return false;
+	}
+	
+	private void intercanviarCartes(){
+		
 	}
 	
 	public boolean avancarTorn(){
@@ -285,5 +298,18 @@ public class Partida {
 
 	public void setIdJugadorInici(int idJugadorInici) {
 		this.idJugadorInici = idJugadorInici;
+	}
+	
+	public int getColorJugadorActual(){
+		for(Jugador j:jugadors){
+			if(j.getId() == idJugadorActual){
+				return j.getColor();
+			}
+		}
+		return 0;
+	}
+	
+	public boolean esUltimTorn(){
+		return(torn == 12);
 	}
 }

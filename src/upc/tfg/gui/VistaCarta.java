@@ -22,8 +22,19 @@ public class VistaCarta extends JButton {
 	private Carta cartaEntity;
 	private int jugadorID;
 	private boolean seleccionada;
+	private int posicio;
 	
-	public VistaCarta(Carta carta, int jugadorID) {
+	public VistaCarta(){
+		setOpaque(false);
+		setLayout(null);
+		setFocusPainted(false); 
+		setContentAreaFilled(false); 
+		setBorderPainted(false);
+		jugadorID = 1;
+		posicio = 0;
+	}
+	
+	public VistaCarta(Carta carta, int jugadorID, int posicio) {
 		setOpaque(false);
 		setLayout(null);
 		setFocusPainted(false); 
@@ -31,6 +42,7 @@ public class VistaCarta extends JButton {
 		setBorderPainted(false);
 		this.cartaEntity = carta;
 		this.jugadorID = jugadorID;
+		this.posicio = posicio;
 		addImageCard();
 	}
 	
@@ -78,6 +90,10 @@ public class VistaCarta extends JButton {
 		repaint();
 	}
 	
+	public Carta getCartaEntity(){
+		return cartaEntity;
+	}
+	
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -91,5 +107,18 @@ public class VistaCarta extends JButton {
 			}
 			g.drawImage(img, 0, 0, null); 	
 		}
+	}
+
+	public int getPosicio() {
+		return posicio;
+	}
+
+	public void setPosicio(int posicio) {
+		this.posicio = posicio;
+	}
+
+	public void setCartaEntity(Carta cartaEntity) {
+		this.cartaEntity = cartaEntity;
+		updateView();
 	}
 }

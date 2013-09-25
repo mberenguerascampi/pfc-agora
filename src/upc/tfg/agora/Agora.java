@@ -165,10 +165,13 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	 */
 	public void cartaSeleccionada(int jugadorID, Carta cartaEntity)
 	{
-		System.out.println("Carta seleccionada ->" + cartaEntity.getValor());
 		logic.cartaSeleccionada(cartaEntity);
 	}
 	
+	public void cartaRobada(int jugadorID, Carta cartaEntity)
+	{
+		logic.cartaRobada(jugadorID, cartaEntity);
+	}
 	
 	public void passejantMogut(int idJugador, String nomDistricte){
 		logic.mouPassejantADistricte(nomDistricte, idJugador);
@@ -181,6 +184,11 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	public void nextPlayer(){
 		Partida.getInstance().avancarJugador();
 		updateView();
+	}
+	
+	public void cartaAgafada(int jugadorID, int barallaID){
+		logic.cartaAgafadaDeLaBaralla(jugadorID, barallaID);
+		//TODO: Comunicar-li a la capa lògica que afegirà la carta i actualitzara la baralla de cartes
 	}
 	
 	//FUNCIONS PÜBLIQUES PER MODIFiCAR LA CAPA DE PRESENTACIÓ
@@ -197,12 +205,22 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		tauler.afegeixCarta(jugadorID, posicio, cartaEntity);
 	}
 	
+	public void afegeixCartaAPosicioBuida(int jugadorID, Carta cartaEntity)
+	{
+		if(jugadorID == 1)cartaEntity.setShowing(true);
+		tauler.afegeixCartaAPosicioBuida(jugadorID, cartaEntity);
+	}
+	
 	public void treureCartaSeleccionada(){
 		tauler.treureCartaSeleccionada();
 	}
 	
 	public void updateView(){
 		tauler.updateView();
+	}
+	
+	public void intercanviaCartes(){
+		tauler.intercanviaCartes();
 	}
 }
 

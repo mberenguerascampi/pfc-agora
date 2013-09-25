@@ -11,16 +11,17 @@ import javax.swing.JPanel;
 import upc.tfg.utils.Constants;
 
 public class TransparentView extends JPanel {
+	private Image img = null;
 
 	public void paintComponent(Graphics g)
 	{
-		//  Dispaly image at full size
-		Image img = null;
-	    URL urlImg = getClass().getResource(Constants.fileUrl+"transparent_background.png");
-		try {
-			img = ImageIO.read(urlImg);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(img == null){
+			URL urlImg = getClass().getResource(Constants.fileUrl+"transparent_background.png");
+			try {
+				img = ImageIO.read(urlImg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		g.drawImage(img, 0, 0, null); 	
 		super.paintComponent(g);

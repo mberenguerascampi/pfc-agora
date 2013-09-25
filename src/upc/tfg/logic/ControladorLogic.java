@@ -70,6 +70,20 @@ public class ControladorLogic {
 		partida.setCartaSeleccionada(carta);
 	}
 	
+	public void cartaRobada(int jugadorID, Carta cartaEntity){
+		if(partida.cartaRobada(jugadorID, cartaEntity)){
+			agora.intercanviaCartes();
+		}
+		agora.updateView();
+	}
+	
+	public void cartaAgafadaDeLaBaralla(int jugadorID, int barallaID){
+		if(barallaID == 1) agora.afegeixCartaAPosicioBuida(jugadorID, partida.getBaralla().getCartes(1)[0]);
+		else agora.afegeixCartaAPosicioBuida(jugadorID, partida.getBaralla2().getCartes(1)[0]);
+		partida.avancarJugador();
+		agora.updateView();
+	}
+	
 	public void divideixBaralla(){
 		partida.divideixBaralla();
 	}
