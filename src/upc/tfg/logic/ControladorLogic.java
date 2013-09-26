@@ -40,9 +40,12 @@ public class ControladorLogic {
 			if(districte.getNom().equalsIgnoreCase(nomDistricte)){
 				districte.afegeixPassejant(p);
 				if(partida.decrementaPassejantsAMoure()){
-					agora.treureCartaSeleccionada();
-					agora.updateView();
-					treuCarta(idJugador, partida.getCartaSeleccionada());
+					if(idJugador == 1){
+						agora.treureCartaSeleccionada();
+						agora.updateView();
+						treuCarta(idJugador, partida.getCartaSeleccionada());
+						getProximMoviment();
+					}
 				}
 				return;
 			}
@@ -60,8 +63,8 @@ public class ControladorLogic {
 			districteB.afegeixPassejant(p);
 			
 			if(partida.decrementaPassejantsAMoure()){
-				//agora.treureCartaSeleccionada();
 				agora.updateView();
+				getProximMoviment();
 			}
 		}
 	}
@@ -71,14 +74,19 @@ public class ControladorLogic {
 	}
 	
 	public void cartaSeleccionada(Carta carta, int jugadorID){
+		partida.setPassejantsAMoure(carta.getValor());
 		if(jugadorID == 1){
-			partida.setPassejantsAMoure(carta.getValor());
 			partida.setCartaSeleccionada(carta);
 		}
 		else{
+			//Actualitzam la capa de domini
 			carta.girar();
+			for(int i = 0; i < carta.getValor(); ++i){
+				mouPassejantADistricte(carta.getDistricte().getNom(), partida.getIdJugadorActual());
+			}
+			//Actualitzem la capa de presentacio
 			agora.seleccionaCartaiMouPassejants(jugadorID, carta);
-			//TODO: Dir-li a la capa de presentació que mogui el nombre de passejants corresponents al districte corresponent
+			getProximMoviment();
 		}
 	}
 	
@@ -102,6 +110,7 @@ public class ControladorLogic {
 		}
 		partida.avancarJugador();
 		agora.updateView();
+		getProximMoviment();
 	}
 	
 	public void divideixBaralla(){
@@ -117,6 +126,15 @@ public class ControladorLogic {
 	}
 	
 	public void getProximMoviment(){
+		//Si estem en un jugador diferent a l'1 li demenem a la inteligència artificial el següent moviment
+		//Sino esperem a que l'usuari tiri
+		agora.updateView();
+		if (partida.getIdJugadorActual() == 1) return;
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		controladorIA.getProximMoviment(partida.getIdJugadorActual(), partida.getPas());
 	}
 }

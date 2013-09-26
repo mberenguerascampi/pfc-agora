@@ -37,10 +37,12 @@ public class ControladorIA {
 		}
 		else if (pas == 3){
 			PassejantsAMoure pam = robot.getPassejantDistricte();
-			System.out.println("Passejant a moure de color " + pam.color + " del districte " + pam.districte.getNom());
+			logic.mouPassejantsEntreDistrictes(pam.districteOrigen.getNom(), pam.districteDesti.getNom(), pam.color);
+			System.out.println("Passejant a moure de color " + pam.color + " del districte " + pam.districteOrigen.getNom());
 		}
 		else if (pas == 4){
 			int idBaralla = robot.getBarallaPerRobarCarta();
+			logic.cartaAgafadaDeLaBaralla(jugadorID, idBaralla);
 			System.out.println("Baralla " + idBaralla);
 		}
 	}

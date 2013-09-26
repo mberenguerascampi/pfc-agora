@@ -242,6 +242,7 @@ public class VistaTauler extends DefaultView{
 		//afegeixCarta(jugadorID, Integer.valueOf(marcCarta.getName()), cartaEntity);
 		//add(cartes.get(cartes.size()-1));
 		if(jugadorID == 1){
+			vistaCartaSeleccionada.setEstaBuida(false);
 			vistaCartaSeleccionada.setBounds(marcCarta.getBounds());
 			vistaCartaSeleccionada.setCartaEntity(cartaEntity);
 			vistaCartaSeleccionada.setEnabled(true);
@@ -582,16 +583,18 @@ public class VistaTauler extends DefaultView{
 		AnimacioCartes anim = new AnimacioCartes(vistaCartaSeleccionada, goal);
 		anim.descartada = true;
 		Thread t = new Thread(anim);
-		t.run();
+		t.start();
+		System.out.println("Main thread");
 	}
 	
-	public void treureCarta(VistaCarta vc){
+	public void treureCarta(VistaCarta vc, Point origin){
 		Point goal = new Point(CARTA_DESCARTADA_X, CARTA_DESCARTADA_Y);
 		animationOn = true;
 		AnimacioCartes anim = new AnimacioCartes(vc, goal);
 		anim.descartada = true;
+		anim.origin = origin;
 		Thread t = new Thread(anim);
-		t.run();
+		t.start();
 	}
 	
 	public void updateView(){
@@ -626,9 +629,11 @@ public class VistaTauler extends DefaultView{
 	
 	public void seleccionaCartaiMouPassejants(int jugadorID, Carta carta){
 		//TODO:
+		Point origin = null;
 		VistaCarta cartaSeleccionadaAux = null;
 		for (VistaCarta vc:cartes){
 			if(vc.getCartaEntity().equals(carta)){
+				origin = vc.getLocation();
 				seleccionaCarta(vc, jugadorID);
 				cartaSeleccionadaAux = vc;
 			}
@@ -638,7 +643,7 @@ public class VistaTauler extends DefaultView{
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		treureCarta(cartaSeleccionadaAux);
+		treureCarta(cartaSeleccionadaAux, origin);
 	}
 	
 	private void seleccionaCarta(VistaCarta vc, int jugadorID){
@@ -689,7 +694,7 @@ public class VistaTauler extends DefaultView{
 	class DragAndDropListener extends MouseAdapter {
 		Point p = null;
 		VistaPassejant vistaPassejants = null;
-		 VistaPassejant vistaPassejantEstatic = null;
+		VistaPassejant vistaPassejantEstatic = null;
 		public boolean shouldSelectDistrict = true;
 		public boolean betweenDistricts = false;
 		public boolean isCartaBaralla = false;
@@ -711,11 +716,17 @@ public class VistaTauler extends DefaultView{
    
         @Override
         public void mouseDragged(MouseEvent e) {
+        	 System.out.println("If inicial, jugador actual: " + Partida.getInstance().getIdJugadorActual());
         	  if(vistaPassejants != null && (Partida.getInstance().getIdJugadorActual() != 1))return;
+        	  System.out.println("Abans del between districts");
 	          if(betweenDistricts){
+	        	  System.out.println("Abans del primer if");
 	        	  if(Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).getNumPassejants(vistaPassejantEstatic.getiColor()) == 0 || Partida.getInstance().getPas() != 3) return;
+	        	  System.out.println("Abans del segon if");
 	        	  if(Partida.getInstance().esUltimTorn() && vistaPassejantEstatic.getiColor() != Partida.getInstance().getColorJugadorActual())return;
+	        	  System.out.println("Abans del tercer if");
 	        	  if(!Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).tePassejantsDisponibles(vistaPassejantEstatic.getiColor()))return;
+	        	  System.out.println("Despres de tots els ifs");
 	          }
 	          else if(isCartaBaralla){
 	        	  if(Partida.getInstance().getPas() != 4)return;
@@ -877,6 +888,7 @@ public class VistaTauler extends DefaultView{
 	class AnimacioCartes implements Runnable{
 		VistaCarta carta;
 		Point goal;
+		Point origin = null;
 		boolean descartada = false;
 		
 		public AnimacioCartes(VistaCarta carta, Point goal) {
@@ -886,6 +898,7 @@ public class VistaTauler extends DefaultView{
 		
 		@Override
 		public void run() {
+			System.out.println("Animacio");
 			if(animationOn){
 				int i = 0;
 				while (carta.getLocation().x != goal.x || carta.getLocation().y != goal.y){
@@ -924,8 +937,11 @@ public class VistaTauler extends DefaultView{
 				}
 			}
 			if(descartada){
-				carta.setBounds(cartesDescartades.getBounds());
 				cartesDescartades.setVisible(true);
+				carta.setEstaBuida(true);
+				if(origin != null)carta.setLocation(origin);
+				else carta.setBounds(cartesDescartades.getBounds());
+				carta.updateView();
 				cartesDescartades.setCartaEntity(carta.getCartaEntity());
 			}
 		}

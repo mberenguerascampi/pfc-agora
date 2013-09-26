@@ -68,6 +68,7 @@ public class Partida {
 	
 	public boolean avancarPas(){
 		idJugadorActual = idJugadorInici;
+		System.out.println("Avancem pas, Torn jugador " + idJugadorInici);
 		++pas;
 		if (pas > 4){
 			pas = 1;
@@ -123,7 +124,7 @@ public class Partida {
 		else{
 			if(cartaSeleccionada != null)cartaSeleccionada.girar();
 			++idJugadorActual;
-			logic.getProximMoviment();
+			System.out.println("Jugador " + idJugadorActual);
 		}
 	}
 	

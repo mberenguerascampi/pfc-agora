@@ -2,6 +2,7 @@ package upc.tfg.gui;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
 
@@ -23,6 +24,7 @@ public class VistaCarta extends JButton {
 	private int jugadorID;
 	private boolean seleccionada;
 	private int posicio;
+	private boolean estaBuida = false;
 	
 	public VistaCarta(){
 		setOpaque(false);
@@ -49,7 +51,15 @@ public class VistaCarta extends JButton {
 	private void addImageCard()
 	{ 
 	    Image img = null;
-	    if(cartaEntity.isShowing()){
+	    if(estaBuida){
+	    	URL urlImg = getClass().getResource(Constants.fileUrl+"cartes/marcCarta.png");
+	    	try {
+				img = ImageIO.read(urlImg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	    }
+	    else if(cartaEntity.isShowing()){
 	    	img = cartaEntity.getImage().getScaledInstance(VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT,  java.awt.Image.SCALE_SMOOTH ) ;  
 	    }
 	    else{
@@ -120,5 +130,13 @@ public class VistaCarta extends JButton {
 	public void setCartaEntity(Carta cartaEntity) {
 		this.cartaEntity = cartaEntity;
 		updateView();
+	}
+
+	public boolean isEstaBuida() {
+		return estaBuida;
+	}
+
+	public void setEstaBuida(boolean estaBuida) {
+		this.estaBuida = estaBuida;
 	}
 }
