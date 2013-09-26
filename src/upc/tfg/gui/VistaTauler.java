@@ -585,6 +585,15 @@ public class VistaTauler extends DefaultView{
 		t.run();
 	}
 	
+	public void treureCarta(VistaCarta vc){
+		Point goal = new Point(CARTA_DESCARTADA_X, CARTA_DESCARTADA_Y);
+		animationOn = true;
+		AnimacioCartes anim = new AnimacioCartes(vc, goal);
+		anim.descartada = true;
+		Thread t = new Thread(anim);
+		t.run();
+	}
+	
 	public void updateView(){
 		if(vistaCartaSeleccionada != null){
 			vistaCartaSeleccionada.updateView();
@@ -613,6 +622,41 @@ public class VistaTauler extends DefaultView{
 //		}
 //		cartesIntercanvi[0].setCartaEntity(aux.getCartaEntity());
 		cartesIntercanvi[0].setSeleccionada(false);
+	}
+	
+	public void seleccionaCartaiMouPassejants(int jugadorID, Carta carta){
+		//TODO:
+		VistaCarta cartaSeleccionadaAux = null;
+		for (VistaCarta vc:cartes){
+			if(vc.getCartaEntity().equals(carta)){
+				seleccionaCarta(vc, jugadorID);
+				cartaSeleccionadaAux = vc;
+			}
+		}
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		treureCarta(cartaSeleccionadaAux);
+	}
+	
+	private void seleccionaCarta(VistaCarta vc, int jugadorID){
+		Rectangle rect = vc.getBounds();
+		if (jugadorID == 1){
+			rect.y -= 25;
+		}
+		else if (jugadorID == 2){
+			rect.x -= 25;
+		}
+		else if (jugadorID == 3){
+			rect.y +=25;
+		}
+		else if (jugadorID == 4){
+			rect.x += 25;
+		}
+		vc.setBounds(rect);
+		vc.updateView();
 	}
 	
 	private void readMapMatrix()
@@ -880,6 +924,7 @@ public class VistaTauler extends DefaultView{
 				}
 			}
 			if(descartada){
+				carta.setBounds(cartesDescartades.getBounds());
 				cartesDescartades.setVisible(true);
 				cartesDescartades.setCartaEntity(carta.getCartaEntity());
 			}

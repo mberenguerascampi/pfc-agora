@@ -2,7 +2,9 @@ package upc.tfg.logic;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import upc.tfg.utils.Constants;
 
@@ -20,17 +22,20 @@ public class Partida {
 	private Baralla baralla2;
 	private static Partida instance = null;
 	private Carta cartaSeleccionada = null;
+	private Map<Integer,Carta> cartesAIntercanviar = new HashMap<Integer,Carta>();
+	private ControladorLogic logic;
 	
 	public Partida() {
 		
 	}
 	
-	public Partida(String nom, Date data, int torn, int pas) {
+	public Partida(String nom, Date data, int torn, int pas, ControladorLogic logic) {
 		instance = this;
 		this.nom = nom;
 		this.data = data;
 		this.torn = torn;
 		this.pas = pas;
+		this.logic = logic;
 		idJugadorInici = 1;
 		idJugadorActual = idJugadorInici;
 		jugadors = new ArrayList<Jugador>();
@@ -81,13 +86,21 @@ public class Partida {
 	}
 	
 	public boolean cartaRobada(int jugadorID, Carta cartaEntity){
+		cartesAIntercanviar.put(jugadorID, cartaEntity);
 		avancarJugador();
 		if(pas == 2)return true;
 		else return false;
 	}
 	
 	private void intercanviarCartes(){
-		
+		for(Jugador j:jugadors){
+			int id = j.getId();
+			int idAnterior = id-1;
+			if(idAnterior == 0)idAnterior = 4;
+			j.afegirCarta(cartesAIntercanviar.get(id));
+			jugadors.get(idAnterior-1).treureCarta(cartesAIntercanviar.get(id));
+		}
+		cartesAIntercanviar.clear();
 	}
 	
 	public boolean avancarTorn(){
@@ -110,6 +123,7 @@ public class Partida {
 		else{
 			if(cartaSeleccionada != null)cartaSeleccionada.girar();
 			++idJugadorActual;
+			logic.getProximMoviment();
 		}
 	}
 	
@@ -195,6 +209,7 @@ public class Partida {
 		int[] resultatsFinals = {puntsBlau, puntsVermell, puntsVerd, puntsGroc};
 		int[] totalDistrictes = {distBlau, distVermell, distVerd, distGroc};
 		int colorGuanyador = getColorGuanyador(resultatsFinals, totalDistrictes);
+		System.out.println("GUANYADOR: " + colorGuanyador);
 		return resultatsFinals;
 	}
 	
@@ -321,6 +336,18 @@ public class Partida {
 		this.passejantsAMoure = passejantsAMoure;
 	}
 	
+	public Jugador[] getJugadorsRobot(){
+		Jugador[] retJugadors = new Jugador[3];
+		int i = 0;
+		for(Jugador j:jugadors){
+			if(j.getId() != 1){
+				retJugadors[i] = j;
+				++i;
+			}
+		}
+		return retJugadors;
+	}
+	
 	/**
 	 * Funcio que decrementa el nombre restant de passejants que pot moure un jugador
 	 * @return true si s'ha acabat el torn del jugador
@@ -376,5 +403,17 @@ public class Partida {
 	
 	public boolean esUltimTorn(){
 		return(torn == 12);
+	}
+	
+	public void afegeixCarta(int jugadorID, Carta carta){
+		for(Jugador j:jugadors){
+			if(j.getId() == jugadorID)j.afegirCarta(carta);
+		}
+	}
+	
+	public void treuCarta(int jugadorID, Carta carta){
+		for(Jugador j:jugadors){
+			if(j.getId() == jugadorID)j.treureCarta(carta);
+		}
 	}
 }

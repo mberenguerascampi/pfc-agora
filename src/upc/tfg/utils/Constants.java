@@ -51,6 +51,7 @@ public class Constants {
 	public static final int VERMELL 	= 2;
 	public static final int GROC	 	= 3;
 	public static final int VERD	 	= 4;
+	public static final int[] COLORS    = {BLAU, VERMELL, VERD, GROC};
 	
 	//Graf dels districtes adjacents
 	private static final List<Integer> valuesCorts = new ArrayList<Integer>(){{

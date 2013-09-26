@@ -151,6 +151,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		Carta[] cartes = logic.getCartes(5);
 		 for(int i = 0; i < 5; ++i){
 			 afegeixCarta(jugadorID, i+1, cartes[i]);
+			 logic.afegeixCarta(jugadorID, cartes[i]);
 		 }
 	}
 	
@@ -165,7 +166,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	 */
 	public void cartaSeleccionada(int jugadorID, Carta cartaEntity)
 	{
-		logic.cartaSeleccionada(cartaEntity);
+		logic.cartaSeleccionada(cartaEntity, jugadorID);
 	}
 	
 	public void cartaRobada(int jugadorID, Carta cartaEntity)
@@ -221,6 +222,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	
 	public void intercanviaCartes(){
 		tauler.intercanviaCartes();
+	}
+	
+	public void seleccionaCartaiMouPassejants(int jugadorID, Carta carta){
+		tauler.seleccionaCartaiMouPassejants(jugadorID, carta);
 	}
 }
 

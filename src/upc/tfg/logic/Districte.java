@@ -99,6 +99,10 @@ public class Districte {
 		return false;
 	}
 	
+	public boolean tePassejantsDisponibles(){
+		return (tePassejantsDisponibles(Constants.BLAU) || tePassejantsDisponibles(Constants.VERMELL) || tePassejantsDisponibles(Constants.VERD) || tePassejantsDisponibles(Constants.GROC));
+	}
+	
 	public boolean potAfegirPassejant(int color){
 		ArrayList<Passejant>temp = getArray(color);
 		if(temp.size()+1 >= passejantsBlaus.size() && temp.size()+1 >= passejantsVermells.size()

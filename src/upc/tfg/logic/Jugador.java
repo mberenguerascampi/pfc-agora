@@ -7,6 +7,7 @@ public class Jugador {
 	private int id;
 	private int color;
 	private ArrayList<Passejant> passejants;
+	private ArrayList<Carta> cartes;
 	int totalPassejants;
 	
 	public Jugador(String nom, int id, int color) {
@@ -15,6 +16,7 @@ public class Jugador {
 		this.color = color;
 		totalPassejants = 30;
 		passejants = new ArrayList<Passejant>();
+		cartes = new ArrayList<Carta>();
 		
 		for(int i = 0; i < totalPassejants; ++i){
 			passejants.add(new Passejant(this.color, false));
@@ -25,6 +27,18 @@ public class Jugador {
 	public Passejant getUnPassejant(){
 		--totalPassejants;
 		return passejants.remove(totalPassejants);
+	}
+	
+	public void afegirCarta(Carta carta){
+		if(carta == null)return;
+		System.out.println("Jugador" + id + " -> " + "Carta afegida -> " + carta.getNom());
+		cartes.add(carta);
+	}
+	
+	public void treureCarta(Carta carta){
+		if(carta == null)return;
+		System.out.println("Jugador" + id + " -> " + "Carta esborrada -> " + carta.getNom());
+		cartes.remove(carta);
 	}
 	
 	//Getters & Setters
@@ -56,4 +70,7 @@ public class Jugador {
 		return totalPassejants;
 	}
 
+	public ArrayList<Carta> getCartes(){
+		return cartes;
+	}
 }

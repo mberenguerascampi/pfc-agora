@@ -6,6 +6,7 @@ import upc.tfg.utils.Constants;
 public class ControladorLogic {
 	private Partida partida;
 	private Agora agora;
+	private ControladorIA controladorIA;
 	
 	public ControladorLogic() {
 		
@@ -13,10 +14,11 @@ public class ControladorLogic {
 	
 	public ControladorLogic(Agora agora) {
 		this.agora = agora;
+		controladorIA = new ControladorIA(this);
 	}
 	
 	public void comencarPartida(){
-		partida = new Partida("hola",null,1,2);
+		partida = new Partida("hola",null,1,2, this);
 		Jugador j1 = new Jugador("J1",1,Constants.BLAU);
 		Jugador j2 = new Jugador("J2",2,Constants.VERMELL);
 		Jugador j3 = new Jugador("J3",3,Constants.VERD);
@@ -26,6 +28,7 @@ public class ControladorLogic {
 		partida.afegirJugador(j3);
 		partida.afegirJugador(j4);
 		partida.crear();
+		controladorIA.setJugadors(partida.getJugadorsRobot());
 	}
 	
 	public void mouPassejantADistricte(String nomDistricte, int idJugador){
@@ -39,6 +42,7 @@ public class ControladorLogic {
 				if(partida.decrementaPassejantsAMoure()){
 					agora.treureCartaSeleccionada();
 					agora.updateView();
+					treuCarta(idJugador, partida.getCartaSeleccionada());
 				}
 				return;
 			}
@@ -66,9 +70,16 @@ public class ControladorLogic {
 		return partida.getBaralla().getCartes(numCartes);
 	}
 	
-	public void cartaSeleccionada(Carta carta){
-		partida.setPassejantsAMoure(carta.getValor());
-		partida.setCartaSeleccionada(carta);
+	public void cartaSeleccionada(Carta carta, int jugadorID){
+		if(jugadorID == 1){
+			partida.setPassejantsAMoure(carta.getValor());
+			partida.setCartaSeleccionada(carta);
+		}
+		else{
+			carta.girar();
+			agora.seleccionaCartaiMouPassejants(jugadorID, carta);
+			//TODO: Dir-li a la capa de presentació que mogui el nombre de passejants corresponents al districte corresponent
+		}
 	}
 	
 	public void cartaRobada(int jugadorID, Carta cartaEntity){
@@ -79,13 +90,33 @@ public class ControladorLogic {
 	}
 	
 	public void cartaAgafadaDeLaBaralla(int jugadorID, int barallaID){
-		if(barallaID == 1) agora.afegeixCartaAPosicioBuida(jugadorID, partida.getBaralla().getCartes(1)[0]);
-		else agora.afegeixCartaAPosicioBuida(jugadorID, partida.getBaralla2().getCartes(1)[0]);
+		if(barallaID == 1) {
+			Carta cartaAgafada = partida.getBaralla().getCartes(1)[0];
+			agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
+			afegeixCarta(jugadorID, cartaAgafada);
+		}
+		else {
+			Carta cartaAgafada = partida.getBaralla2().getCartes(1)[0];
+			agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
+			afegeixCarta(jugadorID, cartaAgafada);
+		}
 		partida.avancarJugador();
 		agora.updateView();
 	}
 	
 	public void divideixBaralla(){
 		partida.divideixBaralla();
+	}
+	
+	public void afegeixCarta(int jugadorID, Carta carta){
+		partida.afegeixCarta(jugadorID, carta);
+	}
+	
+	public void treuCarta(int jugadorID, Carta carta){
+		partida.treuCarta(jugadorID, carta);
+	}
+	
+	public void getProximMoviment(){
+		controladorIA.getProximMoviment(partida.getIdJugadorActual(), partida.getPas());
 	}
 }
