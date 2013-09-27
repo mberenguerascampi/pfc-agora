@@ -126,6 +126,8 @@ public class Partida {
 			++idJugadorActual;
 			System.out.println("Jugador " + idJugadorActual);
 		}
+		
+		if(pas == 3) passejantsAMoure = 2;
 	}
 	
 	public boolean finalitzarPartida(){

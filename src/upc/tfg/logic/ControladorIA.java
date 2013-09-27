@@ -28,6 +28,7 @@ public class ControladorIA {
 		System.out.println("Obtenir moviment pas -> " + pas);
 		if(pas == 1){
 			Carta cartaRobada = robot.getCartaRival();
+			logic.cartaRobada(jugadorID, cartaRobada);
 			System.out.println("Carta robada -> " + cartaRobada.getNom() + " del districte " + cartaRobada.getDistricte().getNom());
 		}
 		else if(pas == 2){
@@ -36,9 +37,11 @@ public class ControladorIA {
 			System.out.println("Carta seleccionada -> " + cartaSeleccionada.getNom() + " del districte " + cartaSeleccionada.getDistricte().getNom());
 		}
 		else if (pas == 3){
-			PassejantsAMoure pam = robot.getPassejantDistricte();
-			logic.mouPassejantsEntreDistrictes(pam.districteOrigen.getNom(), pam.districteDesti.getNom(), pam.color);
-			System.out.println("Passejant a moure de color " + pam.color + " del districte " + pam.districteOrigen.getNom());
+			for (int i = 0; i < 2; ++i){
+				PassejantsAMoure pam = robot.getPassejantDistricte();
+				logic.mouPassejantsEntreDistrictes(pam.districteOrigen.getNom(), pam.districteDesti.getNom(), pam.color);
+				System.out.println("Passejant a moure de color " + pam.color + " del districte " + pam.districteOrigen.getNom());
+			}
 		}
 		else if (pas == 4){
 			int idBaralla = robot.getBarallaPerRobarCarta();

@@ -91,24 +91,34 @@ public class ControladorLogic {
 	}
 	
 	public void cartaRobada(int jugadorID, Carta cartaEntity){
+		System.out.println("LOGIC: Carta robada del jugador"+jugadorID);
+		if(jugadorID != 1){
+			agora.seleccionaCartaPerRobar(jugadorID, cartaEntity);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		if(partida.cartaRobada(jugadorID, cartaEntity)){
 			agora.intercanviaCartes();
 		}
 		agora.updateView();
+		getProximMoviment();
 	}
 	
 	public void cartaAgafadaDeLaBaralla(int jugadorID, int barallaID){
+		partida.avancarJugador();
 		if(barallaID == 1) {
 			Carta cartaAgafada = partida.getBaralla().getCartes(1)[0];
-			agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
 			afegeixCarta(jugadorID, cartaAgafada);
+			agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
 		}
 		else {
 			Carta cartaAgafada = partida.getBaralla2().getCartes(1)[0];
-			agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
 			afegeixCarta(jugadorID, cartaAgafada);
+			agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
 		}
-		partida.avancarJugador();
 		agora.updateView();
 		getProximMoviment();
 	}
@@ -126,15 +136,23 @@ public class ControladorLogic {
 	}
 	
 	public void getProximMoviment(){
-		//Si estem en un jugador diferent a l'1 li demenem a la inteligència artificial el següent moviment
-		//Sino esperem a que l'usuari tiri
-		agora.updateView();
-		if (partida.getIdJugadorActual() == 1) return;
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		controladorIA.getProximMoviment(partida.getIdJugadorActual(), partida.getPas());
+		Thread t = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				//Si estem en un jugador diferent a l'1 li demenem a la inteligència artificial el següent moviment
+				//Sino esperem a que l'usuari tiri
+				System.out.println("Get Proxim moviment");
+				agora.updateView();
+				if (partida.getIdJugadorActual() == 1) return;
+				try {
+					Thread.sleep(1500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				controladorIA.getProximMoviment(partida.getIdJugadorActual(), partida.getPas());
+			}
+		});
+		t.start();
 	}
 }

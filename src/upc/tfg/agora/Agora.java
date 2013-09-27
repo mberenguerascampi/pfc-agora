@@ -189,7 +189,6 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	
 	public void cartaAgafada(int jugadorID, int barallaID){
 		logic.cartaAgafadaDeLaBaralla(jugadorID, barallaID);
-		//TODO: Comunicar-li a la capa lògica que afegirà la carta i actualitzara la baralla de cartes
 	}
 	
 	//FUNCIONS PÜBLIQUES PER MODIFiCAR LA CAPA DE PRESENTACIÓ
@@ -226,6 +225,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	
 	public void seleccionaCartaiMouPassejants(int jugadorID, Carta carta){
 		tauler.seleccionaCartaiMouPassejants(jugadorID, carta);
+	}
+	
+	public void seleccionaCartaPerRobar(int jugadorID, Carta cartaEntity){
+		tauler.seleccionaCartaARobar(jugadorID, cartaEntity);
 	}
 }
 

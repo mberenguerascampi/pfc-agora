@@ -139,4 +139,12 @@ public class VistaCarta extends JButton {
 	public void setEstaBuida(boolean estaBuida) {
 		this.estaBuida = estaBuida;
 	}
+
+	public int getJugadorID() {
+		return jugadorID;
+	}
+
+	public void setJugadorID(int jugadorID) {
+		this.jugadorID = jugadorID;
+	}
 }

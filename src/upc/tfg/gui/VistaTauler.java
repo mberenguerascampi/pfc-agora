@@ -238,10 +238,10 @@ public class VistaTauler extends DefaultView{
 	
 	public void afegeixCartaAPosicioBuida(int jugadorID, final Carta cartaEntity)
 	{
-		marcCarta.setVisible(false);
 		//afegeixCarta(jugadorID, Integer.valueOf(marcCarta.getName()), cartaEntity);
 		//add(cartes.get(cartes.size()-1));
 		if(jugadorID == 1){
+			marcCarta.setVisible(false);
 			vistaCartaSeleccionada.setEstaBuida(false);
 			vistaCartaSeleccionada.setBounds(marcCarta.getBounds());
 			vistaCartaSeleccionada.setCartaEntity(cartaEntity);
@@ -249,8 +249,23 @@ public class VistaTauler extends DefaultView{
 			vistaCartaSeleccionada.setSeleccionada(false);
 			vistaCartaSeleccionada.removeActionListener(vistaCartaSeleccionada.getActionListeners()[0]);
 			afegeixListenerACarta(cartaEntity, jugadorID, vistaCartaSeleccionada);
+			vistaCartaSeleccionada.updateView();
 			vistaCartaSeleccionada = null;
 		}
+		else{
+			for(VistaCarta vc:cartes){
+				if(vc.getJugadorID() == jugadorID && vc.isEstaBuida()){
+					vc.setEstaBuida(false);
+					vc.setCartaEntity(cartaEntity);
+					vc.setEnabled(true);
+					vc.setSeleccionada(false);
+					vc.removeActionListener(vc.getActionListeners()[0]);
+					afegeixListenerACarta(cartaEntity, jugadorID, vc);
+					vc.updateView();
+				}
+			}
+		}
+		updateView();
 	}
 	
 	private void afegeixListenerACarta(final Carta cartaEntity, final int jugadorID, final VistaCarta carta){
@@ -312,6 +327,16 @@ public class VistaTauler extends DefaultView{
 				}
 			});
 	    }
+	}
+	
+	public void seleccionaCartaARobar(int jugadorID, Carta cartaEntity){
+		for(VistaCarta vc:cartes){
+			if (vc.getCartaEntity().equals(cartaEntity)) {
+				System.out.println("Carta a robar del jugador" + jugadorID);
+				vc.setSeleccionada(true);
+				cartesIntercanvi[jugadorID-1] = vc;
+			}
+		}
 	}
 	
 	class DragMouseAdapter extends MouseAdapter {
@@ -616,14 +641,17 @@ public class VistaTauler extends DefaultView{
 		cardInfoView.setSelectVisible(false);
 		cardInfoView.setVisible(false);
 		System.out.println("Intercanviem cartes");
-		//TODO: Descomentar quan hi hagi la IA
-//		int n = cartesIntercanvi.length;
-//		VistaCarta aux = cartesIntercanvi[n-1];
-//		for(int i = 0; i < n-1; ++i){
-//			cartesIntercanvi[i+1].setCartaEntity(cartesIntercanvi[i].getCartaEntity());
-//			cartesIntercanvi[i+1].setSeleccionada(false);
-//		}
-//		cartesIntercanvi[0].setCartaEntity(aux.getCartaEntity());
+		int n = cartesIntercanvi.length;
+		VistaCarta aux = cartesIntercanvi[n-1];
+		for(int i = n-1; i > 0; --i){
+			Carta cartaAIntercanviar = cartesIntercanvi[i-1].getCartaEntity();
+			//Si la carta robada era del jugador1 la girem; si la carta robada es la que ha robat el jugador1 tambe la girem
+			if(i-1 <= 1)cartaAIntercanviar.girar();
+			cartesIntercanvi[i].setCartaEntity(cartaAIntercanviar);
+			cartesIntercanvi[i].setSeleccionada(false);
+		}
+		Carta cartaJugador1 = aux.getCartaEntity();
+		cartesIntercanvi[0].setCartaEntity(cartaJugador1);
 		cartesIntercanvi[0].setSeleccionada(false);
 	}
 	
@@ -716,17 +744,12 @@ public class VistaTauler extends DefaultView{
    
         @Override
         public void mouseDragged(MouseEvent e) {
-        	 System.out.println("If inicial, jugador actual: " + Partida.getInstance().getIdJugadorActual());
         	  if(vistaPassejants != null && (Partida.getInstance().getIdJugadorActual() != 1))return;
-        	  System.out.println("Abans del between districts");
 	          if(betweenDistricts){
 	        	  System.out.println("Abans del primer if");
 	        	  if(Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).getNumPassejants(vistaPassejantEstatic.getiColor()) == 0 || Partida.getInstance().getPas() != 3) return;
-	        	  System.out.println("Abans del segon if");
 	        	  if(Partida.getInstance().esUltimTorn() && vistaPassejantEstatic.getiColor() != Partida.getInstance().getColorJugadorActual())return;
-	        	  System.out.println("Abans del tercer if");
 	        	  if(!Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).tePassejantsDisponibles(vistaPassejantEstatic.getiColor()))return;
-	        	  System.out.println("Despres de tots els ifs");
 	          }
 	          else if(isCartaBaralla){
 	        	  if(Partida.getInstance().getPas() != 4)return;
