@@ -330,11 +330,20 @@ public class VistaTauler extends DefaultView{
 	}
 	
 	public void seleccionaCartaARobar(int jugadorID, Carta cartaEntity){
+		System.out.println("GUI Carta a robar del jugador" + jugadorID + " del districte " + cartaEntity.getDistricte().getNom());
+		int idPropietariCarta = jugadorID-1;
+		if (idPropietariCarta == 0)idPropietariCarta = 4;
 		for(VistaCarta vc:cartes){
-			if (vc.getCartaEntity().equals(cartaEntity)) {
-				System.out.println("Carta a robar del jugador" + jugadorID);
+			if (vc.getJugadorID() == idPropietariCarta && vc.getCartaEntity().equals(cartaEntity)) {
+				System.out.println("GUI carta trobada");
 				vc.setSeleccionada(true);
 				cartesIntercanvi[jugadorID-1] = vc;
+			}
+		}
+		ArrayList<Carta> jcartes = Partida.getInstance().getJugador(idPropietariCarta).getCartes();
+		for(Carta c:jcartes){
+			if (c.equals(cartaEntity)) {
+				System.out.println("GUI carta trobada!!!!!!!!!!!!!!");
 			}
 		}
 	}
@@ -649,18 +658,22 @@ public class VistaTauler extends DefaultView{
 			if(i-1 <= 1)cartaAIntercanviar.girar();
 			cartesIntercanvi[i].setCartaEntity(cartaAIntercanviar);
 			cartesIntercanvi[i].setSeleccionada(false);
+			//Borrem el action listener que tenia i posem el corresponent
+			cartesIntercanvi[i].removeActionListener(cartesIntercanvi[i].getActionListeners()[0]);
+			afegeixListenerACarta(cartaAIntercanviar, cartesIntercanvi[i].getJugadorID(), cartesIntercanvi[i]);
 		}
 		Carta cartaJugador1 = aux.getCartaEntity();
 		cartesIntercanvi[0].setCartaEntity(cartaJugador1);
 		cartesIntercanvi[0].setSeleccionada(false);
+		cartesIntercanvi[0].removeActionListener(cartesIntercanvi[0].getActionListeners()[0]);
+		afegeixListenerACarta(cartaJugador1, cartesIntercanvi[0].getJugadorID(), cartesIntercanvi[0]);
 	}
 	
 	public void seleccionaCartaiMouPassejants(int jugadorID, Carta carta){
-		//TODO:
 		Point origin = null;
 		VistaCarta cartaSeleccionadaAux = null;
 		for (VistaCarta vc:cartes){
-			if(vc.getCartaEntity().equals(carta)){
+			if(vc.getJugadorID() == jugadorID && vc.getCartaEntity().equals(carta)){
 				origin = vc.getLocation();
 				seleccionaCarta(vc, jugadorID);
 				cartaSeleccionadaAux = vc;
@@ -690,6 +703,9 @@ public class VistaTauler extends DefaultView{
 		}
 		vc.setBounds(rect);
 		vc.updateView();
+		cardInfoView.setCarta(vc.getCartaEntity());
+		infoView.setVisible(false);
+		cardInfoView.setVisible(true);
 	}
 	
 	private void readMapMatrix()
@@ -746,7 +762,6 @@ public class VistaTauler extends DefaultView{
         public void mouseDragged(MouseEvent e) {
         	  if(vistaPassejants != null && (Partida.getInstance().getIdJugadorActual() != 1))return;
 	          if(betweenDistricts){
-	        	  System.out.println("Abans del primer if");
 	        	  if(Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).getNumPassejants(vistaPassejantEstatic.getiColor()) == 0 || Partida.getInstance().getPas() != 3) return;
 	        	  if(Partida.getInstance().esUltimTorn() && vistaPassejantEstatic.getiColor() != Partida.getInstance().getColorJugadorActual())return;
 	        	  if(!Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).tePassejantsDisponibles(vistaPassejantEstatic.getiColor()))return;
@@ -960,11 +975,11 @@ public class VistaTauler extends DefaultView{
 				}
 			}
 			if(descartada){
-				cartesDescartades.setVisible(true);
 				carta.setEstaBuida(true);
+				carta.updateView();
+				cartesDescartades.setVisible(true);
 				if(origin != null)carta.setLocation(origin);
 				else carta.setBounds(cartesDescartades.getBounds());
-				carta.updateView();
 				cartesDescartades.setCartaEntity(carta.getCartaEntity());
 			}
 		}

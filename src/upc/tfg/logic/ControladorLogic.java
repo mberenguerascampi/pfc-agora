@@ -2,6 +2,7 @@ package upc.tfg.logic;
 
 import upc.tfg.agora.Agora;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.ResultatsFinals;
 
 public class ControladorLogic {
 	private Partida partida;
@@ -18,7 +19,7 @@ public class ControladorLogic {
 	}
 	
 	public void comencarPartida(){
-		partida = new Partida("hola",null,1,2, this);
+		partida = new Partida("hola",null,1,1, this);
 		Jugador j1 = new Jugador("J1",1,Constants.BLAU);
 		Jugador j2 = new Jugador("J2",2,Constants.VERMELL);
 		Jugador j3 = new Jugador("J3",3,Constants.VERD);
@@ -84,6 +85,7 @@ public class ControladorLogic {
 			for(int i = 0; i < carta.getValor(); ++i){
 				mouPassejantADistricte(carta.getDistricte().getNom(), partida.getIdJugadorActual());
 			}
+			treuCarta(jugadorID, carta);
 			//Actualitzem la capa de presentacio
 			agora.seleccionaCartaiMouPassejants(jugadorID, carta);
 			getProximMoviment();
@@ -109,16 +111,15 @@ public class ControladorLogic {
 	
 	public void cartaAgafadaDeLaBaralla(int jugadorID, int barallaID){
 		partida.avancarJugador();
+		Carta cartaAgafada = null;
 		if(barallaID == 1) {
-			Carta cartaAgafada = partida.getBaralla().getCartes(1)[0];
-			afegeixCarta(jugadorID, cartaAgafada);
-			agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
+			cartaAgafada = partida.getBaralla().getCartes(1)[0];
 		}
 		else {
-			Carta cartaAgafada = partida.getBaralla2().getCartes(1)[0];
-			afegeixCarta(jugadorID, cartaAgafada);
-			agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
+			cartaAgafada = partida.getBaralla2().getCartes(1)[0];
 		}
+		afegeixCarta(jugadorID, cartaAgafada);
+		agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
 		agora.updateView();
 		getProximMoviment();
 	}
@@ -144,6 +145,11 @@ public class ControladorLogic {
 				//Sino esperem a que l'usuari tiri
 				System.out.println("Get Proxim moviment");
 				agora.updateView();
+				if (partida.finalitzarPartida()){
+					ResultatsFinals resultats = partida.getPuntuacioFinal();
+					agora.mostraFinalPartida(resultats);
+					return;
+				}
 				if (partida.getIdJugadorActual() == 1) return;
 				try {
 					Thread.sleep(1500);

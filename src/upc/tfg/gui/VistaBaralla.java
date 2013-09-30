@@ -7,13 +7,16 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import upc.tfg.logic.Baralla;
 import upc.tfg.utils.Constants;
 
 public class VistaBaralla extends JPanel{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8352073768985693808L;
 	public static final int BARALLA_HEIGHT = 115;//VistaTauler.CARTA_HEIGHT+10;
 	public static final int BARALLA_WIDTH = 84;//VistaTauler.CARTA_WIDTH+10;
 	private Image img = null;
@@ -31,7 +34,12 @@ public class VistaBaralla extends JPanel{
 	}
 	
 	public void updateView(){
-		vistaCarta.setCartaEntity(baralla.getCartes().get(1));
+		if(baralla.getCartes().size() > 1){
+			vistaCarta.setCartaEntity(baralla.getCartes().get(1));
+		}
+		else if(baralla.getCartes().size() > 0){
+			vistaCarta.setCartaEntity(baralla.getCartes().get(0));
+		}
 	}
 	
 	public void paintComponent(Graphics page)

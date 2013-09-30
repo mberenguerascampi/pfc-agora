@@ -2,14 +2,12 @@ package upc.tfg.gui;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 
 import upc.tfg.logic.Carta;
 import upc.tfg.utils.Constants;

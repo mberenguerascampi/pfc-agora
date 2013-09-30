@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.ResultatsFinals;
 
 public class Partida {
 	private String nom;
@@ -23,6 +24,7 @@ public class Partida {
 	private static Partida instance = null;
 	private Carta cartaSeleccionada = null;
 	private Map<Integer,Carta> cartesAIntercanviar = new HashMap<Integer,Carta>();
+	private int ultimTorn = 1;
 	private ControladorLogic logic;
 	
 	public Partida() {
@@ -89,8 +91,12 @@ public class Partida {
 	public boolean cartaRobada(int jugadorID, Carta cartaEntity){
 		cartesAIntercanviar.put(jugadorID, cartaEntity);
 		avancarJugador();
-		if(pas == 2)return true;
-		else return false;
+		if(pas == 2){
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	private void intercanviarCartes(){
@@ -106,12 +112,12 @@ public class Partida {
 	
 	public boolean avancarTorn(){
 		++torn;
-		if(torn > 12){
-			int[] puntuacio = getPuntuacioFinal();
+		if(torn > ultimTorn){
+			/*int[] puntuacio = getPuntuacioFinal();
 			System.out.println("RESULTATS: (BLAU, VERMELL, VERD, GROC)");
 			for (int p:puntuacio){
 				System.out.print(p + ", ");
-			}
+			}*/
 			return false;
 		}
 		return true;
@@ -131,7 +137,8 @@ public class Partida {
 	}
 	
 	public boolean finalitzarPartida(){
-		return true;
+		if(torn > ultimTorn)return true;
+		else return false;
 	}
 	
 	public boolean afegirJugador(Jugador jugador){
@@ -186,7 +193,7 @@ public class Partida {
 		}
 	}
 	
-	public int[] getPuntuacioFinal(){
+	public ResultatsFinals getPuntuacioFinal(){
 		int puntsBlau, puntsVermell, puntsVerd, puntsGroc, distBlau, distVermell, distVerd, distGroc;
 		puntsBlau = puntsVermell = puntsVerd = puntsGroc = 0;
 		distBlau = distVermell = distVerd = distGroc = 0;
@@ -213,7 +220,8 @@ public class Partida {
 		int[] totalDistrictes = {distBlau, distVermell, distVerd, distGroc};
 		int colorGuanyador = getColorGuanyador(resultatsFinals, totalDistrictes);
 		System.out.println("GUANYADOR: " + colorGuanyador);
-		return resultatsFinals;
+		return new ResultatsFinals(resultatsFinals[0], resultatsFinals[1], resultatsFinals[2],
+				resultatsFinals[3], colorGuanyador);
 	}
 	
 	private int getColorGuanyador(int[] resultatsFinals, int[] totalDistrictes){
@@ -418,5 +426,12 @@ public class Partida {
 		for(Jugador j:jugadors){
 			if(j.getId() == jugadorID)j.treureCarta(carta);
 		}
+	}
+	
+	public String getNomJugador(int jugadorID){
+		for(Jugador j:jugadors){
+			if(j.getId() == jugadorID)return j.getNom();
+		}
+		return "";
 	}
 }

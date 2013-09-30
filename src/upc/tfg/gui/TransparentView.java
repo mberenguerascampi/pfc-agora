@@ -11,6 +11,10 @@ import javax.swing.JPanel;
 import upc.tfg.utils.Constants;
 
 public class TransparentView extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5176079745731420083L;
 	private Image img = null;
 
 	public void paintComponent(Graphics g)

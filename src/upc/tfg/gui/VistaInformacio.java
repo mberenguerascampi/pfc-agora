@@ -1,16 +1,9 @@
 package upc.tfg.gui;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import upc.tfg.logic.Districte;
 import upc.tfg.utils.Constants;

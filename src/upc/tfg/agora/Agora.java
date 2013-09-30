@@ -17,6 +17,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import upc.tfg.gui.VistaBaralla;
+import upc.tfg.gui.VistaFinalPartida;
 import upc.tfg.gui.VistaMenuPrincipal;
 import upc.tfg.gui.VistaTauler;
 import upc.tfg.interfaces.MenuPrincipalListener;
@@ -27,6 +28,7 @@ import upc.tfg.logic.Partida;
 import upc.tfg.logic.Tauler;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.ImageToNumberArray;
+import upc.tfg.utils.ResultatsFinals;
 
 public class Agora extends JFrame implements MenuPrincipalListener, TaulerListener, ActionListener{
 	/**
@@ -37,6 +39,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	CardLayout cardLayout;
 	VistaMenuPrincipal menuPrincipal;
 	VistaTauler tauler;
+	VistaFinalPartida finalPartida;
 	private JMenuBar menubar;
 	private static Agora instance = null;
 	private ControladorLogic logic;
@@ -103,7 +106,19 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
                 System.exit(0);
             }
         });
+        JMenuItem eMenuItem2 = new JMenuItem("Tornar al menú", icon);
+        eMenuItem2.setBackground(Constants.colorGreen);
+        eMenuItem2.setMnemonic(KeyEvent.VK_R);
+        eMenuItem2.setToolTipText("");
+        eMenuItem2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                tauler.setVisible(false);
+                menuPrincipal.setVisible(true);
+                removeMenu();
+            }
+        });
 
+        file.add(eMenuItem2);
         file.add(eMenuItem);
 
         menubar.add(file);
@@ -127,9 +142,12 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		menuPrincipal.setVisible(true);
 		tauler = new VistaTauler(this);
 		tauler.setVisible(false);
+		finalPartida = new VistaFinalPartida();
+		finalPartida.setVisible(false);
 		
 		contentPane.add(menuPrincipal);
 		contentPane.add(tauler);
+		contentPane.add(finalPartida);
 	}
 
 	@Override
@@ -229,6 +247,15 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	
 	public void seleccionaCartaPerRobar(int jugadorID, Carta cartaEntity){
 		tauler.seleccionaCartaARobar(jugadorID, cartaEntity);
+	}
+	
+	public void mostraFinalPartida(ResultatsFinals resultats){
+		System.out.println("Mostrem final partida");
+		removeMenu();
+		finalPartida.setResultats(resultats);
+		tauler.setVisible(false);
+		menuPrincipal.setVisible(false);
+		finalPartida.setVisible(true);
 	}
 }
 

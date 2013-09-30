@@ -1,10 +1,8 @@
 package upc.tfg.gui;
 
 import java.awt.Color;
-import java.awt.Graphics;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import upc.tfg.logic.Partida;
 import upc.tfg.utils.Constants;

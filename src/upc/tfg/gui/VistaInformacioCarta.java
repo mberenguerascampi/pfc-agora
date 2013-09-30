@@ -1,12 +1,10 @@
 package upc.tfg.gui;
 
 import java.awt.Color;
-import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import upc.tfg.logic.Carta;
 import upc.tfg.utils.Constants;

@@ -71,7 +71,7 @@ public class JugadorRandom implements JugadorRobot{
 	
 	public int getBarallaPerRobarCarta(){
 		Random rand = new Random(System.currentTimeMillis());
-		int barallaID = rand.nextInt(1);
-		return barallaID+1;
+		int barallaID = rand.nextInt(6);
+		return (barallaID%2)+1;
 	}
 }

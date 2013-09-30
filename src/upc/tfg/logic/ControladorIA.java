@@ -1,6 +1,5 @@
 package upc.tfg.logic;
 
-import upc.tfg.agora.Agora;
 import upc.tfg.ia.JugadorRandom;
 import upc.tfg.utils.PassejantsAMoure;
 import upc.tfg.interfaces.JugadorRobot;
