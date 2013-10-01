@@ -138,6 +138,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	
 	private void tornarAlMenu(){
 		amagaVistes();
+		menuPrincipal.updateView();
         menuPrincipal.setVisible(true);
         removeMenu();
 	}
@@ -169,7 +170,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		tauler.setVisible(false);
 		finalPartida = new VistaFinalPartida(this);
 		finalPartida.setVisible(false);
-		vIdioma = new VistaIdioma();
+		vIdioma = new VistaIdioma(this);
 		vIdioma.setVisible(false);
 		vAbout = new VistaAbout(this);
 		vAbout.setVisible(false);

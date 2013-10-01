@@ -29,8 +29,7 @@ public class VistaMenuPrincipal extends DefaultView {
 	{
 		buttons = new CustomDefaultButton[6];
 		for (int i = 0; i < buttons.length; ++i) {
-			CustomDefaultButton button = buttons[i];
-			button = new CustomDefaultButton(getButtonText(i));
+			CustomDefaultButton button = new CustomDefaultButton(getButtonText(i));
 			button.setLayout(null);
 			int x = Constants.paddingX + buttons_paddingX;
 			int y = Constants.paddingY + buttons_paddingY + i*(CustomDefaultButton.BUTTON_HEIGHT+15);
@@ -42,6 +41,7 @@ public class VistaMenuPrincipal extends DefaultView {
 					buttonPressed(position);
 				}
 			});  
+			buttons[i] = button;
 			add(button);
 		}
 	}
@@ -89,6 +89,13 @@ public class VistaMenuPrincipal extends DefaultView {
 				break;
 			default:
 				break;
+		}
 	}
+	
+	public void updateView(){
+		updateBundle();
+		for (int i = 0; i < buttons.length; ++i){
+			buttons[i].setText(getButtonText(i));
+		}
 	}
 }

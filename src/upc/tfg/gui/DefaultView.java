@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
@@ -19,7 +20,8 @@ public class DefaultView extends JPanel{
 	 * 
 	 */
 	private static final long serialVersionUID = -4952576131782945923L;
-	public ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle");
+	Locale defaultLocale = Locale.getDefault();
+	public ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
 	private String backgroundName;
 	private Image img = null;
 
@@ -67,5 +69,10 @@ public class DefaultView extends JPanel{
 			e.printStackTrace();
 		}
 		img = img.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height,  java.awt.Image.SCALE_SMOOTH);
+	}
+	
+	public void updateBundle(){
+		defaultLocale = Locale.getDefault();
+		bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
 	}
 }

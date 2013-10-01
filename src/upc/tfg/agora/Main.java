@@ -1,6 +1,7 @@
 package upc.tfg.agora;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import javax.media.CannotRealizeException;
 import javax.media.NoPlayerException;
@@ -22,6 +23,8 @@ public class Main {
 	        javax.swing.SwingUtilities.invokeLater(new Runnable() {  
 	            public void run() {  
 	            	try {
+	            		Locale catLocale = new Locale("ca", "CAT");
+	            		Locale.setDefault(catLocale);
 	            		agora = new Agora();
 	            		AudioPlayer ap = new AudioPlayer();
 	            		ap.startPlayback();
