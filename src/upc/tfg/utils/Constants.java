@@ -25,6 +25,8 @@ public class Constants {
 	public static final Font fontArialRoundedBig = new Font("Arial Rounded MT Bold", Font.BOLD, 18);
 	public static final Font fontKristen = new Font("Kristen ITC", Font.BOLD, 16);
 	public static final Font fontKristenSmall = new Font("Kristen ITC", Font.CENTER_BASELINE, 14);
+	public static final Font fontPlayerWinner = new Font("Kristen ITC", Font.BOLD, 38);
+	public static final Font fontPlayersNames = new Font("Kristen ITC", Font.BOLD, 22);
 	
 	//Sizes
 	public static final int width = Toolkit.getDefaultToolkit().getScreenSize().width;//1024;

@@ -73,19 +73,19 @@ public class VistaMenuPrincipal extends DefaultView {
 				listener.playPressed();
 				break;
 			case 1:
-				listener.playPressed();
+				listener.loadButtonPressed();
 				break;
 			case 2:
-				listener.playPressed();
+				listener.highscoresButtonPressed();
 				break;
 			case 3:
-				listener.playPressed();
+				listener.languageButtonPressed();
 				break;
 			case 4:
-				listener.playPressed();
+				listener.instructionsButtonPressed();
 				break;
 			case 5:
-				listener.playPressed();
+				listener.aboutButtonPressed();
 				break;
 			default:
 				break;
