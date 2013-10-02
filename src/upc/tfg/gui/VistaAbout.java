@@ -3,6 +3,8 @@ package upc.tfg.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JLabel;
+
 import upc.tfg.interfaces.VistaAmbBotoTornarListener;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.CustomDefaultButton;
@@ -19,8 +21,25 @@ public class VistaAbout extends DefaultView {
 		setLayout(null);
 		this.listener = listener;
 		setSize(Constants.width, Constants.height);
+		afegirLabels();
 		afegirBotoTornar();
 		addSkin("imatgePortada.jpg");
+	}
+	
+	private void afegirLabels(){
+		int originX = Constants.width/2 - 400;
+		int originY = Constants.height/2 - 90;
+		JLabel label_versio = new JLabel(bundle.getString("versio_text"));
+		JLabel label_autor = new JLabel(bundle.getString("autor_text"));
+		
+		label_versio.setFont(Constants.fontPlayersNames);
+		label_autor.setFont(Constants.fontPlayersNames);
+		
+		label_versio.setBounds(originX, originY, 300, 25);
+		label_autor.setBounds(originX, originY+85, 800, 25);
+		
+		add(label_versio);
+		add(label_autor);
 	}
 	
 	private void afegirBotoTornar(){

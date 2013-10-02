@@ -115,6 +115,7 @@ public class VistaTauler extends DefaultView{
 				VistaTauler.this.listener.nextPlayer();
 			}
 		});
+		button.setVisible(false);
 		add(button);
 	}
 	

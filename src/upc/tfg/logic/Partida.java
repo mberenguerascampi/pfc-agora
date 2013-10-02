@@ -24,7 +24,7 @@ public class Partida {
 	private static Partida instance = null;
 	private Carta cartaSeleccionada = null;
 	private Map<Integer,Carta> cartesAIntercanviar = new HashMap<Integer,Carta>();
-	private int ultimTorn = 1;
+	private int ultimTorn = 12;
 	private ControladorLogic logic;
 	
 	public Partida() {
@@ -374,10 +374,12 @@ public class Partida {
 	}
 	
 	public String getTextPas(){
+		int idAnteriorJugador = idJugadorActual - 1;
+		if (idAnteriorJugador == 0) idAnteriorJugador = 4;
 		String text = "<html> PAS " + pas + "<br>";
 		switch(pas){
 			case 1:
-				text = text +  "El jugador " + idJugadorActual + " ha de robar <br> una carta al jugador " + (idJugadorActual-1);
+				text = text +  "El jugador " + idJugadorActual + " ha de robar <br> una carta al jugador " + idAnteriorJugador;
 				break;
 			case 2:
 				text = text + "El jugador " + idJugadorActual + " ha de seleccionar <br> una carta i moure tants passejants"+

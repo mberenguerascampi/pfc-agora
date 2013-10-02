@@ -27,14 +27,14 @@ public class JugadorRandom implements JugadorRobot{
 		if(idJugadorAnterior == 0)idJugadorAnterior = 4;
 		ArrayList<Carta> cartes = Partida.getInstance().getJugador(idJugadorAnterior).getCartes();
 		Random rand = new Random(System.currentTimeMillis());
-		int i = rand.nextInt(cartes.size()-1);
+		int i = rand.nextInt(cartes.size());
 		return cartes.get(i);
 	}
 	
 	public Carta getCartaSeleccionada(){
 		ArrayList<Carta> cartes = jugador.getCartes();
 		Random rand = new Random(System.currentTimeMillis());
-		int i = rand.nextInt(cartes.size()-1);
+		int i = rand.nextInt(cartes.size());
 		return cartes.get(i);
 	}
 	
@@ -42,30 +42,35 @@ public class JugadorRandom implements JugadorRobot{
 		Districte[] districtes = Partida.getInstance().getTauler().getDistrictes(); 
 		Random rand = new Random(System.currentTimeMillis());
 		boolean trobat = false;
-		int maxIntents = 12;
+		int maxIntents = 20;
 		
 		while (!trobat){
 			int intents = 0;
 			
 			//Obtenim el districte del qual agafarem un passejant
+			System.out.println("Obtenim el districte del qual agafarem un passejant");
 			int i = rand.nextInt(districtes.length-1);
-			while(!districtes[i].tePassejantsDisponibles()) i = rand.nextInt(districtes.length-1);
+			while(!districtes[i].tePassejantsDisponibles()) i = rand.nextInt(districtes.length);
 			Districte d = districtes[i];
 			
-			//Obtenim el color del passejant que agafem 
+			//Obtenim el color del passejant que agafem
+			System.out.println("Obtenim el color del passejant que agafem");
 			int j = rand.nextInt(Constants.COLORS.length-1);
-			while(!d.tePassejantsDisponibles(Constants.COLORS[j]))j = rand.nextInt(Constants.COLORS.length-1);
+			while(!d.tePassejantsDisponibles(Constants.COLORS[j]))j = rand.nextInt(Constants.COLORS.length);
 			
 			//Obtenim el districte on afegir el passejant
+			System.out.println("Obtenim el districte on afegir el passejant");
 			int k = rand.nextInt(districtes.length-1);
-			while(intents < maxIntents && !d.equals(districtes[k]) && !districtes[k].potAfegirPassejant(Constants.COLORS[j])){
-				k = rand.nextInt(districtes.length-1);
+			while(intents < maxIntents && !districtes[k].potAfegirPassejant(Constants.COLORS[j])){
+				while(d.equals(districtes[k]))k = rand.nextInt(districtes.length);
 				++intents;
 			}
 			if (intents < maxIntents) {
+				System.out.println("Obtingut");
 				return new PassejantsAMoure(Constants.COLORS[j], d, districtes[k]);
 			}
 		}
+		System.out.println("NO obtingut");
 		return null;
 	}
 	

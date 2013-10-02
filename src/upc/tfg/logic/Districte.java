@@ -32,16 +32,16 @@ public class Districte {
 		passejantsVerds = new ArrayList<Passejant>();
 		passejantsGrocs = new ArrayList<Passejant>();
 		
-		Passejant p = new Passejant(Constants.VERMELL, false);
-		afegeixPassejant(p);
-		Passejant p2 = new Passejant(Constants.VERMELL, false);
-		afegeixPassejant(p2);
-		Passejant p3 = new Passejant(Constants.VERD, false);
-		afegeixPassejant(p3);
-		Passejant p4 = new Passejant(Constants.GROC, false);
-		afegeixPassejant(p4);
-		Passejant p5 = new Passejant(Constants.VERMELL, false);
-		afegeixPassejant(p5);
+//		Passejant p = new Passejant(Constants.VERMELL, false);
+//		afegeixPassejant(p);
+//		Passejant p2 = new Passejant(Constants.VERMELL, false);
+//		afegeixPassejant(p2);
+//		Passejant p3 = new Passejant(Constants.VERD, false);
+//		afegeixPassejant(p3);
+//		Passejant p4 = new Passejant(Constants.GROC, false);
+//		afegeixPassejant(p4);
+//		Passejant p5 = new Passejant(Constants.VERMELL, false);
+//		afegeixPassejant(p5);
 	}
 	
 	public void afegeixPassejant(Passejant passejant){
@@ -84,7 +84,7 @@ public class Districte {
 		int min1 = Math.min(passejantsBlaus.size(), passejantsVermells.size());
 		int max2 = Math.max(passejantsGrocs.size(), passejantsVerds.size());
 		int min2 = Math.min(passejantsGrocs.size(), passejantsVerds.size());
-		if (max1 == max2)return true;
+		if (max1 != 0 && max1 == max2)return true; 
 		if (max1 > max2 && max1 == min1)return true;
 		if (max2 > max1 && max2 == min2)return true;
 		return false;

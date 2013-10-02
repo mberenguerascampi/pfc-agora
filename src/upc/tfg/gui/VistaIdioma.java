@@ -1,6 +1,5 @@
 package upc.tfg.gui;
 
-import java.awt.Checkbox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Locale;
@@ -51,8 +50,8 @@ public class VistaIdioma extends DefaultView {
 	}
 	
 	private void addButtons(){
-		int originX = Constants.width/2 - 200;
-		int originY = Constants.height/2 - 200;
+		int originX = Constants.width/2 - 135;
+		int originY = Constants.height/2 - 105;
 		checkBoxCatala = new CustomCheckBox();
 		checkBoxCatala.addActionListener(new ActionListener() {
 			@Override
