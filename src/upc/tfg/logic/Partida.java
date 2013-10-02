@@ -1,7 +1,7 @@
 package upc.tfg.logic;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ public class Partida {
 	private static Partida instance = null;
 	private Carta cartaSeleccionada = null;
 	private Map<Integer,Carta> cartesAIntercanviar = new HashMap<Integer,Carta>();
-	private int ultimTorn = 12;
+	private int ultimTorn = 1;
 	private ControladorLogic logic;
 	
 	public Partida() {

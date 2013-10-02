@@ -10,6 +10,7 @@ import upc.tfg.interfaces.VistaAmbBotoTornarListener;
 import upc.tfg.logic.Partida;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.CustomDefaultButton;
+import upc.tfg.utils.PuntuacionsBD;
 import upc.tfg.utils.ResultatsFinals;
 
 public class VistaFinalPartida extends DefaultView {
@@ -43,6 +44,7 @@ public class VistaFinalPartida extends DefaultView {
 	}
 	
 	public void setResultats(ResultatsFinals resultats){
+		savePuntacio(resultats);
 		nomGuanyador = new JLabel();
 		nomGuanyador.setText("Guanyador!!!");
 		nomGuanyador.setLayout(null);
@@ -78,5 +80,10 @@ public class VistaFinalPartida extends DefaultView {
 		add(playerCell4);
 		
 		addSkin("imatgePortada.jpg");
+	}
+	
+	private void savePuntacio(ResultatsFinals resultats){
+		PuntuacionsBD bd = new PuntuacionsBD();
+		bd.guardarPuntuacio(resultats);
 	}
 }

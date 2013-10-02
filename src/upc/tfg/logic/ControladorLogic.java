@@ -1,5 +1,7 @@
 package upc.tfg.logic;
 
+import java.util.Date;
+
 import upc.tfg.agora.Agora;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.ResultatsFinals;
@@ -19,7 +21,8 @@ public class ControladorLogic {
 	}
 	
 	public void comencarPartida(){
-		partida = new Partida("hola",null,1,1, this);
+		Date date = new Date();
+		partida = new Partida("hola",date,1,1, this);
 		Jugador j1 = new Jugador("J1",1,Constants.BLAU);
 		Jugador j2 = new Jugador("J2",2,Constants.VERMELL);
 		Jugador j3 = new Jugador("J3",3,Constants.VERD);
