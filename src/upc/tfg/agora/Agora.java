@@ -207,6 +207,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	@Override
 	public void playPressed() {
 		 menuPrincipal.setVisible(false);
+		 tauler.removeAll();
 		 logic.comencarPartida();
 		 afegeixCartesJugador(1);
 		 afegeixCartesJugador(2);

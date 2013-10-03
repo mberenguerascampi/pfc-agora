@@ -24,7 +24,7 @@ public class Partida {
 	private static Partida instance = null;
 	private Carta cartaSeleccionada = null;
 	private Map<Integer,Carta> cartesAIntercanviar = new HashMap<Integer,Carta>();
-	private int ultimTorn = 1;
+	private int ultimTorn = 12;
 	private ControladorLogic logic;
 	
 	public Partida() {
@@ -124,12 +124,13 @@ public class Partida {
 	}
 	
 	public void avancarJugador(){
-		if(idJugadorActual == 4){
+		if(idJugadorActual == 2){
 			avancarPas();
 		}
 		else{
 			if(cartaSeleccionada != null)cartaSeleccionada.girar();
-			++idJugadorActual;
+			--idJugadorActual;
+			if(idJugadorActual == 0)idJugadorActual = 4;
 			System.out.println("Jugador " + idJugadorActual);
 		}
 		

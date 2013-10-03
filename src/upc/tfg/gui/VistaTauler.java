@@ -652,7 +652,7 @@ public class VistaTauler extends DefaultView{
 		cardInfoView.setVisible(false);
 		System.out.println("Intercanviem cartes");
 		int n = cartesIntercanvi.length;
-		VistaCarta aux = cartesIntercanvi[n-1];
+		Carta cartaJugador1 = cartesIntercanvi[n-1].getCartaEntity();
 		for(int i = n-1; i > 0; --i){
 			Carta cartaAIntercanviar = cartesIntercanvi[i-1].getCartaEntity();
 			//Si la carta robada era del jugador1 la girem; si la carta robada es la que ha robat el jugador1 tambe la girem
@@ -663,7 +663,6 @@ public class VistaTauler extends DefaultView{
 			cartesIntercanvi[i].removeActionListener(cartesIntercanvi[i].getActionListeners()[0]);
 			afegeixListenerACarta(cartaAIntercanviar, cartesIntercanvi[i].getJugadorID(), cartesIntercanvi[i]);
 		}
-		Carta cartaJugador1 = aux.getCartaEntity();
 		cartesIntercanvi[0].setCartaEntity(cartaJugador1);
 		cartesIntercanvi[0].setSeleccionada(false);
 		cartesIntercanvi[0].removeActionListener(cartesIntercanvi[0].getActionListeners()[0]);
@@ -684,6 +683,9 @@ public class VistaTauler extends DefaultView{
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+		if(cartaSeleccionadaAux == null){
+			System.out.println("NULL");
 		}
 		treureCarta(cartaSeleccionadaAux, origin);
 	}

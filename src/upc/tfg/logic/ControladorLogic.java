@@ -17,7 +17,6 @@ public class ControladorLogic {
 	
 	public ControladorLogic(Agora agora) {
 		this.agora = agora;
-		controladorIA = new ControladorIA(this);
 	}
 	
 	public void comencarPartida(){
@@ -32,6 +31,7 @@ public class ControladorLogic {
 		partida.afegirJugador(j3);
 		partida.afegirJugador(j4);
 		partida.crear();
+		controladorIA = new ControladorIA(this);
 		controladorIA.setJugadors(partida.getJugadorsRobot());
 	}
 	

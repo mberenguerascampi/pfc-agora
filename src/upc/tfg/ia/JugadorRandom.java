@@ -33,6 +33,12 @@ public class JugadorRandom implements JugadorRobot{
 	
 	public Carta getCartaSeleccionada(){
 		ArrayList<Carta> cartes = jugador.getCartes();
+		if (jugador.getId() == 4){
+			for(Carta carta:cartes){
+				System.out.println("           DISTRICTE: " + carta.getDistricte().getNom() +
+						", CARTA: " + carta.getNom());
+			}
+		}
 		Random rand = new Random(System.currentTimeMillis());
 		int i = rand.nextInt(cartes.size());
 		return cartes.get(i);
