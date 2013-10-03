@@ -67,7 +67,6 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		
 		Agora.instance = this;
 		logic = new ControladorLogic(this);
-		logic.comencarPartida();
 		
 		//new ImageToNumberArray();
 		//pack();
@@ -208,6 +207,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	@Override
 	public void playPressed() {
 		 menuPrincipal.setVisible(false);
+		 logic.comencarPartida();
 		 afegeixCartesJugador(1);
 		 afegeixCartesJugador(2);
 		 afegeixCartesJugador(3);

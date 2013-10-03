@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import upc.tfg.interfaces.VistaAmbBotoTornarListener;
 import upc.tfg.utils.Constants;
 
 public class DefaultView extends JPanel{
@@ -74,5 +75,11 @@ public class DefaultView extends JPanel{
 	public void updateBundle(){
 		defaultLocale = Locale.getDefault();
 		bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
+	}
+	
+	public void afegeixBarraSuperior(String title, VistaAmbBotoTornarListener listener){
+		VistaBarraSuperior vbs = new VistaBarraSuperior(title, listener);
+		vbs.setBounds(0, 0, VistaBarraSuperior.BAR_WIDTH, VistaBarraSuperior.BAR_HEIGHT);
+		add(vbs);
 	}
 }

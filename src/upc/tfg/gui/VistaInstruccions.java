@@ -22,6 +22,7 @@ public class VistaInstruccions extends DefaultView{
 		setLayout(null);
 		this.listener = listener;
 		setSize(Constants.width, Constants.height);
+		afegeixBarraSuperior(bundle.getString("instruccions"), listener);
 		afegirTextInstruccions();
 		afegirBotoTornar();
 		addSkin("imatgePortada.jpg");

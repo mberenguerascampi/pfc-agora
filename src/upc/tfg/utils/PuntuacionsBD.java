@@ -20,7 +20,7 @@ import upc.tfg.logic.Partida;
 
 public class PuntuacionsBD {
 	private static final String FILENAME = "Puntuacions.txt";
-	private static final int NUM_MAX_SCORES = 5;
+	public static final int NUM_MAX_SCORES = 5;
 	
 	public PuntuacionsBD() {
 	}
@@ -42,7 +42,7 @@ public class PuntuacionsBD {
 	
 	private Map<String, Integer> getMaxScores(ResultatsFinals resultats){
 		Map<String, Integer> scores = getPuntuacio();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		String date = "_" + dateFormat.format(Partida.getInstance().getData());
 		scores.put(Partida.getInstance().getNomJugador(1) + date, resultats.getPuntsJ1());
 		scores.put(Partida.getInstance().getNomJugador(2) + date, resultats.getPuntsJ2());
@@ -91,7 +91,7 @@ public class PuntuacionsBD {
 				e.printStackTrace();
 		}
 		
-		return puntuacio;
+		return sortPuntuacions(puntuacio);
 	}
 	
 	private Map<String, Integer> sortPuntuacions(Map<String, Integer> puntuacio){

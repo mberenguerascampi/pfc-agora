@@ -25,6 +25,7 @@ public class VistaIdioma extends DefaultView {
 		setLayout(null);
 		this.listener = listener;
 		setSize(Constants.width, Constants.height);
+		afegeixBarraSuperior(bundle.getString("idioma"), listener);
 		addButtons();
 		addLabels();
 		addSkin("imatgePortada.jpg");

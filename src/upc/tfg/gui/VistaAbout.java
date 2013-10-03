@@ -21,14 +21,15 @@ public class VistaAbout extends DefaultView {
 		setLayout(null);
 		this.listener = listener;
 		setSize(Constants.width, Constants.height);
+		afegeixBarraSuperior(bundle.getString("sobre"), listener);
 		afegirLabels();
 		afegirBotoTornar();
 		addSkin("imatgePortada.jpg");
 	}
 	
 	private void afegirLabels(){
-		int originX = Constants.width/2 - 400;
-		int originY = Constants.height/2 - 90;
+		int originX = Constants.paddingX + 100;
+		int originY = Constants.paddingY + VistaBarraSuperior.BAR_HEIGHT+60;
 		JLabel label_versio = new JLabel(bundle.getString("versio_text"));
 		JLabel label_autor = new JLabel(bundle.getString("autor_text"));
 		
