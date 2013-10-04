@@ -1,8 +1,13 @@
 package upc.tfg.agora;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+import javax.jws.Oneway;
 import javax.media.CannotRealizeException;
 import javax.media.NoPlayerException;
 import javax.swing.UIManager;
@@ -10,6 +15,7 @@ import javax.swing.UIManager;
 import upc.tfg.logic.ControladorLogic;
 import upc.tfg.logic.GameLoop;
 import upc.tfg.utils.AudioPlayer;
+import upc.tfg.utils.Constants;
 
 public class Main {
 	static Agora agora;
@@ -23,6 +29,8 @@ public class Main {
 	        javax.swing.SwingUtilities.invokeLater(new Runnable() {  
 	            public void run() {  
 	            	try {
+	            		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	            		ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/"+Constants.fileFontUrl+"Anna.ttf")));
 	            		Locale catLocale = new Locale("ca", "CAT");
 	            		Locale.setDefault(catLocale);
 	            		agora = new Agora();
@@ -32,7 +40,11 @@ public class Main {
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (InterruptedException e) {
-						e.printStackTrace();}
+						e.printStackTrace();} 
+	            	catch (FontFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 	            }  
 	        });  
 	}

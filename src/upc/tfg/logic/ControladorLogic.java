@@ -115,16 +115,21 @@ public class ControladorLogic {
 	public void cartaAgafadaDeLaBaralla(int jugadorID, int barallaID){
 		partida.avancarJugador();
 		Carta cartaAgafada = null;
-		if(barallaID == 1) {
-			cartaAgafada = partida.getBaralla().getCartes(1)[0];
+		if (barallaID == -1){
+			getProximMoviment();
 		}
-		else {
-			cartaAgafada = partida.getBaralla2().getCartes(1)[0];
+		else{
+			if(barallaID == 1) {
+				cartaAgafada = partida.getBaralla().getCartes(1)[0];
+			}
+			else if (barallaID == 2){
+				cartaAgafada = partida.getBaralla2().getCartes(1)[0];
+			}
+			afegeixCarta(jugadorID, cartaAgafada);
+			agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
+			agora.updateView();
+			getProximMoviment();
 		}
-		afegeixCarta(jugadorID, cartaAgafada);
-		agora.afegeixCartaAPosicioBuida(jugadorID, cartaAgafada);
-		agora.updateView();
-		getProximMoviment();
 	}
 	
 	public void divideixBaralla(){

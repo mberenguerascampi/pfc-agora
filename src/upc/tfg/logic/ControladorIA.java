@@ -43,7 +43,13 @@ public class ControladorIA {
 			}
 		}
 		else if (pas == 4){
-			int idBaralla = robot.getBarallaPerRobarCarta();
+			int idBaralla = 0;
+			if(Partida.getInstance().getBaralla().getCartes().size() == 0 && Partida.getInstance().getBaralla2().getCartes().size() == 0){
+				idBaralla = -1;
+			}
+			else if (Partida.getInstance().getBaralla().getCartes().size() == 0) idBaralla = 2;
+			else if (Partida.getInstance().getBaralla2().getCartes().size() == 0) idBaralla = 1;
+			else idBaralla = robot.getBarallaPerRobarCarta();
 			logic.cartaAgafadaDeLaBaralla(jugadorID, idBaralla);
 			System.out.println("Baralla " + idBaralla);
 		}

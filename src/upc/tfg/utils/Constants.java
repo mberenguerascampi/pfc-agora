@@ -12,6 +12,7 @@ public class Constants {
 	public static final String fileUrl = "/resources/images/";
 	public static final String fileTextsUrl = "/resources/text/";
 	public static final String fileAudioUrl = "/resources/audio/";
+	public static final String fileFontUrl = "/resources/font/";
 	
 	//Colors
 	public static final Color colorGreen = new Color(51, 255, 0);
@@ -19,7 +20,8 @@ public class Constants {
 	//Fonts
 	public static final Font fontGillSansBold = new Font("Gill Sans MT", Font.BOLD, 12);
 	public static final Font fontButton = new Font("Kristen ITC", Font.CENTER_BASELINE, 11);//("Verdana", Font.BOLD, 13);
-	public static final Font fontPassejants = new Font("Kristen ITC", Font.BOLD, 35);
+	public static final Font fontPassejants = new Font("Kristen ITC", Font.BOLD, 32);
+	public static final Font fontPassejantsBig = new Font("Kristen ITC", Font.BOLD, 35);
 	public static final Font fontCooper = new Font("Cooper Black", Font.BOLD, 14);
 	public static final Font fontBradleyBig = new Font("Bradley Hand ITC", Font.BOLD, 18);
 	public static final Font fontArialRoundedBig = new Font("Arial Rounded MT Bold", Font.BOLD, 18);
@@ -27,6 +29,7 @@ public class Constants {
 	public static final Font fontKristenSmall = new Font("Kristen ITC", Font.CENTER_BASELINE, 14);
 	public static final Font fontPlayerWinner = new Font("Kristen ITC", Font.BOLD, 38);
 	public static final Font fontPlayersNames = new Font("Kristen ITC", Font.BOLD, 22);
+	public static final Font fontAnnaVives = new Font("Anna", Font.BOLD, 20);
 	
 	//Sizes
 	public static final int width = Toolkit.getDefaultToolkit().getScreenSize().width;//1024;

@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.TransferHandler;
 
 import upc.tfg.interfaces.TaulerListener;
+import upc.tfg.logic.Baralla;
 import upc.tfg.logic.Carta;
 import upc.tfg.logic.Districte;
 import upc.tfg.logic.Partida;
@@ -639,12 +640,19 @@ public class VistaTauler extends DefaultView{
 			vistaCartaSeleccionada.setEnabled(false);
 		}
 		stateView.actualitzaEstat();
-		vCartaBaralla1.setCartaEntity(Partida.getInstance().getBaralla().getCartes().get(0));
+		updateBaralla(vCartaBaralla1, vBaralla1, Partida.getInstance().getBaralla());
+		updateBaralla(vCartaBaralla2, vBaralla2, Partida.getInstance().getBaralla2());
 		vCartaBaralla1.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
-		vCartaBaralla2.setCartaEntity(Partida.getInstance().getBaralla2().getCartes().get(0));
 		vCartaBaralla2.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y+140, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
-		vBaralla1.updateView();
-		vBaralla2.updateView();
+	}
+	
+	private void updateBaralla(VistaCarta vCartaBaralla, VistaBaralla vBaralla,Baralla baralla){
+		if (baralla.getCartes().size() == 0){
+			vCartaBaralla.setVisible(false);
+			vBaralla.setVisible(false);
+		}
+		else vCartaBaralla.setCartaEntity(baralla.getCartes().get(0));
+		vBaralla.updateView();
 	}
 	
 	public void intercanviaCartes(){

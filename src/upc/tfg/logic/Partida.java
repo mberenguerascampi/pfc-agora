@@ -84,6 +84,7 @@ public class Partida {
 		}
 		else if(pas == 4){
 			restartPassejantsBloquejats();
+			if(!hihaCartesDisponibles())pas = 2;
 		}
 		return true;
 	}
@@ -436,5 +437,9 @@ public class Partida {
 			if(j.getId() == jugadorID)return j.getNom();
 		}
 		return "";
+	}
+	
+	public boolean hihaCartesDisponibles(){
+		return (getBaralla().getCartes().size() != 0 || getBaralla2().getCartes().size() != 0);
 	}
 }

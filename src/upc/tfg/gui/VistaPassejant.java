@@ -19,7 +19,7 @@ public class VistaPassejant extends JButton {
 	public static final String PASSEJANT_VERD	 	= "Verd";
 	public static final int PASSEJANT_WIDTH	 		= 95;
 	public static final int PASSEJANT_HEIGHT	 	= 102;
-	public static final int NUM_WIDTH	 			= 40;
+	public static final int NUM_WIDTH	 			= 95;
 	public static final int NUM_HEIGHT	 			= 40;
 	
 	private String color;
@@ -50,10 +50,12 @@ public class VistaPassejant extends JButton {
 		numLabel = new JLabel("");
 		numLabel.setLayout(null);
 		numLabel.setText(String.valueOf(num));
-		numLabel.setBounds(PASSEJANT_WIDTH/2 - NUM_WIDTH + 30, PASSEJANT_HEIGHT/2 - NUM_HEIGHT + 25, NUM_WIDTH, NUM_HEIGHT);
+		numLabel.setBounds(2, PASSEJANT_HEIGHT/2 - NUM_HEIGHT + 25, NUM_WIDTH, NUM_HEIGHT);
 		numLabel.setFont(Constants.fontPassejants);
 		//numLabel.setAlignmentX(0.5f);
 		numLabel.setAlignmentY(0.5f);
+		numLabel.setVerticalAlignment(CENTER);
+		numLabel.setHorizontalAlignment(CENTER);
 		Color foreground = null;
 		if (color.equals(PASSEJANT_BLAU)){
 			foreground = Color.YELLOW;
@@ -82,6 +84,8 @@ public class VistaPassejant extends JButton {
 	
 	private void updateText(){
 		numLabel.setText(String.valueOf(num));
+		if (num < 10)numLabel.setFont(Constants.fontPassejantsBig);
+		else numLabel.setFont(Constants.fontPassejants);
 		if (num == 0 && !showZero) numLabel.setVisible(false);
 		else numLabel.setVisible(true);
 		if (num < 0) setVisible(false);

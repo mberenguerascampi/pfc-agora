@@ -215,7 +215,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 afegeixCartesJugador(4);
 		 mostraBaralla();
 		 //tauler.comencaIntercanviCartes();
-		 tauler.afegeixPassejants(7, 0);
+		 tauler.afegeixPassejants(30, 0);
 		 tauler.setVisible(true);
 		 addMenu();
 		 //cardLayout.next(contentPane);
