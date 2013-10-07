@@ -25,7 +25,7 @@ public class VistaInstruccions extends DefaultView{
 		afegeixBarraSuperior(bundle.getString("instruccions"), listener);
 		afegirTextInstruccions();
 		afegirBotoTornar();
-		addSkin("imatgePortada.jpg");
+		addSkin("backgroundWithWhiteBox.png");
 	}
 	
 	private void afegirBotoTornar(){

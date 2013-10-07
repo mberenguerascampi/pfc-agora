@@ -1,9 +1,18 @@
 package upc.tfg.gui;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import upc.tfg.interfaces.VistaEstatListener;
 import upc.tfg.logic.Partida;
 import upc.tfg.utils.Constants;
 
@@ -20,12 +29,16 @@ public class VistaEstat extends TransparentView{
 	private JLabel tornLabel;
 	private JLabel pasLabel;
 	private String pasText = "";
+	private JButton info_btn;
+	private VistaEstatListener listener;
 	
-	public VistaEstat() {
+	public VistaEstat(VistaEstatListener listener) {
 		setLayout(null);
 		setOpaque(false);
 		setFocusable(false);
 		setCursor(null);
+		
+		this.listener = listener;
 		
 		numTorn = 1;
 		
@@ -41,8 +54,44 @@ public class VistaEstat extends TransparentView{
 		
 		numPas = 1;
 		createPasLabel();
+		
+		addInfoButton();
 	}
 	
+	private void addInfoButton() {
+		info_btn = new JButton();
+		info_btn.setOpaque(false);
+		info_btn.setBounds(ESTAT_WIDTH-60, 10, 40, 40);
+		info_btn.setFocusPainted(false); 
+		info_btn.setContentAreaFilled(false); 
+		info_btn.setBorderPainted(false);
+		
+		//Configurem el fons del butó per els tres possibles estats que té
+		Image img = null;
+		URL urlImg = getClass().getResource(Constants.fileUrl+"icon_info_on.png");
+		try {
+			img = ImageIO.read(urlImg);
+			img = img.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		ImageIcon icon = new ImageIcon(img);
+		
+		info_btn.setIcon(icon);
+		info_btn.setRolloverIcon(icon);
+		info_btn.setPressedIcon(icon);
+		
+		info_btn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				listener.infoButtonPressed();
+			}
+		});
+		
+		add(info_btn);
+	}
+
 	private void createPasLabel(){
 		if (pasLabel != null)remove(pasLabel);
 		pasLabel = new JLabel("");

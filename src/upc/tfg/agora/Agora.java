@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 import upc.tfg.gui.VistaAbout;
 import upc.tfg.gui.VistaBaralla;
@@ -23,6 +25,7 @@ import upc.tfg.gui.VistaFinalPartida;
 import upc.tfg.gui.VistaIdioma;
 import upc.tfg.gui.VistaInstruccions;
 import upc.tfg.gui.VistaMenuPrincipal;
+import upc.tfg.gui.VistaPopUp;
 import upc.tfg.gui.VistaPuntuacions;
 import upc.tfg.gui.VistaTauler;
 import upc.tfg.interfaces.MenuPrincipalListener;
@@ -280,6 +283,9 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	
 	public void cartaAgafada(int jugadorID, int barallaID){
 		logic.cartaAgafadaDeLaBaralla(jugadorID, barallaID);
+	}
+	
+	public void infoButtonPressed(){
 	}
 	
 	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL FINAL DE PARTIDA

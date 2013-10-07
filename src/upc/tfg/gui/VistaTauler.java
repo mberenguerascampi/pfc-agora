@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.TransferHandler;
 
 import upc.tfg.interfaces.TaulerListener;
+import upc.tfg.interfaces.VistaEstatListener;
 import upc.tfg.logic.Baralla;
 import upc.tfg.logic.Carta;
 import upc.tfg.logic.Districte;
@@ -29,7 +30,7 @@ import upc.tfg.utils.Constants;
 import upc.tfg.utils.ImageToNumberArray;
 import upc.tfg.utils.Posicio;
 
-public class VistaTauler extends DefaultView{
+public class VistaTauler extends DefaultView implements VistaEstatListener{
 	
 	/**
 	 * 
@@ -73,13 +74,15 @@ public class VistaTauler extends DefaultView{
 	private VistaCarta cartesDescartades;
 	private int previousDistrict = -1;
 	
+	VistaPopUp popup;
+	
 	public VistaTauler(TaulerListener tListener) {
 		listener = tListener;
 		setLayout(null);
 		setSize(Constants.width, Constants.height);
 		taulerX = Constants.paddingX + (Constants.width/2) - (IMG_TAULER_WIDTH/2)-VistaInformacio.WIDTH/2;
 	    taulerY = Constants.paddingY + (Constants.height/2) - (IMG_TAULER_HEIGHT/2)-20;
-		
+	    
 	    //Afegim el listener que ens detecti quin districte seleccionem
 	    MouseAdapter listener = new MouseAdapter() {
 	    	Point p = null;
@@ -135,6 +138,13 @@ public class VistaTauler extends DefaultView{
 		}
 	}
 	
+	private void addPopUp(){
+		popup = new VistaPopUp();
+	    popup.setBounds(0, 0, Constants.width, Constants.height);
+		popup.setVisible(false);
+		add(popup);
+	}
+	
 	private void addDistrictInformationView() {
 		infoView = new VistaInformacio();
 		infoView.setBounds(Constants.paddingX+Constants.width - VistaInformacio.INFORMATION_WIDTH, VistaEstat.ESTAT_HEIGHT, VistaInformacio.INFORMATION_WIDTH, VistaInformacio.INFORMATION_HEIGHT);
@@ -176,7 +186,7 @@ public class VistaTauler extends DefaultView{
 	}
 	
 	private void addStateView(){
-		stateView = new VistaEstat();
+		stateView = new VistaEstat(this);
 		stateView.setBounds(Constants.paddingX+Constants.width - VistaEstat.ESTAT_WIDTH, 0, VistaEstat.ESTAT_WIDTH, VistaEstat.ESTAT_HEIGHT);
 		add(stateView);	
 	}
@@ -539,6 +549,7 @@ public class VistaTauler extends DefaultView{
 	}
 	
 	public void afegeixBaralles(){
+		addPopUp();
 		ActionListener aListener = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -994,5 +1005,11 @@ public class VistaTauler extends DefaultView{
 				cartesDescartades.setCartaEntity(carta.getCartaEntity());
 			}
 		}
+	}
+
+	@Override
+	public void infoButtonPressed() {
+		popup.setVisible(true);
+		listener.infoButtonPressed();
 	}
 }

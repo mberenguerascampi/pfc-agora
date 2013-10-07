@@ -9,4 +9,5 @@ public interface TaulerListener {
 	public void passejantMogutEntreDistrictes(String districtName1, String districtName2, int color);
 	public void cartaAgafada(int jugadorID, int barallaID);
 	public void nextPlayer();
+	public void infoButtonPressed();
 }

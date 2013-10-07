@@ -24,7 +24,7 @@ public class VistaPuntuacions extends DefaultView{
 		afegeixBarraSuperior(bundle.getString("puntuacions"), listener);
 		afegirPuntuacions();
 		afegirBotoTornar();
-		addSkin("imatgePortada.jpg");
+		addSkin("backgroundWithWhiteBox.png");
 	}
 	
 	private void afegirPuntuacions(){
@@ -69,7 +69,7 @@ public class VistaPuntuacions extends DefaultView{
 			afegeixBarraSuperior(bundle.getString("puntuacions"), listener);
 			afegirPuntuacions();
 			afegirBotoTornar();
-			addSkin("imatgePortada.jpg");
+			addSkin("backgroundWithWhiteBox.png");
 		}
 	}
 }

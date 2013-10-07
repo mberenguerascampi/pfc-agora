@@ -39,6 +39,10 @@ public class Constants {
 	public static int paddingX = (Toolkit.getDefaultToolkit().getScreenSize().width - width)/2;
 	public static int paddingY = (Toolkit.getDefaultToolkit().getScreenSize().height - height)/2;
 	
+	//Center
+	public static final int centerX = width/2 + paddingX;
+	public static final int centerY = height/2 + paddingY;
+	
 	//Identificadors dels districtes
 	public static final int LES_CORTS 				= 3;
 	public static final int SARRIA_SANT_GERVASI 	= 4;

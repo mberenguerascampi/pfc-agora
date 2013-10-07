@@ -24,7 +24,7 @@ public class VistaAbout extends DefaultView {
 		afegeixBarraSuperior(bundle.getString("sobre"), listener);
 		afegirLabels();
 		afegirBotoTornar();
-		addSkin("imatgePortada.jpg");
+		addSkin("backgroundWithWhiteBox.png");
 	}
 	
 	private void afegirLabels(){

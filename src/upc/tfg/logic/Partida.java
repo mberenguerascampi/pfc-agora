@@ -378,21 +378,22 @@ public class Partida {
 	public String getTextPas(){
 		int idAnteriorJugador = idJugadorActual - 1;
 		if (idAnteriorJugador == 0) idAnteriorJugador = 4;
+		String nomAnteriorJugador = getNomJugador(idAnteriorJugador);
 		String text = "<html> PAS " + pas + "<br>";
 		switch(pas){
 			case 1:
-				text = text +  "El jugador " + idJugadorActual + " ha de robar <br> una carta al jugador " + idAnteriorJugador;
+				text = text +  "El jugador " + getNomJugador(idJugadorActual) + " ha de robar <br> una carta al jugador " + nomAnteriorJugador;
 				break;
 			case 2:
-				text = text + "El jugador " + idJugadorActual + " ha de seleccionar <br> una carta i moure tants passejants"+
+				text = text + "El jugador " + getNomJugador(idJugadorActual) + " ha de seleccionar <br> una carta i moure tants passejants"+
 							" al districte <br> corresponent com punts tingui <br> la plaça";
 				//text = "<html> PAS " + pas + "<br>El jugador 1 ha de robar <br> una carta el jugador 2 </html>";
 				break;
 			case 3:
-				text = text + "El jugador " + idJugadorActual + " ha de moure dos passejants a un districte adjacent";
+				text = text + "El jugador " + getNomJugador(idJugadorActual) + " ha de moure dos passejants a un districte adjacent";
 				break;
 			case 4:
-				text = text + "El jugador " + idJugadorActual + " ha de robar una carta de la pila que vulgui";
+				text = text + "El jugador " + getNomJugador(idJugadorActual) + " ha de robar una carta de la pila que vulgui";
 				break;
 		}
 		text = text + " </html>";
