@@ -23,6 +23,7 @@ public class TransparentView extends JPanel {
 			URL urlImg = getClass().getResource(Constants.fileUrl+"transparent_background.png");
 			try {
 				img = ImageIO.read(urlImg);
+				img = img.getScaledInstance(VistaEstat.ESTAT_WIDTH, VistaInformacio.INFORMATION_HEIGHT, java.awt.Image.SCALE_SMOOTH);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -25,6 +25,8 @@ public class DefaultView extends JPanel{
 	public ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
 	private String backgroundName;
 	private Image img = null;
+	public int marginX = 0;
+	public int marginY = 0;
 
 	public void paintComponent(Graphics page)
 	{
@@ -53,11 +55,10 @@ public class DefaultView extends JPanel{
         URL urlBackgroundImg = getClass().getResource(Constants.fileUrl+name);
         ImageIcon icon = new ImageIcon(urlBackgroundImg);
         Image tempImg = icon.getImage();
-        Image newimg = tempImg.getScaledInstance( Constants.width, Constants.height,  java.awt.Image.SCALE_SMOOTH ) ;  
+        Image newimg = tempImg.getScaledInstance( Constants.width, Constants.height-marginY,  java.awt.Image.SCALE_SMOOTH ) ;  
 	    icon = new ImageIcon( newimg );
 	    
-        skin.setBounds(Constants.paddingX, Constants.paddingY, Constants.width, Constants.height);
-        skin.setSize(Constants.width, Constants.height);
+        skin.setBounds(Constants.paddingX, Constants.paddingY+marginY, Constants.width, Constants.height-marginY);
         skin.setIcon(icon);
         add(skin);
 	}
@@ -81,5 +82,8 @@ public class DefaultView extends JPanel{
 		VistaBarraSuperior vbs = new VistaBarraSuperior(title, listener);
 		vbs.setBounds(0, 0, VistaBarraSuperior.BAR_WIDTH, VistaBarraSuperior.BAR_HEIGHT);
 		add(vbs);
+		marginY = VistaBarraSuperior.BAR_HEIGHT;
+		//img = img.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height-marginY,  java.awt.Image.SCALE_SMOOTH);
+		repaint();
 	}
 }

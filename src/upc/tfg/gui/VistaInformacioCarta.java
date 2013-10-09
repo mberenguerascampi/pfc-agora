@@ -14,6 +14,8 @@ public class VistaInformacioCarta extends TransparentView {
 	 * 
 	 */
 	private static final long serialVersionUID = 6927234034915993591L;
+	private static final int CARTA_WIDTH = VistaTauler.CARTA_WIDTH+25;
+	public static final int originCartaX = VistaInformacio.INFORMATION_WIDTH/2 - CARTA_WIDTH/2;
 	private JLabel nomDistricte;
 	private JLabel nomCarta;
 	private JLabel imatgeCarta;
@@ -27,23 +29,27 @@ public class VistaInformacioCarta extends TransparentView {
 		//Afegim els labels
 		nomCarta = new JLabel();
 		nomCarta.setLayout(null);
-		nomCarta.setBounds(10, 10, VistaInformacio.INFORMATION_WIDTH-20, 15);
+		nomCarta.setBounds(10, 10, VistaInformacio.INFORMATION_WIDTH-20, 40);
 		nomCarta.setFont(Constants.fontBradleyBig);
 		nomCarta.setForeground(Color.WHITE);
 		nomCarta.setOpaque(false);
+		nomCarta.setHorizontalAlignment(JLabel.CENTER);
+		nomCarta.setVerticalAlignment(JLabel.CENTER);
 		add(nomCarta);
 		
 		nomDistricte = new JLabel();
 		nomDistricte.setLayout(null);
-		nomDistricte.setBounds(10, 30, VistaInformacio.INFORMATION_WIDTH-20, 15);
+		nomDistricte.setBounds(10, 60, VistaInformacio.INFORMATION_WIDTH-20, 40);
 		nomDistricte.setFont(Constants.fontBradleyBig);
 		nomDistricte.setForeground(Color.WHITE);
 		nomDistricte.setOpaque(false);
+		nomDistricte.setHorizontalAlignment(JLabel.CENTER);
+		nomDistricte.setVerticalAlignment(JLabel.CENTER);
 		add(nomDistricte);
 		
 		imatgeCarta = new JLabel();
 		imatgeCarta.setLayout(null);
-		imatgeCarta.setBounds(20, 70, VistaTauler.CARTA_WIDTH+25, VistaTauler.CARTA_HEIGHT+30);
+		imatgeCarta.setBounds(originCartaX, 130, VistaTauler.CARTA_WIDTH+25, VistaTauler.CARTA_HEIGHT+30);
 		imatgeCarta.setOpaque(false);
 		add(imatgeCarta);
 		
@@ -56,8 +62,8 @@ public class VistaInformacioCarta extends TransparentView {
 	}
 	
 	private void updateView(){
-		nomCarta.setText(carta.getNom());
-		nomDistricte.setText(carta.getDistricte().getNom());
+		nomCarta.setText("<html>"+carta.getNom()+"</html>");
+		nomDistricte.setText("<html>"+carta.getDistricte().getNom()+"</html>");
 	    ImageIcon icon = null;
 	    if(carta.isShowing())icon = new ImageIcon(carta.getImage().getScaledInstance(VistaTauler.CARTA_WIDTH+25, VistaTauler.CARTA_HEIGHT+30,  java.awt.Image.SCALE_SMOOTH));
 	    else icon = new ImageIcon(carta.getDistricte().getImage().getScaledInstance(VistaTauler.CARTA_WIDTH+25, VistaTauler.CARTA_HEIGHT+30,  java.awt.Image.SCALE_SMOOTH));

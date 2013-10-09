@@ -13,8 +13,9 @@ public class VistaInformacio extends TransparentView {
 	 * 
 	 */
 	private static final long serialVersionUID = -7414583561006916256L;
-	public static final int INFORMATION_WIDTH = 150;
-	public static final int INFORMATION_HEIGHT = 435;
+	public static final int INFORMATION_WIDTH = 160;
+	public static final int INFORMATION_HEIGHT = Constants.height - VistaEstat.ESTAT_HEIGHT;
+	public static final int originPassejantX = INFORMATION_WIDTH/2 - 95/2;
 	
 	private JLabel nomDistricte;
 	private Districte districte;
@@ -40,10 +41,13 @@ public class VistaInformacio extends TransparentView {
 		//Afegim els labels
 		nomDistricte = new JLabel();
 		nomDistricte.setLayout(null);
-		nomDistricte.setBounds(10, 10, INFORMATION_WIDTH-20, 15);
+		nomDistricte.setBounds(5, 5, INFORMATION_WIDTH-10, 40);
 		nomDistricte.setFont(Constants.fontBradleyBig);
 		nomDistricte.setForeground(Color.WHITE);
 		nomDistricte.setOpaque(false);
+		nomDistricte.setHorizontalAlignment(JLabel.CENTER);
+		nomDistricte.setVerticalAlignment(JLabel.CENTER);
+		nomDistricte.setAlignmentY((float) 0.5);
 		add(nomDistricte);
 		
 		//Afegim els passejants
@@ -58,7 +62,7 @@ public class VistaInformacio extends TransparentView {
 	}
 	
 	public void setNomDistricte(String nom) {
-		nomDistricte.setText(nom);
+		nomDistricte.setText("<html>"+nom+"</html>");
 	}
 	
 	public void update(){
@@ -111,7 +115,7 @@ public class VistaInformacio extends TransparentView {
 	private void addPassejants(){
 		vpBlau = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, 0);
 		vpBlau.setEnabled(false);
-		Rectangle frame = new Rectangle(10, 30, 95, 102);
+		Rectangle frame = new Rectangle(originPassejantX, 45, 95, 102);
 		vpBlau.setBounds(frame);
 		vpBlau.setShowZero(true);
 		add(vpBlau);
@@ -122,7 +126,7 @@ public class VistaInformacio extends TransparentView {
 		
 		vpVermell = new VistaPassejant(VistaPassejant.PASSEJANT_VERMELL, 0);
 		vpVermell.setEnabled(false);
-		frame = new Rectangle(10, 130, 95, 102);
+		frame = new Rectangle(originPassejantX, 145, 95, 102);
 		vpVermell.setBounds(frame);
 		vpVermell.setShowZero(true);
 		add(vpVermell);
@@ -133,7 +137,7 @@ public class VistaInformacio extends TransparentView {
 		
 		vpGroc = new VistaPassejant(VistaPassejant.PASSEJANT_GROC, 0);
 		vpGroc.setEnabled(false);
-		frame = new Rectangle(10, 230, 95, 102);
+		frame = new Rectangle(originPassejantX, 245, 95, 102);
 		vpGroc.setShowZero(true);
 		vpGroc.setBounds(frame);
 		add(vpGroc);
@@ -144,7 +148,7 @@ public class VistaInformacio extends TransparentView {
 		
 		vpVerd = new VistaPassejant(VistaPassejant.PASSEJANT_VERD, 0);
 		vpVerd.setEnabled(false);
-		frame = new Rectangle(10, 330, 95, 102);
+		frame = new Rectangle(originPassejantX, 345, 95, 102);
 		vpVerd.setShowZero(true);
 		vpVerd.setBounds(frame);
 		add(vpVerd);

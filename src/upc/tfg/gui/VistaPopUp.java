@@ -39,6 +39,8 @@ public class VistaPopUp extends JPanel {
 		setLayout(null);
 		addBackgroundButton();
 		addLabel();
+		imageLabel = new JLabel();
+		add(imageLabel);
 		addImage();
 	}
 	
@@ -59,10 +61,8 @@ public class VistaPopUp extends JPanel {
 	}
 	
 	private void addImage(){
-		imageLabel = new JLabel();
-	        
 	    //Agafem la imatge i la posem a la mida que volem
-	    URL urlImg = getClass().getResource(Constants.fileUrl+"info_img_pas1.png");
+	    URL urlImg = getClass().getResource(Constants.fileUrl+"info_img_pas" + Partida.getInstance().getPas() + ".png");
 	    Image pasImg = null;
 	    try {
 	    	pasImg = ImageIO.read(urlImg);
@@ -74,7 +74,7 @@ public class VistaPopUp extends JPanel {
 		    
 	    imageLabel.setBounds(Constants.centerX-imgWidth/2, Constants.centerY+boxHeight/2-imgHeight-50, imgWidth, imgHeight);
 	    imageLabel.setIcon(icon);
-	    add(imageLabel);
+	    
 	}
 
 	private void addLabel() {
@@ -113,6 +113,7 @@ public class VistaPopUp extends JPanel {
 			ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
 			String text = "info_pas" + Partida.getInstance().getPas();
 			textLabel.setText("<html>" + bundle.getString(text) + "</html>");
+			addImage();
 		}
 	}
 }

@@ -23,13 +23,12 @@ public class VistaAbout extends DefaultView {
 		setSize(Constants.width, Constants.height);
 		afegeixBarraSuperior(bundle.getString("sobre"), listener);
 		afegirLabels();
-		afegirBotoTornar();
 		addSkin("backgroundWithWhiteBox.png");
 	}
 	
 	private void afegirLabels(){
 		int originX = Constants.paddingX + 100;
-		int originY = Constants.paddingY + VistaBarraSuperior.BAR_HEIGHT+60;
+		int originY = (int) (Constants.paddingY + VistaBarraSuperior.BAR_HEIGHT + Constants.height*0.16);
 		JLabel label_versio = new JLabel(bundle.getString("versio_text"));
 		JLabel label_autor = new JLabel(bundle.getString("autor_text"));
 		
@@ -41,18 +40,5 @@ public class VistaAbout extends DefaultView {
 		
 		add(label_versio);
 		add(label_autor);
-	}
-	
-	private void afegirBotoTornar(){
-		CustomDefaultButton tornar = new CustomDefaultButton("Tornar al menú principal");
-		tornar.setBounds(180, Constants.height-210, 195, 80);
-		tornar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				listener.backButtonPressed();
-			}
-		});
-		add(tornar);
 	}
 }

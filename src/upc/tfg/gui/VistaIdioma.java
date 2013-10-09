@@ -51,8 +51,8 @@ public class VistaIdioma extends DefaultView {
 	}
 	
 	private void addButtons(){
-		int originX = Constants.width/2 - 135;
-		int originY = Constants.height/2 - 105;
+		int originX = (int) (Constants.width*0.39 - 140);
+		int originY = (int) (Constants.paddingY + Constants.height*0.36 + VistaBarraSuperior.HEIGHT);
 		checkBoxCatala = new CustomCheckBox();
 		checkBoxCatala.addActionListener(new ActionListener() {
 			@Override
@@ -69,7 +69,7 @@ public class VistaIdioma extends DefaultView {
 				seleccionaIdioma(false, true, false);
 			}
 		});
-		checkBoxCastella.setBounds(originX, originY+70, 70, 70);
+		checkBoxCastella.setBounds(originX, originY+110, 70, 70);
 		
 		checkBoxAngles = new CustomCheckBox();
 		checkBoxAngles.addActionListener(new ActionListener() {
@@ -78,7 +78,7 @@ public class VistaIdioma extends DefaultView {
 				seleccionaIdioma(false, false, true);
 			}
 		});
-		checkBoxAngles.setBounds(originX, originY+140, 70, 70);
+		checkBoxAngles.setBounds(originX, originY+220, 70, 70);
 		
 		add(checkBoxCatala);
 		add(checkBoxCastella);
