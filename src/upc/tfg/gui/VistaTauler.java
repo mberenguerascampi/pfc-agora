@@ -197,37 +197,59 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	 * @param jugadorID
 	 */
 	public void afegeixPassejants(int numPassejants, int jugadorID){
-		final VistaPassejant vp = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, numPassejants);
-		Rectangle frame = new Rectangle(taulerX+IMG_TAULER_WIDTH-VistaPassejant.PASSEJANT_WIDTH, taulerY+IMG_TAULER_HEIGHT, 
-				VistaPassejant.PASSEJANT_WIDTH, VistaPassejant.PASSEJANT_HEIGHT);
+		String color = Partida.getInstance().getNomColor(Partida.getInstance().getColor(jugadorID));
+		final VistaPassejant vp = new VistaPassejant(color, numPassejants);
+		Rectangle frame = getFramePassejant(jugadorID);
 		vp.setBounds(frame);
-		passejantEstatic = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, numPassejants);
-		passejantEstatic.setBounds(frame);
+		if (jugadorID == 1){
+			passejantEstatic = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, numPassejants);
+			passejantEstatic.setBounds(frame);
+			
+			//Afegim el listener
+			MouseAdapter listener = new DragAndDropListener(vp, passejantEstatic);
+			vp.addMouseListener(listener);
+			vp.addMouseMotionListener(listener);
+			vp.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					draggingPassejant = false;
+					Thread t;
+					if (previousDistrict == -1 || (cartaEntitySeleccionada != null && cartaEntitySeleccionada.getDistricte().getDistricteID() != previousDistrict)){
+						t = new Thread(new AnimacioPassejant(vp, passejantEstatic, passejantEstatic.getLocation(), passejantEstatic.getBounds(), false, false));
+						//TODO: actualitzar la capa lògica 
+					}
+					else{
+						t = new Thread(new AnimacioPassejant(vp, passejantEstatic, infoView.getLocation(), passejantEstatic.getBounds(), true, false));
+						//TODO: actualitzar la vista d'informacio
+					}
+					
+					animationOn = true;
+					t.start();
+				}
+			});
+		}
 		
-		//Afegim el listener
-		MouseAdapter listener = new DragAndDropListener(vp, passejantEstatic);
-		vp.addMouseListener(listener);
-		vp.addMouseMotionListener(listener);
-		vp.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				draggingPassejant = false;
-				Thread t;
-				if (previousDistrict == -1 || (cartaEntitySeleccionada != null && cartaEntitySeleccionada.getDistricte().getDistricteID() != previousDistrict)){
-					t = new Thread(new AnimacioPassejant(vp, passejantEstatic, passejantEstatic.getLocation(), passejantEstatic.getBounds(), false, false));
-					//TODO: actualitzar la capa lògica 
-				}
-				else{
-					t = new Thread(new AnimacioPassejant(vp, passejantEstatic, infoView.getLocation(), passejantEstatic.getBounds(), true, false));
-					//TODO: actualitzar la vista d'informacio
-				}
-				
-				animationOn = true;
-				t.start();
-			}
-		});
 		add(vp);
-		add(passejantEstatic);
+		if(jugadorID == 1)add(passejantEstatic);
+	}
+	
+	private Rectangle getFramePassejant(int idJugador){
+		if(idJugador == 1){
+			return new Rectangle(taulerX+IMG_TAULER_WIDTH-VistaPassejant.PASSEJANT_WIDTH, taulerY+IMG_TAULER_HEIGHT, 
+					VistaPassejant.PASSEJANT_WIDTH, VistaPassejant.PASSEJANT_HEIGHT);
+		}
+		else if(idJugador == 2){
+			return new Rectangle(taulerX+IMG_TAULER_WIDTH-VistaPassejant.PASSEJANT_WIDTH, taulerY+IMG_TAULER_HEIGHT, 
+					VistaPassejant.PASSEJANT_WIDTH, VistaPassejant.PASSEJANT_HEIGHT);
+		}
+		else if(idJugador == 3){
+			return new Rectangle(taulerX+IMG_TAULER_WIDTH-VistaPassejant.PASSEJANT_WIDTH, taulerY+IMG_TAULER_HEIGHT, 
+					VistaPassejant.PASSEJANT_WIDTH, VistaPassejant.PASSEJANT_HEIGHT);
+		}
+		else{
+			return new Rectangle(taulerX+IMG_TAULER_WIDTH-VistaPassejant.PASSEJANT_WIDTH, taulerY+IMG_TAULER_HEIGHT, 
+					VistaPassejant.PASSEJANT_WIDTH, VistaPassejant.PASSEJANT_HEIGHT);
+		}
 	}
 
 	/**

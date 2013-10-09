@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import upc.tfg.gui.VistaPassejant;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.ErrorController;
 import upc.tfg.utils.ResultatsFinals;
 
 public class Partida {
@@ -84,7 +86,10 @@ public class Partida {
 		}
 		else if(pas == 4){
 			restartPassejantsBloquejats();
-			if(!hihaCartesDisponibles())pas = 2;
+			if(!hihaCartesDisponibles()){
+				pas = 2;
+				avancarTorn();
+			}
 		}
 		return true;
 	}
@@ -152,41 +157,6 @@ public class Partida {
 		baralla2 = new Baralla(baralla.getCartes(baralla.getNumCartes()/2));
 		baralla.barrejar();
 		baralla2.barrejar();
-	}
-	
-	public boolean potMoure(String districte1, String districte2, int color){
-		Districte d1 = getDistricte(districte1);
-		Districte d2 = getDistricte(districte2);
-		if(!potAfegirPassejant(d2, color)) return false;
-		if(!potTreurePassejant(d1, color)) return false;
-		if(hiHaDistricteAmbMateixNombrePassejants(d1, d2))return false;
-		List<Integer> districtesAdjacents = Constants.grafDistrictes.get(d1.getDistricteID());
-		for(int i = 0; i < districtesAdjacents.size(); ++i){
-			if(districtesAdjacents.get(i) == d2.getDistricteID())return true;
-		}
-		return false;
-	}
-	
-	public boolean hiHaDistricteAmbMateixNombrePassejants(Districte excepcio1, Districte excepcio2){
-		if(passejantsAMoure != 1) return false;
-		for (Districte d:tauler.getDistrictes()){
-			if (d != excepcio1 && d != excepcio2 && d.teMateixNombreMaxPassejants())return true;
-		}
-		return false;
-	}
-	
-	public boolean potAfegirPassejant(Districte districte, int color){
-		if(passejantsAMoure == 1){
-			return districte.potAfegirPassejant(color);
-		}
-		return true;
-	}
-	
-	public boolean potTreurePassejant(Districte districte, int color){
-		if(passejantsAMoure == 1){
-			return districte.potTreurePassejant(color);
-		}
-		return true;
 	}
 	
 	public void restartPassejantsBloquejats(){
@@ -399,6 +369,57 @@ public class Partida {
 		text = text + " </html>";
 		return text;
 	}
+	
+	//Funcions per consultar si es poden realitzar certes accions
+	
+	public boolean potMoure(String districte1, String districte2, int color){
+		Districte d1 = getDistricte(districte1);
+		Districte d2 = getDistricte(districte2);
+		if(!potAfegirPassejant(d2, color)) return false;
+		if(!potTreurePassejant(d1, color)) return false;
+		if(hiHaDistricteAmbMateixNombrePassejants(d1, d2))return false;
+		List<Integer> districtesAdjacents = Constants.grafDistrictes.get(d1.getDistricteID());
+		for(int i = 0; i < districtesAdjacents.size(); ++i){
+			if(districtesAdjacents.get(i) == d2.getDistricteID())return true;
+		}
+		ErrorController.showError(getIdJugadorActual(),ErrorController.DISTRICTE_NO_ADJACENT,d1,d2);
+		return false;
+	}
+	
+	public boolean hiHaDistricteAmbMateixNombrePassejants(Districte excepcio1, Districte excepcio2){
+		if(passejantsAMoure != 1) return false;
+		for (Districte d:tauler.getDistrictes()){
+			if (d != excepcio1 && d != excepcio2 && d.teMateixNombreMaxPassejants()){
+				ErrorController.showError(getIdJugadorActual(),ErrorController.DISTRICTE_AMB_MATEIX_NOMBRE_PASSEJANTS, d, null);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean potAfegirPassejant(Districte districte, int color){
+		if(passejantsAMoure == 1){
+			if (districte.potAfegirPassejant(color)) return true;
+			else{
+				ErrorController.showError(getIdJugadorActual(), ErrorController.NO_POT_AFEGIR_PASSEJANT, districte, color);
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean potTreurePassejant(Districte districte, int color){
+		if(passejantsAMoure == 1){
+			if(districte.potTreurePassejant(color))return true;
+			else{
+				ErrorController.showError(getIdJugadorActual(), ErrorController.NO_POT_TREURE_PASSEJANT, districte, color);
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	//Getters i setters
 
 	public int getIdJugadorInici() {
 		return idJugadorInici;
@@ -442,5 +463,23 @@ public class Partida {
 	
 	public boolean hihaCartesDisponibles(){
 		return (getBaralla().getCartes().size() != 0 || getBaralla2().getCartes().size() != 0);
+	}
+	
+	public String getNomColor(int colorID){
+		if (colorID == Constants.BLAU) return VistaPassejant.PASSEJANT_BLAU;
+		if (colorID == Constants.VERMELL) return VistaPassejant.PASSEJANT_VERMELL;
+		if (colorID == Constants.VERD) return VistaPassejant.PASSEJANT_VERD;
+		if (colorID == Constants.GROC) return VistaPassejant.PASSEJANT_GROC;
+		return "";
+	}
+
+	public int getColor(int jugadorID) {
+		switch(jugadorID){
+			case 1: return Constants.BLAU;
+			case 2: return Constants.VERMELL;
+			case 3: return Constants.VERD;
+			case 4: return Constants.GROC;
+		}
+		return 0;
 	}
 }

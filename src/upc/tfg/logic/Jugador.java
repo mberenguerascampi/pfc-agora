@@ -26,6 +26,7 @@ public class Jugador {
 	
 	public Passejant getUnPassejant(){
 		--totalPassejants;
+		if(totalPassejants < 0)return null;
 		return passejants.remove(totalPassejants);
 	}
 	

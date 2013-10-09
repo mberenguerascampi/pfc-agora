@@ -39,6 +39,10 @@ public class ControladorLogic {
 		Jugador j = partida.getJugador(idJugador);
 		if(j == null)return;
 		Passejant p = j.getUnPassejant();
+		if(p == null){
+			//TODO: Descartar carta
+			return;
+		}
 		Districte[] districtes = partida.getTauler().getDistrictes();
 		for(Districte districte:districtes){
 			if(districte.getNom().equalsIgnoreCase(nomDistricte)){
@@ -67,6 +71,7 @@ public class ControladorLogic {
 			districteB.afegeixPassejant(p);
 			
 			if(partida.decrementaPassejantsAMoure()){
+				agora.mouPassejant(nomDistricteA, nomDistricteB, color);
 				agora.updateView();
 				getProximMoviment();
 			}
