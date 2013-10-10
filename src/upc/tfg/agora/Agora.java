@@ -33,6 +33,7 @@ import upc.tfg.interfaces.VistaAmbBotoTornarListener;
 import upc.tfg.interfaces.TaulerListener;
 import upc.tfg.logic.Carta;
 import upc.tfg.logic.ControladorLogic;
+import upc.tfg.logic.Districte;
 import upc.tfg.logic.Partida;
 import upc.tfg.logic.Tauler;
 import upc.tfg.utils.Constants;
@@ -342,9 +343,13 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		finalPartida.setVisible(true);
 	}
 
-	public void mouPassejant(String nomDistricteA, String nomDistricteB,
+	public void mouPassejant(Districte districteA, Districte districteB,
 			int color) {
-		
+		tauler.mouPassejant(districteA, districteB, color);
+	}
+
+	public boolean isAnimationOn() {
+		return tauler.animationOn;
 	}
 }
 

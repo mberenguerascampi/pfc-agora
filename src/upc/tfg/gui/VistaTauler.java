@@ -49,7 +49,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	private int taulerY;
 	private boolean draggingPassejant = false;
 	private VistaPassejant passejantEstatic;
-	private boolean animationOn = false;
+	public boolean animationOn = false;
 	private boolean cartaSeleccionada = false;
 	private Carta cartaEntitySeleccionada = null;
 	private VistaCarta vistaCartaSeleccionada = null;
@@ -492,63 +492,67 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	      if(!infoView.isVisible())infoView.setVisible(true);
       	  if(map[y][x] != previousDistrict){
 	        	  previousDistrict = map[y][x];
-	        	  //Configurem la visibilitat de les vistes
-	        	  if(!districte_seleccionat_img.isVisible())districte_seleccionat_img.setVisible(true);
-	        	  switch(map[y][x]){
-	        	  	case Constants.LES_CORTS:
-	        	  		setDistrictedSelected("seleccionat_corts.png");
-	        	  		nomDistricteSeleccionat = "LES CORTS";
-	        	  		break;
-	        	  	case Constants.SARRIA_SANT_GERVASI:
-	        	  		setDistrictedSelected("seleccionat_sarria.png");
-	        	  		nomDistricteSeleccionat = "SARRIÀ SANT GERVASI";
-	        	  		break;
-	        	  	case Constants.GRACIA:
-	        	  		setDistrictedSelected("seleccionat_gracia.png");
-	        	  		nomDistricteSeleccionat = "GRÀCIA";
-	        	  		break;
-	        	  	case Constants.HORTA_GUINARDO:
-	        	  		setDistrictedSelected("seleccionat_horta.png");
-	        	  		nomDistricteSeleccionat = "HORTA GUINARDO";
-	        	  		break;
-	        	  	case Constants.NOU_BARIS:
-	        	  		setDistrictedSelected("seleccionat_nou.png");
-	        	  		nomDistricteSeleccionat = "NOU BARRIS";
-	        	  		break;
-	        	  	case Constants.SANT_ANDREU:
-	        	  		setDistrictedSelected("seleccionat_andreu.png");
-	        	  		nomDistricteSeleccionat = "SANT ANDREU";
-	        	  		break;
-	        	  	case Constants.SANTS_MONTJUIC:
-	        	  		setDistrictedSelected("seleccionat_sants.png");
-	        	  		nomDistricteSeleccionat = "SANTS MONTJUIC";
-	        	  		break;
-	        	  	case Constants.EIXAMPLE:
-	        	  		setDistrictedSelected("seleccionat_eixample.png");
-	        	  		nomDistricteSeleccionat = "EIXAMPLE";
-	        	  		break;
-	        	  	case Constants.SANT_MARTI:
-	        	  		setDistrictedSelected("seleccionat_marti.png");
-	        	  		nomDistricteSeleccionat = "SANT MARTÍ";
-	        	  		break;
-	        	  	case Constants.CIUTAT_VELLA:
-	        	  		setDistrictedSelected("seleccionat_vella.png");
-	        	  		nomDistricteSeleccionat = "CIUTAT VELLA";
-	        	  		break;
-	        	  	default:
-	        	  		districte_seleccionat_img.setVisible(false);
-	        	  		previousDistrict = -1;
-	        	  		break;
-	        	  }
-	        	  
-	        	  Districte d = Partida.getInstance().getDistricte(nomDistricteSeleccionat);
-	        	  if(d!=null)infoView.setDistricte(d);
+	        	  setSelectedDistrict(map[y][x]);
       	  }
         }
         else{
       	  districte_seleccionat_img.setVisible(false);
       	  previousDistrict = -1;
         }
+	}
+	
+	private void setSelectedDistrict(int idDistricte){
+		//Configurem la visibilitat de les vistes
+		  if(!districte_seleccionat_img.isVisible())districte_seleccionat_img.setVisible(true);
+	  	  switch(idDistricte){
+		  	  	case Constants.LES_CORTS:
+		  	  		setDistrictedSelected("seleccionat_corts.png");
+		  	  		nomDistricteSeleccionat = "LES CORTS";
+		  	  		break;
+		  	  	case Constants.SARRIA_SANT_GERVASI:
+		  	  		setDistrictedSelected("seleccionat_sarria.png");
+		  	  		nomDistricteSeleccionat = "SARRIÀ SANT GERVASI";
+		  	  		break;
+		  	  	case Constants.GRACIA:
+		  	  		setDistrictedSelected("seleccionat_gracia.png");
+		  	  		nomDistricteSeleccionat = "GRÀCIA";
+		  	  		break;
+		  	  	case Constants.HORTA_GUINARDO:
+		  	  		setDistrictedSelected("seleccionat_horta.png");
+		  	  		nomDistricteSeleccionat = "HORTA GUINARDO";
+		  	  		break;
+		  	  	case Constants.NOU_BARIS:
+		  	  		setDistrictedSelected("seleccionat_nou.png");
+		  	  		nomDistricteSeleccionat = "NOU BARRIS";
+		  	  		break;
+		  	  	case Constants.SANT_ANDREU:
+		  	  		setDistrictedSelected("seleccionat_andreu.png");
+		  	  		nomDistricteSeleccionat = "SANT ANDREU";
+		  	  		break;
+		  	  	case Constants.SANTS_MONTJUIC:
+		  	  		setDistrictedSelected("seleccionat_sants.png");
+		  	  		nomDistricteSeleccionat = "SANTS MONTJUIC";
+		  	  		break;
+		  	  	case Constants.EIXAMPLE:
+		  	  		setDistrictedSelected("seleccionat_eixample.png");
+		  	  		nomDistricteSeleccionat = "EIXAMPLE";
+		  	  		break;
+		  	  	case Constants.SANT_MARTI:
+		  	  		setDistrictedSelected("seleccionat_marti.png");
+		  	  		nomDistricteSeleccionat = "SANT MARTÍ";
+		  	  		break;
+		  	  	case Constants.CIUTAT_VELLA:
+		  	  		setDistrictedSelected("seleccionat_vella.png");
+		  	  		nomDistricteSeleccionat = "CIUTAT VELLA";
+		  	  		break;
+		  	  	default:
+		  	  		districte_seleccionat_img.setVisible(false);
+		  	  		previousDistrict = -1;
+		  	  		break;
+	  	  }
+	  	  
+	  	  Districte d = Partida.getInstance().getDistricte(nomDistricteSeleccionat);
+	  	  if(d!=null)infoView.setDistricte(d);
 	}
 	
 	public void afegeixMarcCarta(){
@@ -752,6 +756,30 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 		cardInfoView.setVisible(true);
 	}
 	
+	public void mouPassejant(Districte districteA, Districte districteB,
+			int color) {
+		while(animationOn);
+		setSelectedDistrict(districteA.getDistricteID());
+		animationOn = true;
+		AnimacioPassejant anim = new AnimacioPassejant(infoView.getVistaPassejant(color), infoView.getVistaPassejantEstatic(color), getDistrictPosition(districteB.getDistricteID()), infoView.getVistaPassejant(color).getBounds(), false, true);
+		anim.slowness = 105;
+		anim.districtToSelect = districteB;
+		Thread t = new Thread(anim);
+		t.start();
+		//setSelectedDistrict(districteB.getDistricteID());
+	}
+	
+	private Point getDistrictPosition(int districtID){
+		for(int i = 0; i < map.length; ++i){
+			for(int j = 0; j < map[i].length; ++j){
+				if(map[i][j] == districtID){
+					return new Point(j+tauler_img.getLocationOnScreen().x, i+tauler_img.getLocationOnScreen().y);
+				}
+			}
+		}
+		return null;
+	}
+	
 	private void readMapMatrix()
 	{
 		BufferedReader br;
@@ -874,6 +902,8 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 		boolean toInfoView;
 		Rectangle finalPosition;
 		public boolean betweenDistricts = false;
+		public int slowness = 1;
+		public Districte districtToSelect = null;
 		
 		public AnimacioPassejant(VistaPassejant passejant, VistaPassejant vPassejantEstatic, Point goal, Rectangle finalPosition, boolean toInfoView, boolean betweenDistricts) {
 			this.passejant = passejant;
@@ -886,6 +916,16 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 		
 		@Override
 		public void run() {
+			if(districtToSelect != null){
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				passejant.setShowZero(false);
+				passejant.setNum(0);
+				vPassejantEstatic.setNum(vPassejantEstatic.getNum()-1);
+			}
 			if(animationOn){
 				int i = 0;
 				while (passejant.getLocation().x != goal.x || passejant.getLocation().y != goal.y){
@@ -900,7 +940,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 							if(Math.abs(x-goal.x) > Math.abs(y-goal.y)) equilibra = 1;
 							else if (Math.abs(y-goal.y) > Math.abs(x-goal.x)) equilibra = 2;
 						}
-						if(i%3 == 0)Thread.sleep(1);
+						if(i%3 == 0)Thread.sleep(slowness);
 						if(x < goal.x) {
 							++x;
 							if(equilibra != 2 && goal.x - x > 4)x+=4;
@@ -923,6 +963,18 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 					catch(Exception e) {}
 				}
 				passejant.setBounds(finalPosition);
+				if(districtToSelect != null){
+					setSelectedDistrict(districtToSelect.getDistricteID());
+					passejant.setShowZero(true);
+					System.out.println("ANIMACIO");
+					try {
+						Thread.sleep(600);
+						infoView.getVistaPassejant(passejant.getiColor()).setNum(infoView.getVistaPassejant(passejant.getiColor()).getNum()+1);
+						Thread.sleep(1200);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
 				animationOn = false;
 				if(!toInfoView){
 					if(!betweenDistricts){

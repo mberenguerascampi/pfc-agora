@@ -184,7 +184,7 @@ public class VistaInformacio extends TransparentView {
 		}
 	}
 	
-	private VistaPassejant getVistaPassejant(int color){
+	public VistaPassejant getVistaPassejant(int color){
 		switch(color){
 			case Constants.BLAU:
 				return vpBlauDinamic;
@@ -194,6 +194,21 @@ public class VistaInformacio extends TransparentView {
 				return vpVerdDinamic;
 			case Constants.GROC:
 				return vpGrocDinamic;
+			default:
+				return null;
+		}
+	}
+	
+	public VistaPassejant getVistaPassejantEstatic(int color){
+		switch(color){
+			case Constants.BLAU:
+				return vpBlau;
+			case Constants.VERMELL:
+				return vpVermell;
+			case Constants.VERD:
+				return vpVerd;
+			case Constants.GROC:
+				return vpGroc;
 			default:
 				return null;
 		}

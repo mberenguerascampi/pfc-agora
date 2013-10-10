@@ -66,12 +66,14 @@ public class ControladorLogic {
 		Districte districteB = partida.getDistricte(nomDistricteB);
 		
 		if(districteA != null && districteB != null){
+			while(agora.isAnimationOn());
+			if(partida.getIdJugadorActual() != 1)agora.mouPassejant(districteA, districteB, color);
+			while(agora.isAnimationOn());
 			Passejant p = districteA.removePassejant(color);
 			p.bloquejar();
 			districteB.afegeixPassejant(p);
 			
 			if(partida.decrementaPassejantsAMoure()){
-				agora.mouPassejant(nomDistricteA, nomDistricteB, color);
 				agora.updateView();
 				getProximMoviment();
 			}

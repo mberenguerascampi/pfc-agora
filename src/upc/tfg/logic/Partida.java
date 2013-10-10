@@ -370,6 +370,10 @@ public class Partida {
 		return text;
 	}
 	
+	public List<Integer> getDistrictesAdjacents(Districte d){
+		return Constants.grafDistrictes.get(d.getDistricteID());
+	}
+	
 	//Funcions per consultar si es poden realitzar certes accions
 	
 	public boolean potMoure(String districte1, String districte2, int color){
