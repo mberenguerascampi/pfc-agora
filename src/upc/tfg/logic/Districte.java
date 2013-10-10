@@ -22,6 +22,29 @@ public class Districte {
 		passejantsGrocs = new ArrayList<Passejant>();
 	}
 	
+	public Districte(Districte d){
+		this.nom = d.getNom();
+		this.valor = d.getValor();
+		this.image = d.getImage();
+		this.districteID = d.getDistricteID();
+		passejantsBlaus = new ArrayList<Passejant>();
+		passejantsVermells = new ArrayList<Passejant>();
+		passejantsVerds = new ArrayList<Passejant>();
+		passejantsGrocs = new ArrayList<Passejant>();
+		addPassejants(passejantsBlaus, Constants.BLAU, d);
+		addPassejants(passejantsVermells, Constants.VERMELL, d);
+		addPassejants(passejantsVerds, Constants.VERD, d);
+		addPassejants(passejantsGrocs, Constants.GROC, d);
+	}
+	
+	private void addPassejants(ArrayList<Passejant> arrayP, int color, Districte d){
+		ArrayList<Passejant> auxArray = d.getArray(color);
+		for(int i = 0; i < auxArray.size(); ++i) {
+			Passejant p = new Passejant(auxArray.get(i).getColor(), auxArray.get(i).getBloquejat());
+			arrayP.add(p);
+		}
+	}
+	
 	public Districte(String nom, int valor, Image imatge, int districteID) {
 		this.nom = nom;
 		this.valor = valor;
@@ -118,9 +141,12 @@ public class Districte {
 	public boolean potTreurePassejant(int color){
 		ArrayList<Passejant>temp = getArray(color);
 		ArrayList<Passejant>temp2 = getMaxArray();
+		//Si els passejants del determinat color no són els que predominen es poden treure
 		if(!temp.equals(temp2)) return true;
 		else {
 			int newSize = temp.size()-1;
+			//Si es zero permetem treure
+			if(newSize == 0)return true;
 			if(passejantsBlaus.size() == newSize || passejantsVermells.size() == newSize 
 					|| passejantsGrocs.size() == newSize || passejantsVerds.size() == newSize){
 				return false;

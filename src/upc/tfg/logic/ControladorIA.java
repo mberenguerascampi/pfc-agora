@@ -43,7 +43,10 @@ public class ControladorIA {
 			for (int i = 0; i < 2; ++i){
 				PassejantsAMoure pam = robot.getPassejantDistricte();
 				if(pam != null)logic.mouPassejantsEntreDistrictes(pam.districteOrigen.getNom(), pam.districteDesti.getNom(), pam.color);
-				//else logic.getProximMoviment();
+				else{
+					Partida.getInstance().avancarJugador();
+					logic.getProximMoviment();
+				}
 				if(pam != null)System.out.println("Passejant a moure de color " + pam.color + " del districte " + pam.districteOrigen.getNom());
 			}
 		}

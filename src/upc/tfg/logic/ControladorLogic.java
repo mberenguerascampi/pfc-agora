@@ -74,7 +74,6 @@ public class ControladorLogic {
 			districteB.afegeixPassejant(p);
 			
 			if(partida.decrementaPassejantsAMoure()){
-				agora.updateView();
 				getProximMoviment();
 			}
 		}

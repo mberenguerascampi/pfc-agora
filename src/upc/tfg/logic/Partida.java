@@ -379,6 +379,10 @@ public class Partida {
 	public boolean potMoure(String districte1, String districte2, int color){
 		Districte d1 = getDistricte(districte1);
 		Districte d2 = getDistricte(districte2);
+		return potMoure(d1, d2, color);
+	}
+	
+	public boolean potMoure(Districte d1, Districte d2, int color){
 		if(!potAfegirPassejant(d2, color)) return false;
 		if(!potTreurePassejant(d1, color)) return false;
 		if(hiHaDistricteAmbMateixNombrePassejants(d1, d2))return false;

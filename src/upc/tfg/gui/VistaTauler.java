@@ -75,6 +75,8 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	private int previousDistrict = -1;
 	
 	VistaPopUp popup;
+	private JButton lockScreen;
+	
 	
 	public VistaTauler(TaulerListener tListener) {
 		listener = tListener;
@@ -82,6 +84,12 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 		setSize(Constants.width, Constants.height);
 		taulerX = Constants.paddingX + (Constants.width/2) - (IMG_TAULER_WIDTH/2)-VistaInformacio.WIDTH/2;
 	    taulerY = Constants.paddingY + (Constants.height/2) - (IMG_TAULER_HEIGHT/2)-20;
+	    lockScreen = new JButton();
+	    lockScreen.setBounds(Constants.paddingX, Constants.paddingY, Constants.width, Constants.height);
+	    lockScreen.setVisible(false);
+	    lockScreen.setOpaque(false);
+	    lockScreen.setContentAreaFilled(false);
+	    lockScreen.setBorderPainted(false);
 	    
 	    //Afegim el listener que ens detecti quin districte seleccionem
 	    MouseAdapter listener = new MouseAdapter() {
@@ -143,6 +151,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	    popup.setBounds(0, 0, Constants.width, Constants.height);
 		popup.setVisible(false);
 		add(popup);
+		add(lockScreen);
 	}
 	
 	private void addDistrictInformationView() {
@@ -760,9 +769,10 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 			int color) {
 		while(animationOn);
 		setSelectedDistrict(districteA.getDistricteID());
+		lockScreen.setVisible(true);
 		animationOn = true;
 		AnimacioPassejant anim = new AnimacioPassejant(infoView.getVistaPassejant(color), infoView.getVistaPassejantEstatic(color), getDistrictPosition(districteB.getDistricteID()), infoView.getVistaPassejant(color).getBounds(), false, true);
-		anim.slowness = 105;
+		anim.slowness = 40;
 		anim.districtToSelect = districteB;
 		Thread t = new Thread(anim);
 		t.start();
@@ -904,6 +914,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 		public boolean betweenDistricts = false;
 		public int slowness = 1;
 		public Districte districtToSelect = null;
+		public boolean shouldLockScreen = false;
 		
 		public AnimacioPassejant(VistaPassejant passejant, VistaPassejant vPassejantEstatic, Point goal, Rectangle finalPosition, boolean toInfoView, boolean betweenDistricts) {
 			this.passejant = passejant;
@@ -916,9 +927,10 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 		
 		@Override
 		public void run() {
+			if(shouldLockScreen)lockScreen.setVisible(true);
 			if(districtToSelect != null){
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(2500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -970,12 +982,16 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 					try {
 						Thread.sleep(600);
 						infoView.getVistaPassejant(passejant.getiColor()).setNum(infoView.getVistaPassejant(passejant.getiColor()).getNum()+1);
-						Thread.sleep(1200);
+						Thread.sleep(2800);
+						animationOn = false;
+						lockScreen.setVisible(false);
+						return;
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
 				animationOn = false;
+				lockScreen.setVisible(false);
 				if(!toInfoView){
 					if(!betweenDistricts){
 						passejant.setNum(vPassejantEstatic.getNum()+1);

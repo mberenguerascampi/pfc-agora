@@ -31,7 +31,6 @@ public class DefaultView extends JPanel{
 	public void paintComponent(Graphics page)
 	{
 	    super.paintComponent(page);
-	   // URL urlBackgroundImg = getClass().getResource(Constants.fileUrl+"default_background.jpg");
 	    if(img == null){
 	    	URL urlImg = getClass().getResource(Constants.fileUrl+"default_background.jpg");
 			try {
@@ -43,7 +42,7 @@ public class DefaultView extends JPanel{
 	    
 //	    ImageIcon icon = new ImageIcon(urlBackgroundImg);
 //	    Image img = icon.getImage();
-	    page.drawImage(img, 0, 0, null);
+	    page.drawImage(img, 0, 0, this);
 	}
 	
 	public void addSkin(String name)
@@ -64,11 +63,16 @@ public class DefaultView extends JPanel{
 	}
 	
 	public void setBackgroundName(String backgroundName){
-		URL urlImg = getClass().getResource(Constants.fileUrl+backgroundName);
-		try {
-			img = ImageIO.read(urlImg);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(backgroundName.contains(".gif")){
+			img = Toolkit.getDefaultToolkit().createImage("./src/"+Constants.fileUrl+backgroundName);
+		}
+		else{
+			URL urlImg = getClass().getResource(Constants.fileUrl+backgroundName);
+			try {
+				img = ImageIO.read(urlImg);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		img = img.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height,  java.awt.Image.SCALE_SMOOTH);
 	}

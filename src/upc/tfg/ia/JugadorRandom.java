@@ -10,6 +10,7 @@ import upc.tfg.logic.Carta;
 import upc.tfg.logic.Districte;
 import upc.tfg.logic.Jugador;
 import upc.tfg.logic.Partida;
+import upc.tfg.logic.Passejant;
 import upc.tfg.utils.Constants;
 
 public class JugadorRandom implements JugadorRobot{
@@ -59,45 +60,86 @@ public class JugadorRandom implements JugadorRobot{
 			//Obtenim el districte del qual agafarem un passejant
 			System.out.println("Obtenim el districte del qual agafarem un passejant");
 			int i = rand.nextInt(districtes.length);
-			while(!districtes[i].tePassejantsDisponibles()) i = rand.nextInt(districtes.length);
-			Districte d = districtes[i];
-			System.out.println(d.getNom());
-			
-			//Obtenim el color del passejant que agafem
-			System.out.println("Obtenim el color del passejant que agafem");
-			int j = rand.nextInt(Constants.COLORS.length);
-			while(!d.tePassejantsDisponibles(Constants.COLORS[j]))j = rand.nextInt(Constants.COLORS.length);
-			System.out.println(Constants.COLORS[j]);
-			
-			//Obtenim el districte on afegir el passejant
-			System.out.println("Obtenim el districte on afegir el passejant");
-			List<Integer> dAdjacents = Partida.getInstance().getDistrictesAdjacents(d);
-			int k = rand.nextInt(dAdjacents.size());
-			while(intents < maxIntents && !Partida.getInstance().potMoure(d.getNom(), districtes[k].getNom(), Constants.COLORS[j])){
-				while(!d.tePassejantsDisponibles(Constants.COLORS[j]))j = rand.nextInt(Constants.COLORS.length);
-				while(d.equals(districtes[k])) k = rand.nextInt(dAdjacents.size());
+			while(!districtes[i].tePassejantsDisponibles() && intents < maxIntents) {
+				i = rand.nextInt(districtes.length);
 				++intents;
 			}
-			if (intents < maxIntents) {
-				System.out.println("Obtingut");
-				return new PassejantsAMoure(Constants.COLORS[j], d, districtes[k]);
+			if(intents < maxIntents){
+				intents = 0;
+				Districte d = districtes[i];
+				System.out.println(d.getNom());
+				
+				//Obtenim el color del passejant que agafem
+				System.out.println("Obtenim el color del passejant que agafem");
+				int j = rand.nextInt(Constants.COLORS.length);
+				while(!d.tePassejantsDisponibles(Constants.COLORS[j]))j = rand.nextInt(Constants.COLORS.length);
+				System.out.println(Constants.COLORS[j]);
+				
+				//Obtenim el districte on afegir el passejant
+				System.out.println("Obtenim el districte on afegir el passejant");
+				List<Integer> dAdjacents = Partida.getInstance().getDistrictesAdjacents(d);
+				int k = rand.nextInt(dAdjacents.size());
+				while(intents < maxIntents && !Partida.getInstance().potMoure(d.getNom(), districtes[k].getNom(), Constants.COLORS[j])){
+					while(!d.tePassejantsDisponibles(Constants.COLORS[j]))j = rand.nextInt(Constants.COLORS.length);
+					while(d.equals(districtes[k])) k = rand.nextInt(dAdjacents.size());
+					++intents;
+				}
+				if (intents < maxIntents) {
+					System.out.println("Obtingut");
+					if(teSolucioEnFutur(districtes, d, districtes[k], Constants.COLORS[j]))return new PassejantsAMoure(Constants.COLORS[j], d, districtes[k]);
+				}
 			}
 			++totalIntents;
 		}
 		System.out.println("NO obtingut");
-		return getSolucioPassejantDistricte();
+		return getSolucioPassejantDistricte(districtes, false);
 	}
 	
-	private PassejantsAMoure getSolucioPassejantDistricte(){
-		Districte[] districtes = Partida.getInstance().getTauler().getDistrictes();
+	private boolean teSolucioEnFutur(Districte[] districtes, Districte dOrigin, Districte dFi, int color){
+		int passejantsAMoure = Partida.getInstance().getPassejantsAMoure();
+		if(passejantsAMoure == 1)return true;
+		else {
+			Partida.getInstance().setPassejantsAMoure(1);
+		}
+		Districte[] districtesFutur = new Districte[districtes.length];
+		Passejant p = null;
+		Districte dAux = null;
+		for(int i = 0; i < districtes.length; ++i){
+			if(districtes[i].equals(dOrigin)){
+				Districte aux = new Districte(dOrigin);
+				p = aux.removePassejant(color);
+				districtesFutur[i] = aux;
+			}
+			else if(districtes[i].equals(dFi)){
+				dAux = new Districte(dFi);
+				districtesFutur[i] = dAux;
+			}
+			else{
+				districtesFutur[i] = districtes[i];
+			}
+		}
+		dAux.afegeixPassejant(p);
+		if (getSolucioPassejantDistricte(districtesFutur, true) != null){
+			Partida.getInstance().setPassejantsAMoure(passejantsAMoure);
+			return true;
+		}
+		else{
+			Partida.getInstance().setPassejantsAMoure(passejantsAMoure);
+			return false;
+		}
+	}
+	
+	private PassejantsAMoure getSolucioPassejantDistricte(Districte[] districtes, boolean futur){
 		for(int i = 0; i < districtes.length; ++i){
 			if(districtes[i].tePassejantsDisponibles()){
 				for(int k = 0; k < Constants.COLORS.length; ++k){
 					if(districtes[i].tePassejantsDisponibles(Constants.COLORS[k])){
 						for(int j = 0; j < districtes.length; ++j){
 							System.out.println(districtes[i].getNom());
-							if(i != j && Partida.getInstance().potMoure(districtes[i].getNom(), districtes[j].getNom(), Constants.COLORS[k])){
-								return new PassejantsAMoure(Constants.COLORS[k], districtes[i], districtes[j]);
+							if(i != j && Partida.getInstance().potMoure(districtes[i], districtes[j], Constants.COLORS[k])){
+								if(futur || teSolucioEnFutur(districtes, districtes[i], districtes[j], Constants.COLORS[k])){
+									return new PassejantsAMoure(Constants.COLORS[k], districtes[i], districtes[j]);
+								}
 							}
 						}
 					}
