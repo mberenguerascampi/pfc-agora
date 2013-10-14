@@ -135,10 +135,10 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	{
 		super.setVisible(visibility);
 		if(visibility){
-			mostraCartes();
 			addDistrictInformationView();
 			addCartaInformationview();
 			addStateView();
+			mostraCartes();
 			afegeixMarcCarta();
 			addTauler();
 			setBackgroundName("tauler_background.jpg");
@@ -320,17 +320,26 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 				public void actionPerformed(ActionEvent e) {
 					if(!cartaSeleccionada && Partida.getInstance().getPas() == 2 && Partida.getInstance().getIdJugadorActual() == jugadorID){
 						listener.cartaSeleccionada(jugadorSeleccionat, cartaEntity);
-						Rectangle rect = carta.getBounds();
-						carta.setBounds(rect.x, rect.y-25, rect.width, rect.height);
+						Rectangle rect = null;
 						if(vistaCartaSeleccionada != null){
 							rect = vistaCartaSeleccionada.getBounds();
 							vistaCartaSeleccionada.setBounds(rect.x, rect.y+25, rect.width, rect.height);
 						}
-						cartaEntitySeleccionada = cartaEntity;
-						vistaCartaSeleccionada = carta;
-						cardInfoView.setCarta(cartaEntity);
-						infoView.setVisible(false);
-						cardInfoView.setVisible(true);
+						
+						
+						//Si el jugador no te cap passejant es selecciona automaticament
+						if(Partida.getInstance().getJugador(jugadorID).getTotalPassejants() == 0){
+							seleccionaCartaiMouPassejants(jugadorID, cartaEntity);
+						}
+						else{
+							rect = carta.getBounds();
+							carta.setBounds(rect.x, rect.y-25, rect.width, rect.height);
+							cartaEntitySeleccionada = cartaEntity;
+							vistaCartaSeleccionada = carta;
+							cardInfoView.setCarta(cartaEntity);
+							infoView.setVisible(false);
+							cardInfoView.setVisible(true);
+						}
 					}
 					else if(cartaEntitySeleccionada == cartaEntity){
 						infoView.setVisible(false);
@@ -685,6 +694,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 			vistaCartaSeleccionada.setSeleccionada(false);
 			vistaCartaSeleccionada.setEnabled(false);
 		}
+		infoView.updateView();
 		stateView.actualitzaEstat();
 		updateBaralla(vCartaBaralla1, vBaralla1, Partida.getInstance().getBaralla());
 		updateBaralla(vCartaBaralla2, vBaralla2, Partida.getInstance().getBaralla2());
@@ -894,6 +904,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 			infoView.setDraggingPassejant(false, color);
 			Thread t;
 			if (previousDistrict == -1 || !(Partida.getInstance().potMoure(nomAnteriorDistricteSeleccionat, nomDistricteSeleccionat, vpEstatic.getiColor()))){
+				setSelectedDistrict(Partida.getInstance().getDistricte(nomAnteriorDistricteSeleccionat).getDistricteID());
 				t = new Thread(new AnimacioPassejant(vpDinamic, vpEstatic, rect.getLocation(), rect, false, true));
 			}
 			else{
@@ -930,7 +941,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 			if(shouldLockScreen)lockScreen.setVisible(true);
 			if(districtToSelect != null){
 				try {
-					Thread.sleep(2500);
+					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -982,7 +993,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 					try {
 						Thread.sleep(600);
 						infoView.getVistaPassejant(passejant.getiColor()).setNum(infoView.getVistaPassejant(passejant.getiColor()).getNum()+1);
-						Thread.sleep(2800);
+						Thread.sleep(2400);
 						animationOn = false;
 						lockScreen.setVisible(false);
 						return;

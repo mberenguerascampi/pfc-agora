@@ -4,12 +4,14 @@ import java.util.Date;
 
 import upc.tfg.agora.Agora;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.PassejantsAMoure;
 import upc.tfg.utils.ResultatsFinals;
 
 public class ControladorLogic {
 	private Partida partida;
 	private Agora agora;
 	private ControladorIA controladorIA;
+	private PassejantsAMoure lastPAM;
 	
 	public ControladorLogic() {
 		
@@ -37,7 +39,7 @@ public class ControladorLogic {
 	
 	public void mouPassejantADistricte(String nomDistricte, int idJugador){
 		Jugador j = partida.getJugador(idJugador);
-		if(j == null)return;
+		if(j == null || j.getTotalPassejants() == 0)return;
 		Passejant p = j.getUnPassejant();
 		if(p == null){
 			//TODO: Descartar carta
@@ -61,21 +63,24 @@ public class ControladorLogic {
 		
 	}
 	
-	public void mouPassejantsEntreDistrictes(String nomDistricteA, String nomDistricteB, int color){
+	public void mouPassejantsEntreDistrictes(String nomDistricteA, String nomDistricteB, int color, boolean desfent){
 		Districte districteA = partida.getDistricte(nomDistricteA);
 		Districte districteB = partida.getDistricte(nomDistricteB);
 		
 		if(districteA != null && districteB != null){
 			while(agora.isAnimationOn());
 			if(partida.getIdJugadorActual() != 1)agora.mouPassejant(districteA, districteB, color);
+			else lastPAM = new PassejantsAMoure(color, districteA, districteB);
 			while(agora.isAnimationOn());
 			Passejant p = districteA.removePassejant(color);
-			p.bloquejar();
+			if(!desfent)p.bloquejar();
+			else p.desbloquejar();
 			districteB.afegeixPassejant(p);
 			
 			if(partida.decrementaPassejantsAMoure()){
 				getProximMoviment();
 			}
+			else agora.updateView();
 		}
 	}
 	
@@ -84,9 +89,20 @@ public class ControladorLogic {
 	}
 	
 	public void cartaSeleccionada(Carta carta, int jugadorID){
-		partida.setPassejantsAMoure(carta.getValor());
-		if(jugadorID == 1){
+		Jugador j = partida.getJugador(jugadorID);
+		partida.setPassejantsAMoure(Math.min(j.getTotalPassejants(), carta.getValor()));
+		if(partida.getPassejantsAMoure() == 0){
+			if(jugadorID != 1){
+				carta.girar();
+				agora.seleccionaCartaiMouPassejants(jugadorID, carta);
+			}
+			treuCarta(jugadorID, carta);
+			partida.avancarJugador();
+			getProximMoviment();
+		}
+		else if(jugadorID == 1){
 			partida.setCartaSeleccionada(carta);
+			System.out.println("-----------------" + partida.getPassejantsAMoure());
 		}
 		else{
 			//Actualitzam la capa de domini
@@ -174,5 +190,11 @@ public class ControladorLogic {
 			}
 		});
 		t.start();
+	}
+	
+	public void desfesJugada(){
+		if(partida.desfesJugada()){
+			mouPassejantsEntreDistrictes(lastPAM.districteDesti.getNom(), lastPAM.districteOrigen.getNom(), lastPAM.color, true);
+		}
 	}
 }

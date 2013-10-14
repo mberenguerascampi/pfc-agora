@@ -42,6 +42,7 @@ public class JugadorRandom implements JugadorRobot{
 			}
 		}
 		Random rand = new Random(System.currentTimeMillis());
+		if(cartes.size() == 0)return null;
 		int i = rand.nextInt(cartes.size());
 		return cartes.get(i);
 	}

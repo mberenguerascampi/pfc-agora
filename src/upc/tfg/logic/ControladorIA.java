@@ -23,6 +23,7 @@ public class ControladorIA {
 	}
 	
 	public void getProximMoviment(int jugadorID, int pas){
+		if(jugadorID == 1)return;
 		JugadorRobot robot = robots[jugadorID-2];
 		System.out.println("Obtenir moviment pas -> " + pas);
 		if(pas == 1){
@@ -31,10 +32,10 @@ public class ControladorIA {
 			System.out.println("Carta robada -> " + cartaRobada.getNom() + " del districte " + cartaRobada.getDistricte().getNom());
 		}
 		else if(pas == 2){
-			if(jugadors[jugadorID-2].getTotalPassejants() == 0) {
+			/*if(jugadors[jugadorID-2].getTotalPassejants() == 0) {
 				//TODO: Descartar carta
 				return;
-			}
+			}*/
 			Carta cartaSeleccionada = robot.getCartaSeleccionada();
 			logic.cartaSeleccionada(cartaSeleccionada, jugadorID);
 			System.out.println("Carta seleccionada -> " + cartaSeleccionada.getNom() + " del districte " + cartaSeleccionada.getDistricte().getNom());
@@ -42,7 +43,7 @@ public class ControladorIA {
 		else if (pas == 3){
 			for (int i = 0; i < 2; ++i){
 				PassejantsAMoure pam = robot.getPassejantDistricte();
-				if(pam != null)logic.mouPassejantsEntreDistrictes(pam.districteOrigen.getNom(), pam.districteDesti.getNom(), pam.color);
+				if(pam != null)logic.mouPassejantsEntreDistrictes(pam.districteOrigen.getNom(), pam.districteDesti.getNom(), pam.color, false);
 				else{
 					Partida.getInstance().avancarJugador();
 					logic.getProximMoviment();

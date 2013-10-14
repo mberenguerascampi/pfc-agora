@@ -26,7 +26,7 @@ public class Partida {
 	private static Partida instance = null;
 	private Carta cartaSeleccionada = null;
 	private Map<Integer,Carta> cartesAIntercanviar = new HashMap<Integer,Carta>();
-	private int ultimTorn = 12;
+	private int ultimTorn = 1;
 	private ControladorLogic logic;
 	
 	public Partida() {
@@ -338,7 +338,7 @@ public class Partida {
 	public boolean decrementaPassejantsAMoure(){
 		System.out.println("Passejants: "+passejantsAMoure);
 		--passejantsAMoure;
-		if(passejantsAMoure == 0){
+		if(passejantsAMoure <= 0){
 			avancarJugador();
 			return true;
 		}
@@ -360,7 +360,7 @@ public class Partida {
 				//text = "<html> PAS " + pas + "<br>El jugador 1 ha de robar <br> una carta el jugador 2 </html>";
 				break;
 			case 3:
-				text = text + "El jugador " + getNomJugador(idJugadorActual) + " ha de moure dos passejants a un districte adjacent";
+				text = text + "El jugador " + getNomJugador(idJugadorActual) + " ha de moure dos passejants a un districte adjacent ("+ (3-passejantsAMoure) +"/2)";
 				break;
 			case 4:
 				text = text + "El jugador " + getNomJugador(idJugadorActual) + " ha de robar una carta de la pila que vulgui";
@@ -489,5 +489,14 @@ public class Partida {
 			case 4: return Constants.GROC;
 		}
 		return 0;
+	}
+
+	public boolean desfesJugada() {
+		if(pas == 3 && idJugadorActual == 1){
+			passejantsAMoure = 3;
+			System.out.println("DESFENT JUGADA!");
+			return true;
+		}
+		return false;
 	}
 }

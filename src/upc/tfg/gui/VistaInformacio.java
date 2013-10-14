@@ -213,4 +213,8 @@ public class VistaInformacio extends TransparentView {
 				return null;
 		}
 	}
+
+	public void updateView() {
+		if(districte != null)update();
+	}
 }

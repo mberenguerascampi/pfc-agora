@@ -18,6 +18,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
+import upc.tfg.gui.CustomMenuBar;
 import upc.tfg.gui.VistaAbout;
 import upc.tfg.gui.VistaBaralla;
 import upc.tfg.gui.VistaCarregarPartida;
@@ -28,6 +29,7 @@ import upc.tfg.gui.VistaMenuPrincipal;
 import upc.tfg.gui.VistaPopUp;
 import upc.tfg.gui.VistaPuntuacions;
 import upc.tfg.gui.VistaTauler;
+import upc.tfg.interfaces.MenuBarListener;
 import upc.tfg.interfaces.MenuPrincipalListener;
 import upc.tfg.interfaces.VistaAmbBotoTornarListener;
 import upc.tfg.interfaces.TaulerListener;
@@ -40,7 +42,7 @@ import upc.tfg.utils.Constants;
 import upc.tfg.utils.ImageToNumberArray;
 import upc.tfg.utils.ResultatsFinals;
 
-public class Agora extends JFrame implements MenuPrincipalListener, TaulerListener, VistaAmbBotoTornarListener, ActionListener{
+public class Agora extends JFrame implements MenuPrincipalListener, TaulerListener, VistaAmbBotoTornarListener, ActionListener, MenuBarListener{
 	/**
 	 * 
 	 */
@@ -55,7 +57,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	VistaPuntuacions vPuntuacions;
 	VistaCarregarPartida vCarregarPartida;
 	VistaInstruccions vInstruccions;
-	private JMenuBar menubar;
+	private CustomMenuBar menubar;
 	private static Agora instance = null;
 	private ControladorLogic logic;
 	public boolean finish = false;
@@ -104,46 +106,22 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	}
 	
 	private void initMenu(){
-		menubar = new JMenuBar();
-        ImageIcon icon = new ImageIcon(getClass().getResource(Constants.fileUrl+"exit.png"));
-
-        JMenu file = new JMenu("File");
-        file.setFont(Constants.fontGillSansBold);
-        file.setMnemonic(KeyEvent.VK_F);
-
-        JMenuItem eMenuItem = new JMenuItem("Exit", icon);
-        eMenuItem.setBackground(Constants.colorGreen);
-        eMenuItem.setMnemonic(KeyEvent.VK_E);
-        eMenuItem.setToolTipText("Exit application");
-        eMenuItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                System.exit(0);
-            }
-        });
-        JMenuItem eMenuItem2 = new JMenuItem("Tornar al menú", icon);
-        eMenuItem2.setBackground(Constants.colorGreen);
-        eMenuItem2.setMnemonic(KeyEvent.VK_R);
-        eMenuItem2.setToolTipText("");
-        eMenuItem2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                tornarAlMenu();
-            }
-        });
-
-        file.add(eMenuItem2);
-        file.add(eMenuItem);
-
-        menubar.add(file);
-        menubar.setBackground(Constants.colorGreen);
-        menubar.setFont(Constants.fontGillSansBold);
-        
+		menubar = new CustomMenuBar(this);
 	}
 	
-	private void tornarAlMenu(){
+	public void desferJugada(){
+		logic.desfesJugada();
+	}
+	
+	public void tornarAlMenu(){
 		amagaVistes();
 		menuPrincipal.updateView();
         menuPrincipal.setVisible(true);
         removeMenu();
+	}
+	
+	public void exitApplication(){
+		System.exit(0);
 	}
 	
 	private void amagaVistes(){
@@ -219,7 +197,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 afegeixCartesJugador(4);
 		 mostraBaralla();
 		 //tauler.comencaIntercanviCartes();
-		 tauler.afegeixPassejants(30, 1);
+		 tauler.afegeixPassejants(Partida.getInstance().getJugador(1).getTotalPassejants(), 1);
 		 tauler.setVisible(true);
 		 addMenu();
 		 //cardLayout.next(contentPane);
@@ -274,7 +252,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	}
 	
 	public void passejantMogutEntreDistrictes(String districtName1, String districtName2, int color){
-		logic.mouPassejantsEntreDistrictes(districtName1, districtName2, color);
+		logic.mouPassejantsEntreDistrictes(districtName1, districtName2, color, false);
 	}
 	
 	public void nextPlayer(){
