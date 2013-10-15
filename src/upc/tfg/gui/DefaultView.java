@@ -64,7 +64,8 @@ public class DefaultView extends JPanel{
 	
 	public void setBackgroundName(String backgroundName){
 		if(backgroundName.contains(".gif")){
-			img = Toolkit.getDefaultToolkit().createImage("./src/"+Constants.fileUrl+backgroundName);
+			URL urlImg = getClass().getResource(Constants.fileUrl+backgroundName);
+			img = Toolkit.getDefaultToolkit().createImage(urlImg);
 		}
 		else{
 			URL urlImg = getClass().getResource(Constants.fileUrl+backgroundName);

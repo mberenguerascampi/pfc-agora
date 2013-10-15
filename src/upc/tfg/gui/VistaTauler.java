@@ -1107,6 +1107,13 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 			}
 		}
 	}
+	
+	public void reset(){
+		for(VistaCarta vc:cartes){
+			remove(vc);
+		}
+		cartes.clear();
+	}
 
 	@Override
 	public void infoButtonPressed() {

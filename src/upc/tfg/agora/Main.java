@@ -4,17 +4,14 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-import javax.jws.Oneway;
 import javax.swing.UIManager;
 
-import upc.tfg.logic.ControladorLogic;
-import upc.tfg.logic.GameLoop;
 import upc.tfg.utils.AudioPlayer;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.*;
 
 public class Main {
 	static Agora agora;
@@ -32,6 +29,7 @@ public class Main {
 	            		BufferedInputStream myStream = new BufferedInputStream(getClass().getResourceAsStream(Constants.fileFontUrl+"Anna.ttf")); 
 	            		//ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("/src/"+Constants.fileFontUrl+"Anna.ttf")));
 	            		ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, myStream));
+	            		DefaultDataBase.createDataBase();
 	            		Locale catLocale = new Locale("ca", "CAT");
 	            		Locale.setDefault(catLocale);
 	            		agora = new Agora();

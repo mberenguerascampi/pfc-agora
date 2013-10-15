@@ -188,7 +188,9 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL MENÚ PRINCIPAL
 	@Override
 	public void playPressed() {
+		System.out.println("PLAY PRESSED");
 		 menuPrincipal.setVisible(false);
+		 tauler.reset();
 		 tauler.removeAll();
 		 logic.comencarPartida();
 		 afegeixCartesJugador(1);
@@ -313,7 +315,6 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	}
 	
 	public void mostraFinalPartida(ResultatsFinals resultats){
-		System.out.println("Mostrem final partida");
 		removeMenu();
 		finalPartida.setResultats(resultats);
 		tauler.setVisible(false);

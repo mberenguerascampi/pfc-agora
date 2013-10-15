@@ -22,8 +22,8 @@ public class VistaMenuPrincipal extends DefaultView {
 		setLayout(null);
 		setSize(Constants.width, Constants.height);
 		addButtons();
-		//setBackgroundName("prova.gif");
-		addSkin("imatgePortada.jpg");
+		setBackgroundName("prova.gif");
+		//addSkin("imatgePortada.jpg");
 	}
 	
 	private void addButtons()

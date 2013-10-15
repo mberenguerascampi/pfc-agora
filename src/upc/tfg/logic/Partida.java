@@ -26,7 +26,7 @@ public class Partida {
 	private static Partida instance = null;
 	private Carta cartaSeleccionada = null;
 	private Map<Integer,Carta> cartesAIntercanviar = new HashMap<Integer,Carta>();
-	private int ultimTorn = 1;
+	private int ultimTorn = 12;
 	private ControladorLogic logic;
 	
 	public Partida() {

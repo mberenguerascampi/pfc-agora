@@ -34,18 +34,19 @@ public class PuntuacionsBD {
 	}
 	
 	public void guardarPuntuacio(ResultatsFinals resultats){
-		Jugador j = Partida.getInstance().getJugador(resultats.getIdJugadorGuanyador());
-		int punts = 0;
-		if(resultats.getIdJugadorGuanyador() == 1)punts = resultats.getPuntsJ1();
-		if(resultats.getIdJugadorGuanyador() == 2)punts = resultats.getPuntsJ2();
-		if(resultats.getIdJugadorGuanyador() == 3)punts = resultats.getPuntsJ3();
-		if(resultats.getIdJugadorGuanyador() == 4)punts = resultats.getPuntsJ4();
+//		Jugador j = Partida.getInstance().getJugador(resultats.getIdJugadorGuanyador());
+//		int punts = 0;
+//		if(resultats.getIdJugadorGuanyador() == 1)punts = resultats.getPuntsJ1();
+//		if(resultats.getIdJugadorGuanyador() == 2)punts = resultats.getPuntsJ2();
+//		if(resultats.getIdJugadorGuanyador() == 3)punts = resultats.getPuntsJ3();
+//		if(resultats.getIdJugadorGuanyador() == 4)punts = resultats.getPuntsJ4();
 		Map<String, Integer> highscores = getMaxScores(resultats);
-		printInFile(Constants.fileTextsUrl+FILENAME, highscores);
+		DefaultDataBase.insertHighScores(highscores);
 	}
 	
 	public Map<String, Integer> getPuntuacio(){
-		return readPuntuacions();
+		//return readPuntuacions();
+		return sortPuntuacions(DefaultDataBase.getHighscores());
 	}
 	
 	private Map<String, Integer> getMaxScores(ResultatsFinals resultats){
@@ -64,8 +65,6 @@ public class PuntuacionsBD {
 	{
 		PrintWriter writer;
 		try {
-			String path = Agora.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-			InputStream streamIn = getClass().getResourceAsStream(Constants.fileTextsUrl+FILENAME);
 			OutputStream stream = new FileOutputStream(new File(Agora.class.getResource(Constants.fileTextsUrl+FILENAME).toURI().getPath()));
 			writer = new PrintWriter(stream);
 			for(String name:highscores.keySet()){
