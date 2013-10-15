@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import upc.tfg.gui.VistaAlertes;
+import upc.tfg.gui.VistaEstat;
 import upc.tfg.gui.VistaPassejant;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.ErrorController;
@@ -130,6 +132,7 @@ public class Partida {
 	}
 	
 	public void avancarJugador(){
+		VistaAlertes.getInstance().setVisible(false);
 		if(idJugadorActual == 2){
 			avancarPas();
 		}
@@ -336,6 +339,7 @@ public class Partida {
 	 * @return true si s'ha acabat el torn del jugador
 	 */
 	public boolean decrementaPassejantsAMoure(){
+		VistaAlertes.getInstance().setVisible(false);
 		System.out.println("Passejants: "+passejantsAMoure);
 		--passejantsAMoure;
 		if(passejantsAMoure <= 0){
@@ -491,12 +495,14 @@ public class Partida {
 		return 0;
 	}
 
-	public boolean desfesJugada() {
+	public int desfesJugada() {
 		if(pas == 3 && idJugadorActual == 1){
 			passejantsAMoure = 3;
-			System.out.println("DESFENT JUGADA!");
-			return true;
+			return pas;
 		}
-		return false;
+		if(pas == 2 && idJugadorActual == 1){
+			return pas;
+		}
+		return 0;
 	}
 }

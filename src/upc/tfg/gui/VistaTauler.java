@@ -40,9 +40,9 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	private static final int IMG_TAULER_HEIGHT = 401;
 	public static final int CARTA_WIDTH = 74;
 	public static final int CARTA_HEIGHT = 105;
-	public static final int CARTA_DESCARTADA_X = Constants.paddingX+50;
-	public static final int CARTA_DESCARTADA_Y = Constants.paddingY+Constants.height-300;
-	public static final int BARALLA_MARGIN_X = Constants.paddingX+50;
+	public static final int CARTA_DESCARTADA_X = Constants.paddingX+35;
+	public static final int CARTA_DESCARTADA_Y = Constants.paddingY+Constants.height-440;
+	public static final int BARALLA_MARGIN_X = Constants.paddingX+35;
 	public static final int BARALLA_MARGIN_Y = Constants.paddingY+Constants.height/2-200;
 	
 	private int taulerX;
@@ -59,6 +59,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	private VistaInformacio infoView;
 	private VistaInformacioCarta cardInfoView;
 	private VistaEstat stateView;
+	private VistaAlertes warningView;
 	private int[][]map;
 	private VistaCarta[] cartesIntercanvi = new VistaCarta[4];
 	
@@ -138,6 +139,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 			addDistrictInformationView();
 			addCartaInformationview();
 			addStateView();
+			addWarningView();
 			mostraCartes();
 			afegeixMarcCarta();
 			addTauler();
@@ -170,6 +172,12 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 		add(infoView.vpGrocDinamic);
 		add(infoView);	
 		infoView.setVisible(false);
+	}
+	
+	private void addWarningView(){
+		warningView = new VistaAlertes();
+		warningView.setVisible(false);
+		add(warningView);
 	}
 	
 	
@@ -641,14 +649,14 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 		add(vBaralla1);
 		
 		vCartaBaralla2 = new VistaCarta(Partida.getInstance().getBaralla2().getCartes().get(0), 1, 0);
-		vCartaBaralla2.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y+140, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		vCartaBaralla2.setBounds(BARALLA_MARGIN_X+110, BARALLA_MARGIN_Y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
 		vCartaBaralla2.addMouseListener(listener);
 		vCartaBaralla2.addMouseMotionListener(listener);
 		vCartaBaralla2.addActionListener(aListener2);
 		add(vCartaBaralla2);
 		
 		vBaralla2 = new VistaBaralla(Partida.getInstance().getBaralla2());
-		vBaralla2.setBounds(BARALLA_MARGIN_X-10, BARALLA_MARGIN_Y+140, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
+		vBaralla2.setBounds(BARALLA_MARGIN_X-10+110, BARALLA_MARGIN_Y, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
 		add(vBaralla2);
 		
 		cartesDescartades = new VistaCarta();
@@ -698,8 +706,8 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 		stateView.actualitzaEstat();
 		updateBaralla(vCartaBaralla1, vBaralla1, Partida.getInstance().getBaralla());
 		updateBaralla(vCartaBaralla2, vBaralla2, Partida.getInstance().getBaralla2());
-		vCartaBaralla1.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
-		vCartaBaralla2.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y+140, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		vCartaBaralla1.setBounds(vBaralla1.getLocation().x+10, vBaralla1.getLocation().y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		vCartaBaralla2.setBounds(vBaralla2.getLocation().x+10, vBaralla2.getLocation().y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
 	}
 	
 	private void updateBaralla(VistaCarta vCartaBaralla, VistaBaralla vBaralla,Baralla baralla){

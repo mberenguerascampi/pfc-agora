@@ -1,5 +1,6 @@
 package upc.tfg.utils;
 
+import upc.tfg.gui.VistaAlertes;
 import upc.tfg.logic.Districte;
 import upc.tfg.logic.Partida;
 
@@ -27,6 +28,9 @@ public class ErrorController {
 			default:
 				break;
 		}
-		if(idJugador == 1)System.out.println(errorText);
+		if(idJugador == 1){
+			VistaAlertes.getInstance().setWarningText(errorText);
+			System.out.println(errorText);
+		}
 	}
 }

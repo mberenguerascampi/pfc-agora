@@ -193,7 +193,8 @@ public class ControladorLogic {
 	}
 	
 	public void desfesJugada(){
-		if(partida.desfesJugada()){
+		int pas = partida.desfesJugada();
+		if(pas == 3){
 			mouPassejantsEntreDistrictes(lastPAM.districteDesti.getNom(), lastPAM.districteOrigen.getNom(), lastPAM.color, true);
 		}
 	}
