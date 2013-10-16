@@ -3,6 +3,7 @@ package upc.tfg.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JLabel;
 
@@ -20,6 +21,7 @@ public class VistaIdioma extends DefaultView {
 	private CustomCheckBox checkBoxCatala;
 	private CustomCheckBox checkBoxCastella;
 	private CustomCheckBox checkBoxAngles;
+	private JLabel labelDescription;
 	
 	public VistaIdioma(VistaAmbBotoTornarListener listener) {
 		setLayout(null);
@@ -33,18 +35,22 @@ public class VistaIdioma extends DefaultView {
 	}
 	
 	private void addLabels(){
+		labelDescription = new JLabel(bundle.getString("idioma_des"));
 		JLabel labelCatala = new JLabel(bundle.getString("idioma_cat"));
 		JLabel labelCastella = new JLabel(bundle.getString("idioma_es"));
 		JLabel labelAngles = new JLabel(bundle.getString("idioma_en"));
 		
+		labelDescription.setBounds(checkBoxCatala.getLocation().x-200, checkBoxCatala.getLocation().y-80, 500, 30);
 		labelCatala.setBounds(checkBoxCatala.getLocation().x+80, checkBoxCatala.getLocation().y, 200, 70);
 		labelCastella.setBounds(checkBoxCastella.getLocation().x+80, checkBoxCastella.getLocation().y, 200, 70);
 		labelAngles.setBounds(checkBoxAngles.getLocation().x+80, checkBoxAngles.getLocation().y, 200, 70);
 		
+		labelDescription.setFont(Constants.fontDescription);
 		labelCatala.setFont(Constants.fontPlayersNames);
 		labelCastella.setFont(Constants.fontPlayersNames);
 		labelAngles.setFont(Constants.fontPlayersNames);
 		
+		add(labelDescription);
 		add(labelCatala);
 		add(labelCastella);
 		add(labelAngles);
@@ -52,7 +58,7 @@ public class VistaIdioma extends DefaultView {
 	
 	private void addButtons(){
 		int originX = (int) (Constants.width*0.39 - 140);
-		int originY = (int) (Constants.paddingY + Constants.height*0.36 + VistaBarraSuperior.HEIGHT);
+		int originY = (int) (Constants.paddingY + Constants.height*0.39 + VistaBarraSuperior.HEIGHT);
 		checkBoxCatala = new CustomCheckBox();
 		checkBoxCatala.addActionListener(new ActionListener() {
 			@Override
@@ -112,7 +118,7 @@ public class VistaIdioma extends DefaultView {
 			Locale catLocale = new Locale("ca", "CAT");
     		Locale.setDefault(catLocale);
 		}
-		
+		bundle = ResourceBundle.getBundle("AgoraBundle", Locale.getDefault());
 		listener.backButtonPressed();
 	}
 	
@@ -120,5 +126,10 @@ public class VistaIdioma extends DefaultView {
 		checkBoxCatala.setSelected(catala);
 		checkBoxCastella.setSelected(castella);
 		checkBoxAngles.setSelected(angles);
+	}
+	
+	public void setVisible(boolean aFlag){
+		super.setVisible(aFlag);
+		if(aFlag)labelDescription.setText(bundle.getString("idioma_des"));
 	}
 }

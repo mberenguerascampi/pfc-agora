@@ -60,10 +60,6 @@ public class Partida {
 		return true;
 	}
 	
-	public boolean carregar(){
-		return true;
-	}
-	
 	public boolean guardar(){
 		return true;
 	}
@@ -72,6 +68,10 @@ public class Partida {
 		return true;
 	}
 	
+	public boolean carregar(){
+		return true;
+	}
+
 	public boolean avancarPas(){
 		idJugadorActual = idJugadorInici;
 		System.out.println("Avancem pas, Torn jugador " + idJugadorInici);
@@ -498,10 +498,12 @@ public class Partida {
 	public int desfesJugada() {
 		if(pas == 3 && idJugadorActual == 1){
 			passejantsAMoure = 3;
-			return pas;
+			return 1;
 		}
 		if(pas == 2 && idJugadorActual == 1){
-			return pas;
+			int passejantsATreure = getCartaSeleccionada().getValor()-passejantsAMoure;
+			passejantsAMoure = 0;
+			return passejantsATreure;
 		}
 		return 0;
 	}

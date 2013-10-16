@@ -29,6 +29,7 @@ public class Constants {
 	public static final Font fontKristenSmall = new Font("Kristen ITC", Font.CENTER_BASELINE, 14);
 	public static final Font fontPlayerWinner = new Font("Kristen ITC", Font.BOLD, 38);
 	public static final Font fontPlayersNames = new Font("Kristen ITC", Font.BOLD, 22);
+	public static final Font fontDescription = new Font("Kristen ITC", Font.ITALIC, 25);
 	public static final Font fontAnnaVives = new Font("Anna", Font.BOLD, 20);
 	
 	//Sizes

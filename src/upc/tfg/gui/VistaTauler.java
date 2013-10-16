@@ -49,6 +49,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	private int taulerY;
 	private boolean draggingPassejant = false;
 	private VistaPassejant passejantEstatic;
+	private VistaPassejant passejantDinamic;
 	public boolean animationOn = false;
 	private boolean cartaSeleccionada = false;
 	private Carta cartaEntitySeleccionada = null;
@@ -221,6 +222,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 		if (jugadorID == 1){
 			passejantEstatic = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, numPassejants);
 			passejantEstatic.setBounds(frame);
+			passejantEstatic.setMinValue(1);
 			
 			//Afegim el listener
 			MouseAdapter listener = new DragAndDropListener(vp, passejantEstatic);
@@ -231,7 +233,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 				public void actionPerformed(ActionEvent e) {
 					draggingPassejant = false;
 					Thread t;
-					if (previousDistrict == -1 || (cartaEntitySeleccionada != null && cartaEntitySeleccionada.getDistricte().getDistricteID() != previousDistrict)){
+					if (Partida.getInstance().getPassejantsAMoure() == 0 || previousDistrict == -1 || (cartaEntitySeleccionada != null && cartaEntitySeleccionada.getDistricte().getDistricteID() != previousDistrict)){
 						t = new Thread(new AnimacioPassejant(vp, passejantEstatic, passejantEstatic.getLocation(), passejantEstatic.getBounds(), false, false));
 						//TODO: actualitzar la capa lògica 
 					}
@@ -244,10 +246,16 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 					t.start();
 				}
 			});
+			passejantDinamic = vp;
 		}
 		
 		add(vp);
 		if(jugadorID == 1)add(passejantEstatic);
+	}
+	
+	public void updatePassejants(int jugadorID){
+		passejantEstatic.setNum(Partida.getInstance().getJugador(jugadorID).getTotalPassejants());
+		passejantDinamic.setNum(passejantEstatic.getNum());
 	}
 	
 	private Rectangle getFramePassejant(int idJugador){
@@ -872,8 +880,10 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	          }
 	          else {
 	        	  if(Partida.getInstance().getPas() != 2)return;
-	        	  cartaSeleccionada = true;
-	        	  if(vistaCartaSeleccionada!=null)vistaCartaSeleccionada.setSeleccionada(cartaSeleccionada);
+	        	  if(vistaCartaSeleccionada!=null){
+	        		  cartaSeleccionada = true;
+	        		  vistaCartaSeleccionada.setSeleccionada(cartaSeleccionada);
+	        	  }
 	          }
         	  JComponent c = (JComponent) e.getSource();
 	          Point l = c.getLocation();
@@ -1127,5 +1137,16 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	public void infoButtonPressed() {
 		popup.setVisible(true);
 		listener.infoButtonPressed();
+	}
+
+	public void deseleccionaCarta() {
+		if(vistaCartaSeleccionada != null){
+			Rectangle rect = vistaCartaSeleccionada.getBounds();
+			vistaCartaSeleccionada.setBounds(rect.x, rect.y+25, rect.width, rect.height);
+			vistaCartaSeleccionada.setSeleccionada(false);
+			cartaEntitySeleccionada = null;
+			vistaCartaSeleccionada = null;
+			cartaSeleccionada = false;
+		}
 	}
 }

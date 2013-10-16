@@ -18,13 +18,13 @@ public class HighscoreCell extends JPanel{
 	public static final int CELL_WIDTH = 600;
 	public static final int CELL_HEIGHT = 60;
 
-	public HighscoreCell(String nomJugador, int punts, String data){
+	public HighscoreCell(String nomJugador, String punts, String data){
 		setLayout(null);
 		setOpaque(false);
 		Border border = BorderFactory.createLineBorder(Color.GRAY);
 		setBorder(border);
 		JLabel nomLabel = new JLabel(nomJugador);
-		JLabel puntuacioLabel = new JLabel(String.valueOf(punts));
+		JLabel puntuacioLabel = new JLabel(punts);
 		JLabel dataLabel = new JLabel(data);
 		
 		nomLabel.setFont(Constants.fontPlayersNames);

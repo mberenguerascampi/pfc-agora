@@ -42,6 +42,11 @@ public class Jugador {
 		cartes.remove(carta);
 	}
 	
+	public void afegeixUnPassejant(Passejant p){
+		passejants.add(p);
+		++totalPassejants;
+	}
+	
 	//Getters & Setters
 	public String getNom() {
 		return nom;

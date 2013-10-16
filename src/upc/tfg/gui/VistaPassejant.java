@@ -31,6 +31,7 @@ public class VistaPassejant extends JButton {
 	private boolean bloquejat = false;
 	private Image img = null;
 	private Image imgBloquejat = null;
+	private int minValue = 0;
 	/**
 	 * 
 	 */
@@ -88,7 +89,9 @@ public class VistaPassejant extends JButton {
 		else numLabel.setFont(Constants.fontPassejants);
 		if (num == 0 && !showZero) numLabel.setVisible(false);
 		else numLabel.setVisible(true);
-		if (num <= 0) setVisible(false);
+		if (num < 0) setVisible(false);
+		if (minValue > 0 && num < minValue)setVisible(false);
+		else if (minValue > 0)setVisible(true);
 	}
 	
 	public void paintComponent(Graphics graphics)
@@ -165,5 +168,13 @@ public class VistaPassejant extends JButton {
 
 		public void setBloquejat(boolean bloquejat) {
 			this.bloquejat = bloquejat;
+		}
+
+		public int getMinValue() {
+			return minValue;
+		}
+
+		public void setMinValue(int minValue) {
+			this.minValue = minValue;
 		}
 }

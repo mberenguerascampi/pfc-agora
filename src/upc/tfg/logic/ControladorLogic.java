@@ -193,9 +193,23 @@ public class ControladorLogic {
 	}
 	
 	public void desfesJugada(){
-		int pas = partida.desfesJugada();
-		if(pas == 3){
+		int passejantsATreure = partida.desfesJugada();
+		if(passejantsATreure > 0 && Partida.getInstance().getPas() == 3){
 			mouPassejantsEntreDistrictes(lastPAM.districteDesti.getNom(), lastPAM.districteOrigen.getNom(), lastPAM.color, true);
 		}
+		else if (passejantsATreure > 0){
+			for(int i = 0; i < passejantsATreure; ++i){
+				Jugador jAux = partida.getJugador(partida.getIdJugadorActual());
+				retornaPassejantAJugador(jAux, partida.getCartaSeleccionada().getDistricte(), jAux.getColor());
+			}
+			agora.deseleccionaCarta();
+			agora.afegeixPassejants(partida.getIdJugadorActual());
+			agora.updateView();
+		}
+	}
+	
+	public void retornaPassejantAJugador(Jugador j, Districte d, int color){
+		Passejant p = d.removePassejant(color);
+		j.afegeixUnPassejant(p);
 	}
 }

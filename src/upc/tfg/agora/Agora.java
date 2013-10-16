@@ -39,6 +39,7 @@ import upc.tfg.logic.Districte;
 import upc.tfg.logic.Partida;
 import upc.tfg.logic.Tauler;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.DefaultDataBase;
 import upc.tfg.utils.ImageToNumberArray;
 import upc.tfg.utils.ResultatsFinals;
 
@@ -267,6 +268,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	}
 	
 	public void infoButtonPressed(){
+		DefaultDataBase.guardarPartida(Partida.getInstance());
 	}
 	
 	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL FINAL DE PARTIDA
@@ -329,6 +331,14 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 
 	public boolean isAnimationOn() {
 		return tauler.animationOn;
+	}
+
+	public void deseleccionaCarta() {
+		tauler.deseleccionaCarta();
+	}
+
+	public void afegeixPassejants(int jugadorID) {
+		tauler.updatePassejants(jugadorID);
 	}
 }
 
