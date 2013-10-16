@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -36,6 +37,7 @@ import upc.tfg.interfaces.TaulerListener;
 import upc.tfg.logic.Carta;
 import upc.tfg.logic.ControladorLogic;
 import upc.tfg.logic.Districte;
+import upc.tfg.logic.Jugador;
 import upc.tfg.logic.Partida;
 import upc.tfg.logic.Tauler;
 import upc.tfg.utils.Constants;
@@ -209,7 +211,8 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	@Override
 	public void loadButtonPressed() {
 		menuPrincipal.setVisible(false);
-		vCarregarPartida.setVisible(true);
+		//vCarregarPartida.setVisible(true);
+		loadGame(DefaultDataBase.getPartida("hola"));
 	}
 
 	@Override
@@ -339,6 +342,26 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 
 	public void afegeixPassejants(int jugadorID) {
 		tauler.updatePassejants(jugadorID);
+	}
+	
+	public void loadGame(Partida partida){
+		menuPrincipal.setVisible(false);
+		 tauler.reset();
+		 tauler.removeAll();
+		 logic.carregarPartida(partida);
+		 for(Jugador j:partida.getJugadors()){
+			 afegeixCartesJugador(j.getId(), j.getCartes());
+		 }
+		 mostraBaralla();
+		 tauler.afegeixPassejants(partida.getJugador(1).getTotalPassejants(), 1);
+		 tauler.setVisible(true);
+		 addMenu();
+	}
+	
+	private void afegeixCartesJugador(int jugadorID, ArrayList<Carta>cartes){
+		 for(int i = 0; i < cartes.size(); ++i){
+			 afegeixCarta(jugadorID, i+1, cartes.get(i));
+		 }
 	}
 }
 

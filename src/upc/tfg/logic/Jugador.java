@@ -47,6 +47,15 @@ public class Jugador {
 		++totalPassejants;
 	}
 	
+	public void setNumPassejants(int num){
+		passejants.clear();
+		for (int i = 0; i < num; ++i){
+			Passejant p = new Passejant(color, false);
+			passejants.add(p);
+		}
+		totalPassejants = num;
+	}
+	
 	//Getters & Setters
 	public String getNom() {
 		return nom;

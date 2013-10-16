@@ -5,12 +5,11 @@ import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import javax.swing.UIManager;
 
-import upc.tfg.utils.AudioPlayer;
-import upc.tfg.utils.Constants;
 import upc.tfg.utils.*;
 
 public class Main {
@@ -31,6 +30,10 @@ public class Main {
 	            		ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, myStream));
 	            		DefaultDataBase.createDataBase();
 	            		DefaultDataBase.createPartidaDataBase();
+	            		ArrayList<String>noms = DefaultDataBase.getNomsPartides();
+	            		for(String s:noms){
+	            			System.out.println(s);
+	            		}
 	            		Locale catLocale = new Locale("ca", "CAT");
 	            		Locale.setDefault(catLocale);
 	            		agora = new Agora();

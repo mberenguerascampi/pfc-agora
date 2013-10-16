@@ -23,7 +23,7 @@ public class ControladorLogic {
 	
 	public void comencarPartida(){
 		Date date = new Date();
-		partida = new Partida("hola",date,1,1, this);
+		partida = new Partida("hola",date,1,1);
 		Jugador j1 = new Jugador("J1",1,Constants.BLAU);
 		Jugador j2 = new Jugador("J2",2,Constants.VERMELL);
 		Jugador j3 = new Jugador("J3",3,Constants.VERD);
@@ -35,6 +35,10 @@ public class ControladorLogic {
 		partida.crear();
 		controladorIA = new ControladorIA(this);
 		controladorIA.setJugadors(partida.getJugadorsRobot());
+	}
+	
+	public void carregarPartida(Partida partida){
+		this.partida = partida;
 	}
 	
 	public void mouPassejantADistricte(String nomDistricte, int idJugador){

@@ -1,5 +1,8 @@
 package upc.tfg.logic;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,23 +32,37 @@ public class Partida {
 	private Carta cartaSeleccionada = null;
 	private Map<Integer,Carta> cartesAIntercanviar = new HashMap<Integer,Carta>();
 	private int ultimTorn = 12;
-	private ControladorLogic logic;
 	
 	public Partida() {
 		
 	}
 	
-	public Partida(String nom, Date data, int torn, int pas, ControladorLogic logic) {
+	public Partida(String nom, Date data, int torn, int pas) {
 		instance = this;
 		this.nom = nom;
 		this.data = data;
 		this.torn = torn;
 		this.pas = pas;
-		this.logic = logic;
 		idJugadorInici = 1;
 		idJugadorActual = idJugadorInici;
 		jugadors = new ArrayList<Jugador>();
 		tauler = new Tauler();
+		baralla = new Baralla();
+		baralla.barrejar();
+	}
+	
+	public Partida(String nom, String data, int torn, int pas, ArrayList<Jugador> jugadors, Districte[] districtes) {
+		instance = this;
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
+		this.nom = nom;
+		this.data = null;//df.parse(data);
+		this.torn = torn;
+		this.pas = pas;
+		idJugadorInici = 1;
+		idJugadorActual = idJugadorInici;
+		this.jugadors = jugadors;
+		tauler = new Tauler();
+		tauler.setDistrictes(districtes);
 		baralla = new Baralla();
 		baralla.barrejar();
 	}
@@ -506,5 +523,9 @@ public class Partida {
 			return passejantsATreure;
 		}
 		return 0;
+	}
+
+	public ArrayList<Jugador> getJugadors() {
+		return jugadors;
 	}
 }

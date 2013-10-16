@@ -87,6 +87,13 @@ public class Districte {
 		
 	}
 	
+	public void inicialitzaIAfefeixPassejants(int color, int numP){
+		for(int i = 0; i < numP; ++i){
+			Passejant p = new Passejant(color, false);
+			afegeixPassejant(p);
+		}
+	}
+	
 	public Passejant removePassejant(int color){
 		switch (color){
 			case Constants.BLAU:
