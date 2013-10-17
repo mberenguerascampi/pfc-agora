@@ -1,12 +1,17 @@
 package upc.tfg.gui;
 
 import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import upc.tfg.interfaces.CellListener;
 import upc.tfg.utils.Constants;
 
 public class HighscoreCell extends JPanel{
@@ -41,6 +46,38 @@ public class HighscoreCell extends JPanel{
 		
 		add(nomLabel);
 		add(puntuacioLabel);
+		add(dataLabel);
+	}
+	
+	public HighscoreCell(final String nomPartida, String data, final CellListener listener){
+		setLayout(null);
+		setOpaque(false);
+		Border border = BorderFactory.createLineBorder(Color.GRAY);
+		setBorder(border);
+		JLabel nomLabel = new JLabel(nomPartida);
+		JLabel dataLabel = new JLabel(data);
+		JButton button = new JButton();
+		button.setOpaque(false);
+		button.setContentAreaFilled(false);
+		button.setBorderPainted(false);
+		button.setBounds(0, 0, CELL_WIDTH, CELL_HEIGHT);
+		button.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				listener.cellPressed(nomPartida);
+			}
+		});
+		
+		nomLabel.setFont(Constants.fontPlayersNames);
+		nomLabel.setBounds(20, 15, 280, 20);
+		nomLabel.setAlignmentY(CENTER_ALIGNMENT);
+		
+		dataLabel.setFont(Constants.fontPlayersNames);
+		dataLabel.setBounds(330, 15, 230, 20);
+		dataLabel.setAlignmentY(CENTER_ALIGNMENT);
+		
+		add(button);
+		add(nomLabel);
 		add(dataLabel);
 	}
 }

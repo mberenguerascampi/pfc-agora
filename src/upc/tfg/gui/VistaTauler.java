@@ -20,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.TransferHandler;
 
+import upc.tfg.interfaces.PopupButtonsListener;
 import upc.tfg.interfaces.TaulerListener;
 import upc.tfg.interfaces.VistaEstatListener;
 import upc.tfg.logic.Baralla;
@@ -30,7 +31,7 @@ import upc.tfg.utils.Constants;
 import upc.tfg.utils.ImageToNumberArray;
 import upc.tfg.utils.Posicio;
 
-public class VistaTauler extends DefaultView implements VistaEstatListener{
+public class VistaTauler extends DefaultView implements VistaEstatListener, PopupButtonsListener{
 	
 	/**
 	 * 
@@ -76,7 +77,8 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	private VistaCarta cartesDescartades;
 	private int previousDistrict = -1;
 	
-	VistaPopUp popup;
+	private VistaPopUp popup;
+	private VistaPopUpBotons buttonsPopup;
 	private JButton lockScreen;
 	
 	
@@ -142,7 +144,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 			addStateView();
 			addWarningView();
 			mostraCartes();
-			afegeixMarcCarta();
+			if(marcCarta == null)afegeixMarcCarta();
 			addTauler();
 			setBackgroundName("tauler_background.jpg");
 			//addSkin("tauler_background.jpg");
@@ -151,9 +153,11 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	
 	private void addPopUp(){
 		popup = new VistaPopUp();
-	    popup.setBounds(0, 0, Constants.width, Constants.height);
 		popup.setVisible(false);
+		buttonsPopup = new VistaPopUpBotons(this);
+		buttonsPopup.setVisible(false);
 		add(popup);
+		add(buttonsPopup);
 		add(lockScreen);
 	}
 	
@@ -305,6 +309,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 			vistaCartaSeleccionada.setBounds(marcCarta.getBounds());
 			vistaCartaSeleccionada.setCartaEntity(cartaEntity);
 			vistaCartaSeleccionada.setEnabled(true);
+			vistaCartaSeleccionada.setVisible(true);
 			vistaCartaSeleccionada.setSeleccionada(false);
 			vistaCartaSeleccionada.removeActionListener(vistaCartaSeleccionada.getActionListeners()[0]);
 			afegeixListenerACarta(cartaEntity, jugadorID, vistaCartaSeleccionada);
@@ -478,8 +483,15 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 	
 	private void mostraCartes()
 	{
-		for (JButton carta:cartes){
+		for (VistaCarta carta:cartes){
 			add(carta);
+			//Comprovem si s'ha carregat una partida amb una carta buida en el jugador1
+			if(carta.getJugadorID() == 1 && carta.getCartaEntity() == null){
+		    	afegeixMarcCarta();
+		    	visualitzaMarcCarta(carta);
+		    	marcCarta.setLocation(marcCarta.getLocation().x, marcCarta.getLocation().y-25);
+		    	vistaCartaSeleccionada = carta;
+		    }
 		}
 	}
 	
@@ -1148,5 +1160,28 @@ public class VistaTauler extends DefaultView implements VistaEstatListener{
 			vistaCartaSeleccionada = null;
 			cartaSeleccionada = false;
 		}
+	}
+	
+	public void showPopupGuardar(){
+		buttonsPopup.setVisible(true);
+	}
+
+	
+	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL POPUP
+	@Override
+	public void saveButtonPressed(String name) {
+		listener.saveButtonPressed(name);
+	}
+
+	@Override
+	public void saveBeforeQuit() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void quitButtonPressed() {
+		// TODO Auto-generated method stub
+		
 	}
 }

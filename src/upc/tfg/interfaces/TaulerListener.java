@@ -10,4 +10,5 @@ public interface TaulerListener {
 	public void cartaAgafada(int jugadorID, int barallaID);
 	public void nextPlayer();
 	public void infoButtonPressed();
+	public void saveButtonPressed(String nom);
 }

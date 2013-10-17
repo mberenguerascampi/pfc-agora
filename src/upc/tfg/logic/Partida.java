@@ -13,6 +13,7 @@ import upc.tfg.gui.VistaAlertes;
 import upc.tfg.gui.VistaEstat;
 import upc.tfg.gui.VistaPassejant;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.DefaultDataBase;
 import upc.tfg.utils.ErrorController;
 import upc.tfg.utils.ResultatsFinals;
 
@@ -51,15 +52,17 @@ public class Partida {
 		baralla.barrejar();
 	}
 	
-	public Partida(String nom, String data, int torn, int pas, ArrayList<Jugador> jugadors, Districte[] districtes) {
+	public Partida(String nom, String data, int torn, int pas, ArrayList<Jugador> jugadors, 
+			Districte[] districtes, int idJugadorInici, int passejantsAMoure) {
 		instance = this;
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
 		this.nom = nom;
 		this.data = null;//df.parse(data);
 		this.torn = torn;
 		this.pas = pas;
-		idJugadorInici = 1;
+		this.idJugadorInici = idJugadorInici;
 		idJugadorActual = idJugadorInici;
+		this.passejantsAMoure = passejantsAMoure;
 		this.jugadors = jugadors;
 		tauler = new Tauler();
 		tauler.setDistrictes(districtes);
@@ -77,7 +80,9 @@ public class Partida {
 		return true;
 	}
 	
-	public boolean guardar(){
+	public boolean guardar(String nom){
+		this.nom = nom;
+		DefaultDataBase.guardarPartida(this);
 		return true;
 	}
 	

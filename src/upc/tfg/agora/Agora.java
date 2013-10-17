@@ -32,6 +32,7 @@ import upc.tfg.gui.VistaPuntuacions;
 import upc.tfg.gui.VistaTauler;
 import upc.tfg.interfaces.MenuBarListener;
 import upc.tfg.interfaces.MenuPrincipalListener;
+import upc.tfg.interfaces.PopupButtonsListener;
 import upc.tfg.interfaces.VistaAmbBotoTornarListener;
 import upc.tfg.interfaces.TaulerListener;
 import upc.tfg.logic.Carta;
@@ -45,7 +46,8 @@ import upc.tfg.utils.DefaultDataBase;
 import upc.tfg.utils.ImageToNumberArray;
 import upc.tfg.utils.ResultatsFinals;
 
-public class Agora extends JFrame implements MenuPrincipalListener, TaulerListener, VistaAmbBotoTornarListener, ActionListener, MenuBarListener{
+public class Agora extends JFrame implements MenuPrincipalListener, TaulerListener,
+										VistaAmbBotoTornarListener, ActionListener, MenuBarListener{
 	/**
 	 * 
 	 */
@@ -127,6 +129,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		System.exit(0);
 	}
 	
+	public void mostraPopupGuardar(){
+		tauler.showPopupGuardar();
+	}
+	
 	private void amagaVistes(){
 		tauler.setVisible(false);
 		finalPartida.setVisible(false);
@@ -160,7 +166,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		vAbout.setVisible(false);
 		vPuntuacions = new VistaPuntuacions(this);
 		vPuntuacions.setVisible(false);
-		vCarregarPartida = new VistaCarregarPartida();
+		vCarregarPartida = new VistaCarregarPartida(this);
 		vCarregarPartida.setVisible(false);
 		vInstruccions = new VistaInstruccions(this);
 		vInstruccions.setVisible(false);
@@ -211,8 +217,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	@Override
 	public void loadButtonPressed() {
 		menuPrincipal.setVisible(false);
-		//vCarregarPartida.setVisible(true);
-		loadGame(DefaultDataBase.getPartida("hola"));
+		vCarregarPartida.setVisible(true);
 	}
 
 	@Override
@@ -271,7 +276,11 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	}
 	
 	public void infoButtonPressed(){
-		DefaultDataBase.guardarPartida(Partida.getInstance());
+		
+	}
+	
+	public void saveButtonPressed(String nom){
+		logic.guardarPartida(nom);
 	}
 	
 	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL FINAL DE PARTIDA
@@ -289,7 +298,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	 */
 	public void afegeixCarta(int jugadorID, int posicio, Carta cartaEntity)
 	{
-		if(jugadorID == 1)cartaEntity.setShowing(true);
+		if(jugadorID == 1 && cartaEntity != null)cartaEntity.setShowing(true);
 		tauler.afegeixCarta(jugadorID, posicio, cartaEntity);
 	}
 	
@@ -359,9 +368,15 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	}
 	
 	private void afegeixCartesJugador(int jugadorID, ArrayList<Carta>cartes){
+		 //Afegim les cartes que tenia el jugador
 		 for(int i = 0; i < cartes.size(); ++i){
 			 afegeixCarta(jugadorID, i+1, cartes.get(i));
 		 }
+		 //Si el jugador no té les cinc cartes la posem buida
+		 for(int i = cartes.size(); i < 5; ++i){
+			 afegeixCarta(jugadorID, i+1, null);
+		 }
 	}
+
 }
 

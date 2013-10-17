@@ -1,6 +1,5 @@
 package upc.tfg.gui;
 
-
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -12,37 +11,40 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
+import upc.tfg.interfaces.PopupButtonsListener;
 import upc.tfg.logic.Partida;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.CustomDefaultButton;
 
-public class VistaPopUp extends JPanel {
+public class VistaPopUpBotons extends JPanel {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -1452077690748690332L;
+	private static final long serialVersionUID = 939723317900635307L;
 	public int boxWidth = 550;
-	public int boxHeight = 450;
-	private final static int imgWidth = 315;
-	private final static int imgHeight = 171;
+	public int boxHeight = 300;
 	private Image img = null;
 	private Image boxImg = null;
+	private JLabel titolLabel;
 	private JLabel textLabel;
-	private JLabel imageLabel;
+	private JTextField nameField;
+	private PopupButtonsListener listener;
 	
-	public VistaPopUp() {
+	public VistaPopUpBotons(PopupButtonsListener listener) {
 		setOpaque(false);
 		setLayout(null);
+		this.listener = listener;
 		setBounds(0, 0, Constants.width, Constants.height);
-		addBackgroundButton();
 		addLabel();
-		imageLabel = new JLabel();
-		add(imageLabel);
-		addImage();
+		addNameField();
+		addButtons();
+		addBackgroundButton();
 	}
 	
 	private void addBackgroundButton() {
@@ -61,33 +63,47 @@ public class VistaPopUp extends JPanel {
 		add(backgroundButton);
 	}
 	
-	private void addImage(){
-	    //Agafem la imatge i la posem a la mida que volem
-	    URL urlImg = getClass().getResource(Constants.fileUrl+"info_img_pas" + Partida.getInstance().getPas() + ".png");
-	    Image pasImg = null;
-	    try {
-	    	pasImg = ImageIO.read(urlImg);
-	    	pasImg = pasImg.getScaledInstance(imgWidth, imgHeight,  java.awt.Image.SCALE_SMOOTH ) ; 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	    ImageIcon icon = new ImageIcon(pasImg);
-		    
-	    imageLabel.setBounds(Constants.centerX-imgWidth/2, Constants.centerY+boxHeight/2-imgHeight-50, imgWidth, imgHeight);
-	    imageLabel.setIcon(icon);
-	    
-	}
-
 	private void addLabel() {
+		titolLabel = new JLabel("HOLA");
+		titolLabel.setOpaque(false);
+//		textLabel.setFont(Constants.fontAnnaVives);
+		titolLabel.setFont(Constants.fontTitle);
+		titolLabel.setBounds(Constants.centerX-boxWidth/2+40, Constants.centerY-boxHeight/2+40, boxWidth-100, 40);
+		
+		add(titolLabel);
+		
 		textLabel = new JLabel("HOLA");
 		textLabel.setOpaque(false);
 //		textLabel.setFont(Constants.fontAnnaVives);
 		textLabel.setFont(Constants.fontKristen);
-		textLabel.setBounds(Constants.centerX-boxWidth/2+40, Constants.centerY-boxHeight/2+40, boxWidth-100, boxHeight-imgHeight-50);
+		textLabel.setBounds(Constants.centerX-boxWidth/2+40, Constants.centerY-boxHeight/2+100, boxWidth-100, boxHeight-265);
 		
 		add(textLabel);
 	}
-
+	
+	private void addNameField(){
+		nameField = new JTextField();
+		nameField.setFont(Constants.fontKristen);
+		nameField.setBounds(Constants.centerX-boxWidth/2+40, (int) (textLabel.getLocation().y+textLabel.getSize().getHeight())+15, boxWidth-100, 30);
+		
+		add(nameField);
+	}
+	
+	private void addButtons(){
+		CustomDefaultButton saveButton = new CustomDefaultButton("GUARDAR");
+		saveButton.setBounds(Constants.centerX+boxWidth/2-CustomDefaultButton.BUTTON_WIDTH-40, (int) (nameField.getLocation().y+nameField.getSize().getHeight())+15, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				listener.saveButtonPressed(nameField.getText());
+				//TODO: S'ha de mostrar un toast indicant que s'ha guardat correctament
+				setVisible(false);
+			}
+		});
+		
+		add(saveButton);
+	}
+	
 	public void paintComponent(Graphics page)
 	{
 	    super.paintComponent(page);
@@ -112,9 +128,9 @@ public class VistaPopUp extends JPanel {
 		if(aFlag){
 			Locale defaultLocale = Locale.getDefault();
 			ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
-			String text = "info_pas" + Partida.getInstance().getPas();
-			textLabel.setText("<html>" + bundle.getString(text) + "</html>");
-			addImage();
+			textLabel.setText("<html>" + bundle.getString("text_guardar") + "</html>");
+			titolLabel.setText(bundle.getString("titol_guardar"));
 		}
 	}
+	
 }

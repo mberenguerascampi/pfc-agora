@@ -70,6 +70,18 @@ public class CustomMenuBar extends JMenuBar{
             }
         });
         
+        ImageIcon icon4 = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/"+"save_icon.png"));
+        JMenuItem eMenuItem4 = new JMenuItem(bundle.getString("guardar"), icon4);
+        eMenuItem4.setBackground(Constants.colorGreen);
+        eMenuItem4.setMnemonic(KeyEvent.VK_S);
+        eMenuItem4.setToolTipText("");
+        eMenuItem4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                listener.mostraPopupGuardar();
+            }
+        });
+        
+        partida.add(eMenuItem4);
         partida.add(eMenuItem3);
         partida.add(eMenuItem2);
         partida.add(eMenuItem);

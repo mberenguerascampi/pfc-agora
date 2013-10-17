@@ -30,10 +30,6 @@ public class Main {
 	            		ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, myStream));
 	            		DefaultDataBase.createDataBase();
 	            		DefaultDataBase.createPartidaDataBase();
-	            		ArrayList<String>noms = DefaultDataBase.getNomsPartides();
-	            		for(String s:noms){
-	            			System.out.println(s);
-	            		}
 	            		Locale catLocale = new Locale("ca", "CAT");
 	            		Locale.setDefault(catLocale);
 	            		agora = new Agora();

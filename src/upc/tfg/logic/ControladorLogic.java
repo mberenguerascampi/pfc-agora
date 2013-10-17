@@ -39,6 +39,12 @@ public class ControladorLogic {
 	
 	public void carregarPartida(Partida partida){
 		this.partida = partida;
+		controladorIA = new ControladorIA(this);
+		controladorIA.setJugadors(partida.getJugadorsRobot());
+	}
+	
+	public void guardarPartida(String nom){
+		partida.guardar(nom);
 	}
 	
 	public void mouPassejantADistricte(String nomDistricte, int idJugador){

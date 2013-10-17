@@ -129,6 +129,8 @@ public class DefaultDataBase {
 	                  " torn INTEGER, " + 
 	                  " pas INTEGER, " + 
 	                  " idJugadorActual INTEGER, " + 
+	                  " idJugadorInici INTEGER, " + 
+	                  " passejantsAMoure INTEGER, " +
 	                  " PRIMARY KEY (nom))"; 
 			      stmt.executeUpdate(sql);
 		      
@@ -138,6 +140,7 @@ public class DefaultDataBase {
 	                  " id INTEGER, " + 
 	                  " numPassejants INTEGER, " +
 	                  " nomPartida VARCHAR(255), " +
+	                  " color INTEGER, " +
 	                  " PRIMARY KEY (nomJugador, nomPartida))"; 
 			  stmt.executeUpdate(sql);
 			  
@@ -181,16 +184,18 @@ public class DefaultDataBase {
 	
 		       stmt = c.createStatement();
 		       c.commit();
-		       String sql = "INSERT INTO PARTIDA (nom,data,torn,pas,idJugadorActual) " +
+		       String sql = "INSERT INTO PARTIDA (nom,data,torn,pas,idJugadorActual,idJugadorInici,passejantsAMoure) " +
 	                    "VALUES ('"+ partida.getNom() +"', '"+ partida.getData() +"', "+ partida.getTorn()+
-	                    ", "+ partida.getPas() + ", " + partida.getIdJugadorActual() +");"; 
+	                    ", "+ partida.getPas() + ", " + partida.getIdJugadorActual() + ", " + 
+	                    partida.getIdJugadorInici() + ", " + partida.getPassejantsAMoure() +");"; 
 				stmt.executeUpdate(sql);
 				
 			//Guardem els jugadors	
 		       for(int i = 0; i < 4; ++i){
 		    	   Jugador j = partida.getJugador(i+1);
-					sql = "INSERT INTO JUGADOR (nomJugador,id,numPassejants,nomPartida) " +
-		                    "VALUES ('"+ j.getNom() +"', "+ j.getId() +", " + j.getTotalPassejants() + ", '"+ partida.getNom() +"');"; 
+					sql = "INSERT INTO JUGADOR (nomJugador,id,numPassejants,nomPartida,color) " +
+		                    "VALUES ('"+ j.getNom() +"', "+ j.getId() +", " + j.getTotalPassejants() + 
+		                    ", '"+ partida.getNom()+"', "+ j.getColor() +");"; 
 					stmt.executeUpdate(sql);
 					//Guardem les cartes del jugador
 					for(Carta carta:j.getCartes()){
@@ -217,9 +222,9 @@ public class DefaultDataBase {
 		     System.out.println("Records created successfully");
 	   }
 	   
-	   public static ArrayList<String> getNomsPartides()
+	   public static Map<String,String> getNomsPartides()
 	   {
-		   ArrayList<String> noms = new ArrayList<String>();
+		   Map<String,String> noms = new HashMap<String,String>();
 		     Connection c = null;
 		     Statement stmt = null;
 		     try {
@@ -231,7 +236,7 @@ public class DefaultDataBase {
 		       stmt = c.createStatement();
 		       ResultSet rs = stmt.executeQuery( "SELECT * FROM PARTIDA;" );
 		       while ( rs.next() ) {
-		          noms.add(rs.getString("nom"));  
+		          noms.put(rs.getString("nom"), rs.getString("data"));  
 		       }
 		       rs.close();
 		       stmt.close();
@@ -263,7 +268,7 @@ public class DefaultDataBase {
 		       ResultSet rs = stmt.executeQuery( "SELECT * FROM JUGADOR "+
 			       		"WHERE nomPartida='"+ nom + "';" );
 			   while ( rs.next() ) {
-				   Jugador j = new Jugador(rs.getString("nomJugador"), rs.getInt("id"), 1);
+				   Jugador j = new Jugador(rs.getString("nomJugador"), rs.getInt("id"), rs.getInt("color"));
 				   j.setNumPassejants(rs.getInt("numPassejants"));
 				   jugadors.add(j);
 			   }
@@ -300,7 +305,8 @@ public class DefaultDataBase {
 			   //Creem la partida
 			   rs = stmt.executeQuery( "SELECT * FROM PARTIDA "+
 			       		"WHERE nom='"+ nom + "';" );
-			   partida = new Partida(nom,rs.getString("data"),rs.getInt("torn"),rs.getInt("pas"),jugadors,districtes);
+			   partida = new Partida(nom,rs.getString("data"),rs.getInt("torn"),rs.getInt("pas"),
+					   jugadors,districtes, rs.getInt("idJugadorInici"), rs.getInt("passejantsAMoure"));
 			       
 		       rs.close();
 		       stmt.close();

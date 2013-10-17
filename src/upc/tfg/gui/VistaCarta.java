@@ -40,7 +40,12 @@ public class VistaCarta extends JButton {
 		setFocusPainted(false); 
 		setContentAreaFilled(false); 
 		setBorderPainted(false);
-		this.cartaEntity = carta;
+		if(carta != null)this.cartaEntity = carta;
+		else {
+			if(jugadorID == 1)setVisible(false);
+			setEstaBuida(true);
+			
+		}
 		this.jugadorID = jugadorID;
 		this.posicio = posicio;
 		addImageCard();
