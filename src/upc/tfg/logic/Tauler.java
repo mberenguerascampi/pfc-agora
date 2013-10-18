@@ -10,7 +10,7 @@ import upc.tfg.agora.Agora;
 import upc.tfg.utils.Constants;
 
 public class Tauler {
-	private Districte[] districtes;
+	private static Districte[] districtes = null;
 	
 	public Tauler() {
 		districtes = creaDistrictes();
@@ -39,7 +39,7 @@ public class Tauler {
 	}
 	
 	public static Districte getDistricte(String nom){
-		Districte[] districtes = creaDistrictes();
+		if(districtes == null)districtes = creaDistrictes();
 		for(Districte districte:districtes){
 			if(districte.getNom().equalsIgnoreCase(nom)){
 				return districte;

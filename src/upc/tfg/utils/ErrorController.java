@@ -9,6 +9,7 @@ public class ErrorController {
 	public static final int DISTRICTE_NO_ADJACENT = 2;
 	public static final int NO_POT_TREURE_PASSEJANT = 3;
 	public static final int NO_POT_AFEGIR_PASSEJANT = 4;
+	public static final int NO_ES_POT_GUARDAR = 5;
 	
 	public static void showError(int idJugador, int idError, Object arg1, Object arg2){
 		String errorText = "";
@@ -24,6 +25,9 @@ public class ErrorController {
 				break;
 			case NO_POT_AFEGIR_PASSEJANT:
 				errorText = "NO ES POT AFEGIR CAP PASSEJANT DE COLOR " + Partida.getInstance().getNomColor((int)arg2) +" EN EL DISTRICTE DE "+ ((Districte)arg1).getNom();
+				break;
+			case NO_ES_POT_GUARDAR:
+				errorText = "No es pot guardar";
 				break;
 			default:
 				break;

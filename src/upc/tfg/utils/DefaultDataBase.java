@@ -205,6 +205,20 @@ public class DefaultDataBase {
 					}
 		       }
 		       
+		       //Guardem les cartes que estan a la baralla1
+		       for(Carta carta:partida.getBaralla().getCartes()){
+		    	   sql = "INSERT INTO CARTA (nomCarta,nomPartida,idJugador) " +
+		                    "VALUES ('"+ carta.getNom() +"', '"+ partida.getNom() +"', " + -1 + ");"; 
+					stmt.executeUpdate(sql);
+		       }
+		       
+		       //Guardem les cartes que estan a la baralla2
+		       for(Carta carta:partida.getBaralla2().getCartes()){
+		    	   sql = "INSERT INTO CARTA (nomCarta,nomPartida,idJugador) " +
+		                    "VALUES ('"+ carta.getNom() +"', '"+ partida.getNom() +"', " + -2 + ");"; 
+					stmt.executeUpdate(sql);
+		       }
+		       
 		       for(Districte d:partida.getTauler().getDistrictes()){
 		    	   sql = "INSERT INTO DISTRICTE (nomDistricte,p_blaus,p_vermells,p_verds,p_grocs,nomPartida) " +
 		                    "VALUES ('"+ d.getNom() +"', "+ d.getNumPassejantsBlaus() +", " + d.getNumPassejantsVermells() + 
@@ -296,8 +310,33 @@ public class DefaultDataBase {
 					   for(int i = 0; i < CartesBD.nomsCartesComplets.length; ++i){
 						   if(CartesBD.nomsCartesComplets[i].equalsIgnoreCase(nomCarta)){
 							   j.afegirCarta(new Carta(CartesBD.nomsCartes[i], CartesBD.valorsCartes[i], CartesBD.nomsCartesComplets[i]));
-							   System.out.println("AFEGINT CARTA A JUGADOR");
 						   }
+					   }
+				   }
+			   }
+			   
+			   //Aconseguim les cartes de la baralla1
+			   ArrayList<Carta> cartesB1 = new ArrayList<Carta>();
+			   rs = stmt.executeQuery( "SELECT * FROM CARTA "+
+			       		"WHERE nomPartida='"+ nom + "' AND idJugador='"+ -1 +"';" );
+			   while ( rs.next() ) {
+				   String nomCarta = rs.getString("nomCarta");
+				   for(int i = 0; i < CartesBD.nomsCartesComplets.length; ++i){
+					   if(CartesBD.nomsCartesComplets[i].equalsIgnoreCase(nomCarta)){
+						   cartesB1.add(new Carta(CartesBD.nomsCartes[i], CartesBD.valorsCartes[i], CartesBD.nomsCartesComplets[i]));
+					   }
+				   }
+			   }
+			   
+			 //Aconseguim les cartes de la baralla2
+			   ArrayList<Carta> cartesB2 = new ArrayList<Carta>();
+			   rs = stmt.executeQuery( "SELECT * FROM CARTA "+
+			       		"WHERE nomPartida='"+ nom + "' AND idJugador='"+ -2 +"';" );
+			   while ( rs.next() ) {
+				   String nomCarta = rs.getString("nomCarta");
+				   for(int i = 0; i < CartesBD.nomsCartesComplets.length; ++i){
+					   if(CartesBD.nomsCartesComplets[i].equalsIgnoreCase(nomCarta)){
+						   cartesB2.add(new Carta(CartesBD.nomsCartes[i], CartesBD.valorsCartes[i], CartesBD.nomsCartesComplets[i]));
 					   }
 				   }
 			   }
@@ -306,7 +345,8 @@ public class DefaultDataBase {
 			   rs = stmt.executeQuery( "SELECT * FROM PARTIDA "+
 			       		"WHERE nom='"+ nom + "';" );
 			   partida = new Partida(nom,rs.getString("data"),rs.getInt("torn"),rs.getInt("pas"),
-					   jugadors,districtes, rs.getInt("idJugadorInici"), rs.getInt("passejantsAMoure"));
+					   jugadors,districtes, rs.getInt("idJugadorInici"), rs.getInt("passejantsAMoure"),
+					   cartesB1, cartesB2);
 			       
 		       rs.close();
 		       stmt.close();
@@ -317,5 +357,42 @@ public class DefaultDataBase {
 		     }
 		     System.out.println("Operation done successfully");
 		   return partida;
+	   }
+	   
+	   public static void deletePartida(String nom)
+	   {
+		   	 Connection c = null;
+		     Statement stmt = null;
+		     try {
+		       Class.forName("org.sqlite.JDBC");
+		       c = DriverManager.getConnection("jdbc:sqlite:test.db");
+		       c.setAutoCommit(false);
+		       System.out.println("Opened database successfully");
+	
+		       stmt = c.createStatement();
+		       
+		       //Borrem els jugadors
+		       stmt.executeUpdate( "DELETE FROM JUGADOR "+
+			       		"WHERE nomPartida='"+ nom + "';" );
+			   
+			   //Borrem els districtes
+			   stmt.executeUpdate( "DELETE FROM DISTRICTE "+
+			       		"WHERE nomPartida='"+ nom + "';" );
+			   
+			   //Borrem les cartes
+			   stmt.executeUpdate( "DELETE FROM CARTA "+
+				       		"WHERE nomPartida='"+ nom + "';" );
+			   
+			   //Borrem la partida
+			   stmt.executeUpdate( "DELETE FROM PARTIDA "+
+			       		"WHERE nom='"+ nom + "';" );
+			   c.commit();
+		       stmt.close();
+		       c.close();
+		     } catch ( Exception e ) {
+		       System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		       System.exit(0);
+		     }
+		     System.out.println("Operation done successfully");
 	   }
 }

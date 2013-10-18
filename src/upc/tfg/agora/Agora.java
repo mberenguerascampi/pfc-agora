@@ -65,6 +65,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	private CustomMenuBar menubar;
 	private static Agora instance = null;
 	private ControladorLogic logic;
+	private boolean backToTauler = false;
 	public boolean finish = false;
 	
 	public Agora() throws IOException {
@@ -133,7 +134,19 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		tauler.showPopupGuardar();
 	}
 	
+	public void carregarPartida(){
+		amagaVistes();
+		vCarregarPartida.setVisible(true);
+		backToTauler = true;
+        removeMenu();
+	}
+	
+	public void crearPartida(){
+		playPressed();
+	}
+	
 	private void amagaVistes(){
+		menuPrincipal.setVisible(false);
 		tauler.setVisible(false);
 		finalPartida.setVisible(false);
 		vAbout.setVisible(false);
@@ -189,8 +202,8 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 }
 	}
 	
-	private void mostraBaralla(){
-		logic.divideixBaralla();
+	private void mostraBaralla(boolean barallaDividida){
+		if(!barallaDividida)logic.divideixBaralla();
 		tauler.afegeixBaralles();
 	}
 	
@@ -206,7 +219,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 afegeixCartesJugador(2);
 		 afegeixCartesJugador(3);
 		 afegeixCartesJugador(4);
-		 mostraBaralla();
+		 mostraBaralla(false);
 		 //tauler.comencaIntercanviCartes();
 		 tauler.afegeixPassejants(Partida.getInstance().getJugador(1).getTotalPassejants(), 1);
 		 tauler.setVisible(true);
@@ -279,13 +292,20 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		
 	}
 	
-	public void saveButtonPressed(String nom){
-		logic.guardarPartida(nom);
+	public boolean saveButtonPressed(String nom){
+		return logic.guardarPartida(nom);
 	}
 	
 	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL FINAL DE PARTIDA
 	public void backButtonPressed(){
-		tornarAlMenu();
+		if(backToTauler){
+			tauler.setVisible(true);
+			addMenu();
+		}
+		else{
+			tornarAlMenu();
+		}
+		backToTauler = false;
 	}
 	
 	//FUNCIONS PÜBLIQUES PER MODIFiCAR LA CAPA DE PRESENTACIÓ
@@ -361,7 +381,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 for(Jugador j:partida.getJugadors()){
 			 afegeixCartesJugador(j.getId(), j.getCartes());
 		 }
-		 mostraBaralla();
+		 mostraBaralla(true);
 		 tauler.afegeixPassejants(partida.getJugador(1).getTotalPassejants(), 1);
 		 tauler.setVisible(true);
 		 addMenu();

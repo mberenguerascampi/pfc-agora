@@ -49,7 +49,9 @@ public class CustomMenuBar extends JMenuBar{
                 System.exit(0);
             }
         });
-        JMenuItem eMenuItem2 = new JMenuItem(bundle.getString("tornar"), icon);
+        
+        ImageIcon icon2 = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/"+"menu_icon.png"));
+        JMenuItem eMenuItem2 = new JMenuItem(bundle.getString("tornar"), icon2);
         eMenuItem2.setBackground(Constants.colorGreen);
         eMenuItem2.setMnemonic(KeyEvent.VK_R);
         eMenuItem2.setToolTipText("");
@@ -81,6 +83,30 @@ public class CustomMenuBar extends JMenuBar{
             }
         });
         
+        ImageIcon icon5 = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/"+"open_icon.png"));
+        JMenuItem eMenuItem5 = new JMenuItem(bundle.getString("carregar_menu"), icon5);
+        eMenuItem5.setBackground(Constants.colorGreen);
+        eMenuItem5.setMnemonic(KeyEvent.VK_O);
+        eMenuItem5.setToolTipText("");
+        eMenuItem5.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                listener.carregarPartida();
+            }
+        });
+        
+        ImageIcon icon6 = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/"+"new_icon.png"));
+        JMenuItem eMenuItem6 = new JMenuItem(bundle.getString("crear"), icon6);
+        eMenuItem6.setBackground(Constants.colorGreen);
+        eMenuItem6.setMnemonic(KeyEvent.VK_S);
+        eMenuItem6.setToolTipText("");
+        eMenuItem6.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                listener.crearPartida();
+            }
+        });
+       
+        partida.add(eMenuItem6);
+        partida.add(eMenuItem5);
         partida.add(eMenuItem4);
         partida.add(eMenuItem3);
         partida.add(eMenuItem2);
@@ -90,7 +116,7 @@ public class CustomMenuBar extends JMenuBar{
 	}
 	
 	private void afegeixPestanyaPuntuacio(){
-		ImageIcon icon = new ImageIcon(getClass().getResource(Constants.fileUrl+"exit.png"));
+		ImageIcon icon = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/"+"highscores_icon.png"));
 
         JMenu puntuacio = new JMenu(bundle.getString("puntuacio"));
         puntuacio.setFont(Constants.fontGillSansBold);
@@ -105,7 +131,10 @@ public class CustomMenuBar extends JMenuBar{
                 System.exit(0);
             }
         });
-        JMenuItem eMenuItem2 = new JMenuItem(bundle.getString("veure_normesP"), icon);
+        
+        ImageIcon icon2 = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/"+"rules_icon.png"));
+
+        JMenuItem eMenuItem2 = new JMenuItem(bundle.getString("veure_normesP"), icon2);
         eMenuItem2.setBackground(Constants.colorGreen);
         eMenuItem2.setMnemonic(KeyEvent.VK_R);
         eMenuItem2.setToolTipText("");
@@ -123,7 +152,7 @@ public class CustomMenuBar extends JMenuBar{
 	}
 	
 	private void afegeixPestanyaAjuda(){
-		ImageIcon icon = new ImageIcon(getClass().getResource(Constants.fileUrl+"exit.png"));
+		ImageIcon icon = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/"+"help_icon.png"));
 
         JMenu ajuda = new JMenu(bundle.getString("ajuda"));
         ajuda.setFont(Constants.fontGillSansBold);

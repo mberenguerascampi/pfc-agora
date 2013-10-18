@@ -1170,7 +1170,9 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL POPUP
 	@Override
 	public void saveButtonPressed(String name) {
-		listener.saveButtonPressed(name);
+		if(listener.saveButtonPressed(name)){
+			warningView.setOkText("Partida guardada correctament");
+		}
 	}
 
 	@Override

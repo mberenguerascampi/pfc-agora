@@ -23,17 +23,13 @@ public class VistaCarregarPartida extends DefaultView implements CellListener{
 	private static final long serialVersionUID = 5465148974317814990L;
 	private VistaAmbBotoTornarListener listener;
 	private JLabel labelDescription;
-	private JPanel partidesPanel;
+	private JPanel partidesPanel = new JPanel();
 	private static final int NUM_MAX_CELLS = 6;
 
 	public VistaCarregarPartida(VistaAmbBotoTornarListener listener) {
 		setLayout(null);
 		setSize(Constants.width, Constants.height);
 		this.listener = listener;
-		afegeixBarraSuperior(bundle.getString("carregar"), listener);
-		afegirDescripcio();
-		afegirPartidesGuardades();
-		addSkin("backgroundWithWhiteBox.png");
 	}
 	
 	private void afegirDescripcio(){
@@ -49,7 +45,11 @@ public class VistaCarregarPartida extends DefaultView implements CellListener{
 		int i = 0;
 		int originX = (int) (Constants.width*0.39 - HighscoreCell.CELL_WIDTH/2);
 		int originY = Constants.height/2 - (HighscoreCell.CELL_HEIGHT+10)* PuntuacionsBD.NUM_MAX_SCORES/2+90;
-		partidesPanel = new JPanel();
+		int extraWidth = 2;
+		if (noms.size() > NUM_MAX_CELLS){
+			extraWidth = 20;
+		}
+		
 		partidesPanel.setLayout(null);
 		partidesPanel.setPreferredSize(new Dimension(HighscoreCell.CELL_WIDTH, HighscoreCell.CELL_HEIGHT*noms.size()));
 		while (it.hasNext()) {
@@ -61,19 +61,28 @@ public class VistaCarregarPartida extends DefaultView implements CellListener{
 	        ++i;
 	    }
 		JScrollPane scrollView = new JScrollPane(partidesPanel);
-		int extraWidth = 2;
-		if (noms.size() > NUM_MAX_CELLS)extraWidth = 20;
 		scrollView.setBounds(originX, originY, HighscoreCell.CELL_WIDTH+extraWidth, HighscoreCell.CELL_HEIGHT*NUM_MAX_CELLS+15);
 		scrollView.getVerticalScrollBar().setPreferredSize(new Dimension(18, 0));
 		add(scrollView, BorderLayout.CENTER);
 	}
 	
 	private void addCell(String nomJugador, String data, int num){
-		int originX = (int) (Constants.width*0.39 - HighscoreCell.CELL_WIDTH/2);
-		int originY = Constants.height/2 - (HighscoreCell.CELL_HEIGHT+10)* PuntuacionsBD.NUM_MAX_SCORES/2+90;
 		HighscoreCell cell = new HighscoreCell(nomJugador, data, this);
 		cell.setBounds(0, num*HighscoreCell.CELL_HEIGHT, HighscoreCell.CELL_WIDTH, HighscoreCell.CELL_HEIGHT);
 		partidesPanel.add(cell);
+	}
+	
+	public void setVisible(boolean aFlag){
+		if(aFlag){
+			partidesPanel.removeAll();
+			removeAll();
+			afegeixBarraSuperior(bundle.getString("carregar"), listener);
+			afegirDescripcio();
+			afegirPartidesGuardades();
+			addSkin("backgroundWithWhiteBox.png");
+			repaint();
+		}
+		super.setVisible(aFlag);
 	}
 	
 	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DE LA CEL·LA

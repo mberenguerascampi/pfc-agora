@@ -26,6 +26,7 @@ public class VistaBarraSuperior extends JPanel{
 	public static final int BAR_WIDTH = Constants.width;
 	public static final int BAR_HEIGHT = 80;
 	private VistaAmbBotoTornarListener listener;
+	JButton backButton = null;
 
 	public VistaBarraSuperior(String title, VistaAmbBotoTornarListener listener) {
 		setLayout(null);
@@ -45,7 +46,7 @@ public class VistaBarraSuperior extends JPanel{
 	}
 	
 	private void afegeixBotoEnderrere(){
-		JButton backButton = new JButton();
+		backButton = new JButton();
 		
 		backButton.setOpaque(false);
 		backButton.setBounds(15, 0, BAR_HEIGHT+30, BAR_HEIGHT);
@@ -75,14 +76,19 @@ public class VistaBarraSuperior extends JPanel{
 		backButton.setRolloverIcon(rolloverIcon);
 		backButton.setPressedIcon(pressedIcon);
 		
+		addActionListener(backButton);
+		
+		add(backButton);
+	}
+	
+	private void addActionListener(JButton backButton){
+		for(ActionListener l:backButton.getActionListeners())backButton.removeActionListener(l);
 		backButton.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				getParent().setVisible(false);
 				listener.backButtonPressed();
 			}
 		});
-		
-		add(backButton);
 	}
 }

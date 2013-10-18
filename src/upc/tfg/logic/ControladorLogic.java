@@ -23,7 +23,7 @@ public class ControladorLogic {
 	
 	public void comencarPartida(){
 		Date date = new Date();
-		partida = new Partida("hola",date,1,1);
+		partida = new Partida("",date,1,1);
 		Jugador j1 = new Jugador("J1",1,Constants.BLAU);
 		Jugador j2 = new Jugador("J2",2,Constants.VERMELL);
 		Jugador j3 = new Jugador("J3",3,Constants.VERD);
@@ -43,8 +43,8 @@ public class ControladorLogic {
 		controladorIA.setJugadors(partida.getJugadorsRobot());
 	}
 	
-	public void guardarPartida(String nom){
-		partida.guardar(nom);
+	public boolean guardarPartida(String nom){
+		return partida.guardar(nom);
 	}
 	
 	public void mouPassejantADistricte(String nomDistricte, int idJugador){
@@ -212,6 +212,7 @@ public class ControladorLogic {
 				Jugador jAux = partida.getJugador(partida.getIdJugadorActual());
 				retornaPassejantAJugador(jAux, partida.getCartaSeleccionada().getDistricte(), jAux.getColor());
 			}
+			partida.setCartaSeleccionada(null);
 			agora.deseleccionaCarta();
 			agora.afegeixPassejants(partida.getIdJugadorActual());
 			agora.updateView();

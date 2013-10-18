@@ -85,6 +85,7 @@ public class VistaPopUpBotons extends JPanel {
 		nameField = new JTextField();
 		nameField.setFont(Constants.fontKristen);
 		nameField.setBounds(Constants.centerX-boxWidth/2+40, (int) (textLabel.getLocation().y+textLabel.getSize().getHeight())+15, boxWidth-100, 30);
+		nameField.setText(Partida.getInstance().getNom());
 		
 		add(nameField);
 	}
@@ -96,7 +97,6 @@ public class VistaPopUpBotons extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				listener.saveButtonPressed(nameField.getText());
-				//TODO: S'ha de mostrar un toast indicant que s'ha guardat correctament
 				setVisible(false);
 			}
 		});

@@ -24,6 +24,10 @@ public class Baralla {
 		}
 	}
 	
+	public Baralla(ArrayList<Carta> cartes){
+		this.cartes = cartes;
+	}
+	
 	public void barrejar(){
 		Random rand = new Random();
 		rand.setSeed(System.currentTimeMillis());

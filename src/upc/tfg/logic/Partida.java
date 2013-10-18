@@ -53,7 +53,8 @@ public class Partida {
 	}
 	
 	public Partida(String nom, String data, int torn, int pas, ArrayList<Jugador> jugadors, 
-			Districte[] districtes, int idJugadorInici, int passejantsAMoure) {
+			Districte[] districtes, int idJugadorInici, int passejantsAMoure,
+			ArrayList<Carta> cartesB1, ArrayList<Carta> cartesB2) {
 		instance = this;
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
 		this.nom = nom;
@@ -66,8 +67,8 @@ public class Partida {
 		this.jugadors = jugadors;
 		tauler = new Tauler();
 		tauler.setDistrictes(districtes);
-		baralla = new Baralla();
-		baralla.barrejar();
+		baralla = new Baralla(cartesB1);
+		baralla2 = new Baralla(cartesB2);
 	}
 	
 	public static Partida getInstance(){
@@ -81,9 +82,17 @@ public class Partida {
 	}
 	
 	public boolean guardar(String nom){
-		this.nom = nom;
-		DefaultDataBase.guardarPartida(this);
-		return true;
+		//Només es pot guardar en el torn de l'usuari i si no s'ha seleccionat cap carta en el torn 2
+		if(idJugadorActual != 1 || (pas == 2 && (passejantsAMoure != 0 || 
+				(cartaSeleccionada != null && cartaSeleccionada.getValor() > passejantsAMoure)))){
+			ErrorController.showError(idJugadorActual, ErrorController.NO_ES_POT_GUARDAR, null, null);
+			return false;
+		}
+		else{
+			this.nom = nom;
+			DefaultDataBase.guardarPartida(this);
+			return true;
+		}
 	}
 	
 	public boolean esborrar(){
@@ -523,7 +532,8 @@ public class Partida {
 			return 1;
 		}
 		if(pas == 2 && idJugadorActual == 1){
-			int passejantsATreure = getCartaSeleccionada().getValor()-passejantsAMoure;
+			int passejantsATreure = 0;
+			if(getCartaSeleccionada() != null)passejantsATreure =getCartaSeleccionada().getValor()-passejantsAMoure;
 			passejantsAMoure = 0;
 			return passejantsATreure;
 		}

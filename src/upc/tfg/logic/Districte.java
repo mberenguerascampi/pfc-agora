@@ -68,6 +68,7 @@ public class Districte {
 	}
 	
 	public void afegeixPassejant(Passejant passejant){
+		System.out.println("Passejant afegit");
 		switch (passejant.getColor()){
 			case Constants.BLAU:
 				passejantsBlaus.add(passejant);

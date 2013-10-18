@@ -24,9 +24,11 @@ public class DefaultView extends JPanel{
 	Locale defaultLocale = Locale.getDefault();
 	public ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
 	private String backgroundName;
+	public JLabel skin;
 	private Image img = null;
 	public int marginX = 0;
 	public int marginY = 0;
+	public VistaBarraSuperior vbs = null;
 
 	public void paintComponent(Graphics page)
 	{
@@ -47,7 +49,7 @@ public class DefaultView extends JPanel{
 	
 	public void addSkin(String name)
 	{
-		JLabel skin = new JLabel("");
+		skin = new JLabel("");
         skin.setLayout(null);
         
         //Agafem la imatge i la posem a la mida que volem
@@ -84,11 +86,15 @@ public class DefaultView extends JPanel{
 	}
 	
 	public void afegeixBarraSuperior(String title, VistaAmbBotoTornarListener listener){
-		VistaBarraSuperior vbs = new VistaBarraSuperior(title, listener);
+		vbs = new VistaBarraSuperior(title, listener);
 		vbs.setBounds(0, 0, VistaBarraSuperior.BAR_WIDTH, VistaBarraSuperior.BAR_HEIGHT);
 		add(vbs);
 		marginY = VistaBarraSuperior.BAR_HEIGHT;
 		//img = img.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height-marginY,  java.awt.Image.SCALE_SMOOTH);
 		repaint();
+	}
+	
+	public void setVisible(boolean aFlag){
+		super.setVisible(aFlag);
 	}
 }
