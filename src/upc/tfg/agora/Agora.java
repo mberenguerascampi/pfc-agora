@@ -23,6 +23,7 @@ import upc.tfg.gui.CustomMenuBar;
 import upc.tfg.gui.VistaAbout;
 import upc.tfg.gui.VistaBaralla;
 import upc.tfg.gui.VistaCarregarPartida;
+import upc.tfg.gui.VistaComençarPartida;
 import upc.tfg.gui.VistaFinalPartida;
 import upc.tfg.gui.VistaIdioma;
 import upc.tfg.gui.VistaInstruccions;
@@ -60,6 +61,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	VistaIdioma vIdioma;
 	VistaAbout vAbout;
 	VistaPuntuacions vPuntuacions;
+	VistaComençarPartida vComençarPartida;
 	VistaCarregarPartida vCarregarPartida;
 	VistaInstruccions vInstruccions;
 	private CustomMenuBar menubar;
@@ -142,7 +144,8 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	}
 	
 	public void crearPartida(){
-		playPressed();
+		començarPartida(Partida.getInstance().getNomJugador(1), Partida.getInstance().getNomJugador(2), 
+				Partida.getInstance().getNomJugador(3), Partida.getInstance().getNomJugador(4));
 	}
 	
 	private void amagaVistes(){
@@ -154,6 +157,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		vIdioma.setVisible(false);
 		vInstruccions.setVisible(false);
 		vPuntuacions.setVisible(false);
+		vComençarPartida.setVisible(false);
 	}
 	
 	private void addMenu()
@@ -179,6 +183,8 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		vAbout.setVisible(false);
 		vPuntuacions = new VistaPuntuacions(this);
 		vPuntuacions.setVisible(false);
+		vComençarPartida = new VistaComençarPartida(this);
+		vComençarPartida.setVisible(false);
 		vCarregarPartida = new VistaCarregarPartida(this);
 		vCarregarPartida.setVisible(false);
 		vInstruccions = new VistaInstruccions(this);
@@ -190,6 +196,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		contentPane.add(vIdioma);
 		contentPane.add(vAbout);
 		contentPane.add(vPuntuacions);
+		contentPane.add(vComençarPartida);
 		contentPane.add(vCarregarPartida);
 		contentPane.add(vInstruccions);
 	}
@@ -212,19 +219,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	public void playPressed() {
 		System.out.println("PLAY PRESSED");
 		 menuPrincipal.setVisible(false);
-		 tauler.reset();
-		 tauler.removeAll();
-		 logic.comencarPartida();
-		 afegeixCartesJugador(1);
-		 afegeixCartesJugador(2);
-		 afegeixCartesJugador(3);
-		 afegeixCartesJugador(4);
-		 mostraBaralla(false);
-		 //tauler.comencaIntercanviCartes();
-		 tauler.afegeixPassejants(Partida.getInstance().getJugador(1).getTotalPassejants(), 1);
-		 tauler.setVisible(true);
-		 addMenu();
-		 //cardLayout.next(contentPane);
+		 vComençarPartida.setVisible(true);
 	}
 	
 	@Override
@@ -294,6 +289,22 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	
 	public boolean saveButtonPressed(String nom){
 		return logic.guardarPartida(nom);
+	}
+	
+	public void començarPartida(String nomJ1, String nomJ2, String nomJ3, String nomJ4){
+		 menuPrincipal.setVisible(false);
+		 tauler.reset();
+		 tauler.removeAll();
+		 logic.comencarPartida(nomJ1, nomJ2, nomJ3, nomJ4);
+		 afegeixCartesJugador(1);
+		 afegeixCartesJugador(2);
+		 afegeixCartesJugador(3);
+		 afegeixCartesJugador(4);
+		 mostraBaralla(false);
+		 //tauler.comencaIntercanviCartes();
+		 tauler.afegeixPassejants(Partida.getInstance().getJugador(1).getTotalPassejants(), 1);
+		 tauler.setVisible(true);
+		 addMenu();
 	}
 	
 	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL FINAL DE PARTIDA
@@ -385,6 +396,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 tauler.afegeixPassejants(partida.getJugador(1).getTotalPassejants(), 1);
 		 tauler.setVisible(true);
 		 addMenu();
+	}
+	
+	public void deleteGame(String nom){
+		logic.esborraPartida(nom);
 	}
 	
 	private void afegeixCartesJugador(int jugadorID, ArrayList<Carta>cartes){

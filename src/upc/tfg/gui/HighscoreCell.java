@@ -22,7 +22,8 @@ public class HighscoreCell extends JPanel{
 	private static final long serialVersionUID = 3804869214193693532L;
 	public static final int CELL_WIDTH = 600;
 	public static final int CELL_HEIGHT = 60;
-
+	public String nomPartida = "";
+	
 	public HighscoreCell(String nomJugador, String punts, String data){
 		setLayout(null);
 		setOpaque(false);
@@ -50,6 +51,7 @@ public class HighscoreCell extends JPanel{
 	}
 	
 	public HighscoreCell(final String nomPartida, String data, final CellListener listener){
+		this.nomPartida = nomPartida;
 		setLayout(null);
 		setOpaque(false);
 		Border border = BorderFactory.createLineBorder(Color.GRAY);
@@ -65,6 +67,7 @@ public class HighscoreCell extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				listener.cellPressed(nomPartida);
+				setSelected(true);
 			}
 		});
 		
@@ -79,5 +82,19 @@ public class HighscoreCell extends JPanel{
 		add(button);
 		add(nomLabel);
 		add(dataLabel);
+	}
+	
+	public String getNomPartida(){
+		return nomPartida;
+	}
+	
+	public void setSelected(boolean select){
+		if(select){
+			setOpaque(true);
+			setBackground(Color.YELLOW);
+		}
+		else{
+			setOpaque(false);
+		}
 	}
 }

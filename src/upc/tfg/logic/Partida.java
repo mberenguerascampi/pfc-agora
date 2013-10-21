@@ -82,8 +82,12 @@ public class Partida {
 	}
 	
 	public boolean guardar(String nom){
+		Map<String,String> noms = DefaultDataBase.getNomsPartides();
+		if(noms.keySet().contains(nom)){
+			return false;
+		}
 		//Només es pot guardar en el torn de l'usuari i si no s'ha seleccionat cap carta en el torn 2
-		if(idJugadorActual != 1 || (pas == 2 && (passejantsAMoure != 0 || 
+		else if(idJugadorActual != 1 || (pas == 2 && (passejantsAMoure != 0 || 
 				(cartaSeleccionada != null && cartaSeleccionada.getValor() > passejantsAMoure)))){
 			ErrorController.showError(idJugadorActual, ErrorController.NO_ES_POT_GUARDAR, null, null);
 			return false;

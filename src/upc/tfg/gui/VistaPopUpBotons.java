@@ -1,5 +1,6 @@
 package upc.tfg.gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -11,10 +12,12 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import upc.tfg.interfaces.PopupButtonsListener;
 import upc.tfg.logic.Partida;
@@ -96,8 +99,13 @@ public class VistaPopUpBotons extends JPanel {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				listener.saveButtonPressed(nameField.getText());
-				setVisible(false);
+				if(nameField.getText().equals("") || !listener.saveButtonPressed(nameField.getText())){
+					nameField.setBorder(BorderFactory.createLineBorder(Color.RED));
+				}
+				else{
+					nameField.setBorder(UIManager.getBorder("TextField.border"));
+					setVisible(false);
+				}
 			}
 		});
 		

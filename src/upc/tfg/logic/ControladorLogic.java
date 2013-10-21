@@ -4,6 +4,7 @@ import java.util.Date;
 
 import upc.tfg.agora.Agora;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.DefaultDataBase;
 import upc.tfg.utils.PassejantsAMoure;
 import upc.tfg.utils.ResultatsFinals;
 
@@ -21,13 +22,13 @@ public class ControladorLogic {
 		this.agora = agora;
 	}
 	
-	public void comencarPartida(){
+	public void comencarPartida(String nomJ1, String nomJ2, String nomJ3, String nomJ4){
 		Date date = new Date();
 		partida = new Partida("",date,1,1);
-		Jugador j1 = new Jugador("J1",1,Constants.BLAU);
-		Jugador j2 = new Jugador("J2",2,Constants.VERMELL);
-		Jugador j3 = new Jugador("J3",3,Constants.VERD);
-		Jugador j4 = new Jugador("J4",4,Constants.GROC);
+		Jugador j1 = new Jugador(nomJ1,1,Constants.BLAU);
+		Jugador j2 = new Jugador(nomJ2,2,Constants.VERMELL);
+		Jugador j3 = new Jugador(nomJ3,3,Constants.VERD);
+		Jugador j4 = new Jugador(nomJ4,4,Constants.GROC);
 		partida.afegirJugador(j1);
 		partida.afegirJugador(j2);
 		partida.afegirJugador(j3);
@@ -222,5 +223,9 @@ public class ControladorLogic {
 	public void retornaPassejantAJugador(Jugador j, Districte d, int color){
 		Passejant p = d.removePassejant(color);
 		j.afegeixUnPassejant(p);
+	}
+
+	public void esborraPartida(String nom) {
+		DefaultDataBase.deletePartida(nom);
 	}
 }
