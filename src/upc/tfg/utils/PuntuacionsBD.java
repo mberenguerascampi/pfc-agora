@@ -52,7 +52,8 @@ public class PuntuacionsBD {
 	private Map<String, Integer> getMaxScores(ResultatsFinals resultats){
 		Map<String, Integer> scores = getPuntuacio();
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		String date = "_" + dateFormat.format(Partida.getInstance().getData());
+		String date = "_";
+		if(Partida.getInstance().getData() != null)date = date + dateFormat.format(Partida.getInstance().getData());
 		scores.put(Partida.getInstance().getNomJugador(1) + date, resultats.getPuntsJ1());
 		scores.put(Partida.getInstance().getNomJugador(2) + date, resultats.getPuntsJ2());
 		scores.put(Partida.getInstance().getNomJugador(3) + date, resultats.getPuntsJ3());

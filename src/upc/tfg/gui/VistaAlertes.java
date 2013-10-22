@@ -75,4 +75,9 @@ public class VistaAlertes extends TransparentView{
 		warningLabel.setText("<html>"+text+"</html>");
 		setVisible(true);
 	}
+	
+	public String getText(){
+		if(warningLabel.getText().contains("<html>"))return warningLabel.getText().substring(6, warningLabel.getText().length()-7);
+		else return warningLabel.getText();
+	}
 }

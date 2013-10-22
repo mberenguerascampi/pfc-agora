@@ -10,7 +10,7 @@ import upc.tfg.utils.CartesBD;
 import upc.tfg.utils.Constants;
 
 public class Carta {
-	private String nom;
+	private String nom = "";
 	private int valor;
 	private boolean showing;
 	private Image image;

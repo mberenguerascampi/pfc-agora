@@ -301,6 +301,8 @@ public class DefaultDataBase {
 				   }
 			   }
 			   
+			   Tauler.setDistrictes(districtes);
+			   
 			   //Aconseguim les cartes
 			   for(Jugador j:jugadors){
 				   rs = stmt.executeQuery( "SELECT * FROM CARTA "+
@@ -309,7 +311,8 @@ public class DefaultDataBase {
 					   String nomCarta = rs.getString("nomCarta");
 					   for(int i = 0; i < CartesBD.nomsCartesComplets.length; ++i){
 						   if(CartesBD.nomsCartesComplets[i].equalsIgnoreCase(nomCarta)){
-							   j.afegirCarta(new Carta(CartesBD.nomsCartes[i], CartesBD.valorsCartes[i], CartesBD.nomsCartesComplets[i]));
+							   Carta cAux = new Carta(CartesBD.nomsCartes[i], CartesBD.valorsCartes[i], CartesBD.nomsCartesComplets[i]);
+							   j.afegirCarta(cAux);
 						   }
 					   }
 				   }

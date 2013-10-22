@@ -128,8 +128,15 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
         removeMenu();
 	}
 	
+	public void acabarPartidaiTornarAlMenu(){
+		if(tauler.showGoMenuPopup()){
+			tornarAlMenu();
+		}
+	}
+	
 	public void exitApplication(){
-		System.exit(0);
+		//System.exit(0);
+		tauler.showPopupConfirmar();
 	}
 	
 	public void mostraPopupGuardar(){

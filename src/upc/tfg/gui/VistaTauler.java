@@ -654,31 +654,36 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 			}
 		};
 		
-		vCartaBaralla1 = new VistaCarta(Partida.getInstance().getBaralla().getCartes().get(0), 1, 0);
-		vCartaBaralla1.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
 		DragAndDropListener listener = new DragAndDropListener();
 		listener.shouldSelectDistrict = false;
 		listener.isCartaBaralla = true;
-		vCartaBaralla1.addMouseListener(listener);
-		vCartaBaralla1.addMouseMotionListener(listener);
-		vCartaBaralla1.addActionListener(aListener);
-		add(vCartaBaralla1);
 		
-		vBaralla1 = new VistaBaralla(Partida.getInstance().getBaralla());
-		vBaralla1.setBounds(BARALLA_MARGIN_X-10, BARALLA_MARGIN_Y, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
-		add(vBaralla1);
+		//Pot ser que estiguem carregant una pantalla on la baralla de cartes ja s'ha acabat
+		if(Partida.getInstance().getBaralla().getCartes().size() > 0){
+			vCartaBaralla1 = new VistaCarta(Partida.getInstance().getBaralla().getCartes().get(0), 1, 0);
+			vCartaBaralla1.setBounds(BARALLA_MARGIN_X, BARALLA_MARGIN_Y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+			vCartaBaralla1.addMouseListener(listener);
+			vCartaBaralla1.addMouseMotionListener(listener);
+			vCartaBaralla1.addActionListener(aListener);
+			add(vCartaBaralla1);
+			
+			vBaralla1 = new VistaBaralla(Partida.getInstance().getBaralla());
+			vBaralla1.setBounds(BARALLA_MARGIN_X-10, BARALLA_MARGIN_Y, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
+			add(vBaralla1);
+		}
 		
-		vCartaBaralla2 = new VistaCarta(Partida.getInstance().getBaralla2().getCartes().get(0), 1, 0);
-		vCartaBaralla2.setBounds(BARALLA_MARGIN_X+110, BARALLA_MARGIN_Y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
-		vCartaBaralla2.addMouseListener(listener);
-		vCartaBaralla2.addMouseMotionListener(listener);
-		vCartaBaralla2.addActionListener(aListener2);
-		add(vCartaBaralla2);
-		
-		vBaralla2 = new VistaBaralla(Partida.getInstance().getBaralla2());
-		vBaralla2.setBounds(BARALLA_MARGIN_X-10+110, BARALLA_MARGIN_Y, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
-		add(vBaralla2);
-		
+		if(Partida.getInstance().getBaralla2().getCartes().size() > 0){
+			vCartaBaralla2 = new VistaCarta(Partida.getInstance().getBaralla2().getCartes().get(0), 1, 0);
+			vCartaBaralla2.setBounds(BARALLA_MARGIN_X+110, BARALLA_MARGIN_Y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+			vCartaBaralla2.addMouseListener(listener);
+			vCartaBaralla2.addMouseMotionListener(listener);
+			vCartaBaralla2.addActionListener(aListener2);
+			add(vCartaBaralla2);
+			
+			vBaralla2 = new VistaBaralla(Partida.getInstance().getBaralla2());
+			vBaralla2.setBounds(BARALLA_MARGIN_X-10+110, BARALLA_MARGIN_Y, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
+			add(vBaralla2);
+		}
 		cartesDescartades = new VistaCarta();
 		cartesDescartades.setBounds(CARTA_DESCARTADA_X, CARTA_DESCARTADA_Y, CARTA_WIDTH, CARTA_HEIGHT);
 		cartesDescartades.setVisible(false);
@@ -726,11 +731,12 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		stateView.actualitzaEstat();
 		updateBaralla(vCartaBaralla1, vBaralla1, Partida.getInstance().getBaralla());
 		updateBaralla(vCartaBaralla2, vBaralla2, Partida.getInstance().getBaralla2());
-		vCartaBaralla1.setBounds(vBaralla1.getLocation().x+10, vBaralla1.getLocation().y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
-		vCartaBaralla2.setBounds(vBaralla2.getLocation().x+10, vBaralla2.getLocation().y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		if(vCartaBaralla1 != null)vCartaBaralla1.setBounds(vBaralla1.getLocation().x+10, vBaralla1.getLocation().y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		if(vCartaBaralla2 != null)vCartaBaralla2.setBounds(vBaralla2.getLocation().x+10, vBaralla2.getLocation().y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
 	}
 	
 	private void updateBaralla(VistaCarta vCartaBaralla, VistaBaralla vBaralla,Baralla baralla){
+		if(vCartaBaralla == null || vBaralla == null || baralla == null) return;
 		if (baralla.getCartes().size() == 0){
 			vCartaBaralla.setVisible(false);
 			vBaralla.setVisible(false);
@@ -765,7 +771,11 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		Point origin = null;
 		VistaCarta cartaSeleccionadaAux = null;
 		for (VistaCarta vc:cartes){
-			if(vc.getJugadorID() == jugadorID && vc.getCartaEntity().equals(carta)){
+//			System.out.println("1. "+vc.getJugadorID() + ", " + jugadorID); 
+//			System.out.println("2. "+vc.getCartaEntity().getNom());
+//			System.out.println("3. "+carta.getNom());
+			if(vc != null && vc.getJugadorID() == jugadorID && vc.getCartaEntity() != null
+					&& vc.getCartaEntity().getNom().equals(carta.getNom())){
 				origin = vc.getLocation();
 				seleccionaCarta(vc, jugadorID);
 				cartaSeleccionadaAux = vc;
@@ -1163,6 +1173,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	}
 	
 	public void showPopupGuardar(){
+		buttonsPopup.setTipus(VistaPopUpBotons.TIPUS_GUARDAR);
 		buttonsPopup.setVisible(true);
 	}
 
@@ -1171,7 +1182,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	@Override
 	public boolean saveButtonPressed(String name) {
 		if(listener.saveButtonPressed(name)){
-			warningView.setOkText("Partida guardada correctament");
+			warningView.setOkText(bundle.getString("text_partida_guardada"));
 			return true;
 		}
 		return false;
@@ -1187,5 +1198,39 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	public void quitButtonPressed() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void showPopupConfirmar() {
+		if(warningView.isVisible() && warningView.getText().equals(bundle.getString("text_partida_guardada"))){
+			System.exit(0);
+		}
+		else{
+			buttonsPopup.setTipus(VistaPopUpBotons.TIPUS_PREGUNTA);
+			buttonsPopup.setNoSaveActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					System.exit(0);
+				}
+			});
+			buttonsPopup.setVisible(true);
+		}
+	}
+	
+	public boolean showGoMenuPopup(){
+		System.out.println(warningView.getText() + " -> " + bundle.getString("text_partida_guardada"));
+		if(warningView.isVisible() && warningView.getText().equals(bundle.getString("text_partida_guardada"))){
+			return true;
+		}
+		else{
+			buttonsPopup.setTipus(VistaPopUpBotons.TIPUS_PREGUNTA);
+			buttonsPopup.setNoSaveActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					listener.tornarAlMenu();
+				}
+			});
+			buttonsPopup.setVisible(true);
+			return false;
+		}
 	}
 }

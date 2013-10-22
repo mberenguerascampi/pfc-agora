@@ -11,4 +11,5 @@ public interface TaulerListener {
 	public void nextPlayer();
 	public void infoButtonPressed();
 	public boolean saveButtonPressed(String nom);
+	public void tornarAlMenu();
 }

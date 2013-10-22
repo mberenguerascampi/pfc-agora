@@ -31,6 +31,7 @@ public class VistaPopUpBotons extends JPanel {
 	 */
 	private static final long serialVersionUID = 939723317900635307L;
 	public int boxWidth = 550;
+	public int boxWidth2 = 700;
 	public int boxHeight = 300;
 	private Image img = null;
 	private Image boxImg = null;
@@ -38,6 +39,13 @@ public class VistaPopUpBotons extends JPanel {
 	private JLabel textLabel;
 	private JTextField nameField;
 	private PopupButtonsListener listener;
+	private CustomDefaultButton saveButton;
+	private CustomDefaultButton cancelButton;
+	private CustomDefaultButton noSaveButton;
+	public static final int TIPUS_GUARDAR = 1;
+	public static final int TIPUS_PREGUNTA = 2;
+	private int tipus = TIPUS_GUARDAR;
+	private boolean typeChanged = false;
 	
 	public VistaPopUpBotons(PopupButtonsListener listener) {
 		setOpaque(false);
@@ -94,28 +102,64 @@ public class VistaPopUpBotons extends JPanel {
 	}
 	
 	private void addButtons(){
-		CustomDefaultButton saveButton = new CustomDefaultButton("GUARDAR");
+		saveButton = new CustomDefaultButton("GUARDAR");
 		saveButton.setBounds(Constants.centerX+boxWidth/2-CustomDefaultButton.BUTTON_WIDTH-40, (int) (nameField.getLocation().y+nameField.getSize().getHeight())+15, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(nameField.getText().equals("") || !listener.saveButtonPressed(nameField.getText())){
-					nameField.setBorder(BorderFactory.createLineBorder(Color.RED));
+				//Si estem en el popup per guardar, intentem guardar
+				if(tipus == TIPUS_GUARDAR){
+					if(nameField.getText().equals("") || !listener.saveButtonPressed(nameField.getText())){
+						nameField.setBorder(BorderFactory.createLineBorder(Color.RED));
+					}
+					else{
+						nameField.setBorder(UIManager.getBorder("TextField.border"));
+						setVisible(false);
+					}
 				}
-				else{
-					nameField.setBorder(UIManager.getBorder("TextField.border"));
-					setVisible(false);
+				else if(tipus == TIPUS_PREGUNTA){
+					tipus = TIPUS_GUARDAR;
+					setVisible(true);
+					repaint();
 				}
+				
 			}
 		});
 		
 		add(saveButton);
+		
+		cancelButton = new CustomDefaultButton("CANCELAR");
+		cancelButton.setBounds(Constants.centerX-boxWidth2/2+40, (int) (nameField.getLocation().y+nameField.getSize().getHeight())+15, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
+		cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
+			}
+		});
+		
+		add(cancelButton);
+		
+		noSaveButton = new CustomDefaultButton("NO GUARDAR");
+		noSaveButton.setBounds(Constants.centerX-CustomDefaultButton.BUTTON_WIDTH/2, (int) (nameField.getLocation().y+nameField.getSize().getHeight())+15, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
+		noSaveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
+		
+		add(noSaveButton);
+	}
+	
+	public void setNoSaveActionListener(ActionListener al){
+		for(ActionListener l: noSaveButton.getActionListeners()) noSaveButton.removeActionListener(l);
+		noSaveButton.addActionListener(al);
 	}
 	
 	public void paintComponent(Graphics page)
 	{
 	    super.paintComponent(page);
-	    if(img == null){
+	    if(img == null || typeChanged){
 	    	URL urlImg = getClass().getResource(Constants.fileUrl+"transparent_background.png");
 	    	URL urlBoxImg = getClass().getResource(Constants.fileUrl+"whiteBox.png");
 			try {
@@ -126,6 +170,7 @@ public class VistaPopUpBotons extends JPanel {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			typeChanged = false;
 	    }
 	    page.drawImage(img, 0, 0, null);
 	    page.drawImage(boxImg, Constants.centerX-boxWidth/2, Constants.centerY-boxHeight/2, null);
@@ -136,9 +181,34 @@ public class VistaPopUpBotons extends JPanel {
 		if(aFlag){
 			Locale defaultLocale = Locale.getDefault();
 			ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
-			textLabel.setText("<html>" + bundle.getString("text_guardar") + "</html>");
-			titolLabel.setText(bundle.getString("titol_guardar"));
+			if(tipus == TIPUS_GUARDAR){
+				boxWidth = 550;
+				textLabel.setText("<html>" + bundle.getString("text_guardar") + "</html>");
+				titolLabel.setText(bundle.getString("titol_guardar"));
+				cancelButton.setVisible(false);
+				noSaveButton.setVisible(false);
+				nameField.setVisible(true);
+			}
+			else{
+				boxWidth = boxWidth2;
+				textLabel.setText("<html>" + bundle.getString("text_noGuardar") + "</html>");
+				titolLabel.setText(bundle.getString("titol_noGuardar"));
+				cancelButton.setVisible(true);
+				noSaveButton.setVisible(true);
+				nameField.setVisible(false);
+			}
+			saveButton.setBounds(Constants.centerX+boxWidth/2-CustomDefaultButton.BUTTON_WIDTH-40, (int) (nameField.getLocation().y+nameField.getSize().getHeight())+15, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
+			typeChanged = true;
+			repaint();
 		}
+	}
+
+	public int getTipus() {
+		return tipus;
+	}
+
+	public void setTipus(int tipus) {
+		this.tipus = tipus;
 	}
 	
 }

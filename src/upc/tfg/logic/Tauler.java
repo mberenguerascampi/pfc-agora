@@ -58,7 +58,7 @@ public class Tauler {
 		return districtes;
 	}
 
-	public void setDistrictes(Districte[] districtes) {
-		this.districtes = districtes;
+	public static void setDistrictes(Districte[] districtes) {
+		Tauler.districtes = districtes;
 	}
 }
