@@ -88,6 +88,7 @@ public class VistaPassejant extends JButton {
 		if (num < 10)numLabel.setFont(Constants.fontPassejantsBig);
 		else numLabel.setFont(Constants.fontPassejants);
 		if (num == 0 && !showZero) numLabel.setVisible(false);
+		else if (minValue > 0 && num == minValue && showZero) numLabel.setVisible(false);
 		else numLabel.setVisible(true);
 		if (num < 0) setVisible(false);
 		if (minValue > 0 && num < minValue)setVisible(false);

@@ -50,7 +50,8 @@ public class DefaultDataBase {
 		       System.out.println("Opened database successfully");
 	
 		       stmt = c.createStatement();
-		       String sql = "DELETE from HIGHSCORES;";
+		       String sql = "";
+		       sql = "DELETE from HIGHSCORES;";
 		       stmt.executeUpdate(sql);
 		       c.commit();
 		       
@@ -58,7 +59,8 @@ public class DefaultDataBase {
 		    	   	int punts = highscores.get(name);
 		    	   	String[] strNoms = name.split("_");
 					String nomJugador = strNoms[0];
-					String data = strNoms[1];
+					String data = "";
+					if(strNoms.length > 1)data = strNoms[1];
 					sql = "INSERT INTO HIGHSCORES (score,name,date) " +
 		                    "VALUES ("+ punts +", '"+ nomJugador +"', '" + data + "');"; 
 					stmt.executeUpdate(sql);

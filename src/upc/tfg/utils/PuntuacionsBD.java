@@ -16,6 +16,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -52,12 +53,13 @@ public class PuntuacionsBD {
 	private Map<String, Integer> getMaxScores(ResultatsFinals resultats){
 		Map<String, Integer> scores = getPuntuacio();
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		String date = "_";
-		if(Partida.getInstance().getData() != null)date = date + dateFormat.format(Partida.getInstance().getData());
-		scores.put(Partida.getInstance().getNomJugador(1) + date, resultats.getPuntsJ1());
-		scores.put(Partida.getInstance().getNomJugador(2) + date, resultats.getPuntsJ2());
-		scores.put(Partida.getInstance().getNomJugador(3) + date, resultats.getPuntsJ3());
-		scores.put(Partida.getInstance().getNomJugador(4) + date, resultats.getPuntsJ4());
+		Date date = new Date();
+		String strdate = "_";
+		strdate = strdate + dateFormat.format(date);
+		scores.put(Partida.getInstance().getNomJugador(1) + strdate, resultats.getPuntsJ1());
+		scores.put(Partida.getInstance().getNomJugador(2) + strdate, resultats.getPuntsJ2());
+		scores.put(Partida.getInstance().getNomJugador(3) + strdate, resultats.getPuntsJ3());
+		scores.put(Partida.getInstance().getNomJugador(4) + strdate, resultats.getPuntsJ4());
 		Map<String, Integer> highscores = sortPuntuacions(scores);
 		return highscores;
 	}

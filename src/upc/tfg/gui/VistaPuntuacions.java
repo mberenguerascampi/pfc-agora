@@ -43,8 +43,13 @@ public class VistaPuntuacions extends DefaultView{
 			int punts = puntuacions.get(key);
 			String[] strNoms = key.split("_");
 			String nomJugador = strNoms[0];
-			String data = strNoms[1];
-			addCell(nomJugador, String.valueOf(punts), data.substring(0, 10), i);
+			String data = "";
+			String dataToAdd = "";
+			if(strNoms.length > 1){
+				data = strNoms[1];
+				dataToAdd = data.substring(0, 10);
+			}
+			addCell(nomJugador, String.valueOf(punts), dataToAdd, i);
 			++i;
 		}
 	}

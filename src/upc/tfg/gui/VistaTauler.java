@@ -227,6 +227,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 			passejantEstatic = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, numPassejants);
 			passejantEstatic.setBounds(frame);
 			passejantEstatic.setMinValue(1);
+			vp.setMinValue(1);
 			
 			//Afegim el listener
 			MouseAdapter listener = new DragAndDropListener(vp, passejantEstatic);
@@ -684,6 +685,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 			vBaralla2.setBounds(BARALLA_MARGIN_X-10+110, BARALLA_MARGIN_Y, VistaBaralla.BARALLA_WIDTH, VistaBaralla.BARALLA_HEIGHT);
 			add(vBaralla2);
 		}
+		
 		cartesDescartades = new VistaCarta();
 		cartesDescartades.setBounds(CARTA_DESCARTADA_X, CARTA_DESCARTADA_Y, CARTA_WIDTH, CARTA_HEIGHT);
 		cartesDescartades.setVisible(false);
@@ -823,6 +825,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		anim.slowness = 40;
 		anim.districtToSelect = districteB;
 		Thread t = new Thread(anim);
+		t.setPriority(Thread.MAX_PRIORITY);
 		t.start();
 		//setSelectedDistrict(districteB.getDistricteID());
 	}
@@ -919,7 +922,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	          }
 	          if(vistaPassejants != null && !draggingPassejant){
 	        	  vistaPassejantEstatic.setNum(vistaPassejants.getNum()-1);
-	        	  vistaPassejants.setNum(0);
+	        	  vistaPassejants.setNum(1);
 	        	  vistaPassejants.setShowZero(false);
 	        	  draggingPassejant = true;
 	        	  if(betweenDistricts)infoView.setDraggingPassejant(true, vistaPassejantEstatic.getiColor());

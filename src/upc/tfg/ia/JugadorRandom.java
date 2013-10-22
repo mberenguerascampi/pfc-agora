@@ -98,6 +98,7 @@ public class JugadorRandom implements JugadorRobot{
 	
 	private boolean teSolucioEnFutur(Districte[] districtes, Districte dOrigin, Districte dFi, int color){
 		int passejantsAMoure = Partida.getInstance().getPassejantsAMoure();
+		System.out.println("Abans de retornar true");
 		if(passejantsAMoure == 1)return true;
 		else {
 			Partida.getInstance().setPassejantsAMoure(1);
@@ -105,6 +106,7 @@ public class JugadorRandom implements JugadorRobot{
 		Districte[] districtesFutur = new Districte[districtes.length];
 		Passejant p = null;
 		Districte dAux = null;
+		System.out.println("Abans de crear districtes auxiliars");
 		for(int i = 0; i < districtes.length; ++i){
 			if(districtes[i].equals(dOrigin)){
 				Districte aux = new Districte(dOrigin);
@@ -120,11 +122,14 @@ public class JugadorRandom implements JugadorRobot{
 			}
 		}
 		dAux.afegeixPassejant(p);
+		System.out.println("Abans de buscar solucio");
 		if (getSolucioPassejantDistricte(districtesFutur, true) != null){
+			System.out.println("Abans de retornar true2");
 			Partida.getInstance().setPassejantsAMoure(passejantsAMoure);
 			return true;
 		}
 		else{
+			System.out.println("Abans de retornar false");
 			Partida.getInstance().setPassejantsAMoure(passejantsAMoure);
 			return false;
 		}

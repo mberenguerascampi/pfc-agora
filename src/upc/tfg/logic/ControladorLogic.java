@@ -79,7 +79,7 @@ public class ControladorLogic {
 		Districte districteB = partida.getDistricte(nomDistricteB);
 		
 		if(districteA != null && districteB != null){
-			while(agora.isAnimationOn());
+			while(agora.isAnimationOn())System.out.println("Animacio on");;
 			if(partida.getIdJugadorActual() != 1)agora.mouPassejant(districteA, districteB, color);
 			else lastPAM = new PassejantsAMoure(color, districteA, districteB);
 			while(agora.isAnimationOn());
