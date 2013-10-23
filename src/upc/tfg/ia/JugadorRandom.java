@@ -19,10 +19,6 @@ public class JugadorRandom implements JugadorRobot{
 	public JugadorRandom(Jugador jugador) {
 		this.jugador = jugador;
 	}
-
-	@Override
-	public void obtenirMoviment(int pas) {
-	}
 	
 	public Carta getCartaRival(){
 		int idJugadorAnterior = jugador.getId()-1;
@@ -35,15 +31,14 @@ public class JugadorRandom implements JugadorRobot{
 	
 	public Carta getCartaSeleccionada(){
 		ArrayList<Carta> cartes = jugador.getCartes();
-		if (jugador.getId() == 4){
-			for(Carta carta:cartes){
-				System.out.println("           DISTRICTE: " + carta.getDistricte().getNom() +
-						", CARTA: " + carta.getNom());
-			}
-		}
 		Random rand = new Random(System.currentTimeMillis());
 		if(cartes.size() == 0)return null;
 		int i = rand.nextInt(cartes.size());
+		int numPassejantsAMoure = Math.min(jugador.getTotalPassejants(), cartes.get(i).getValor());
+		while(Partida.getInstance().hiHauraDistricteAmbMateixNombrePassejants(numPassejantsAMoure, cartes.get(i).getDistricte(), jugador.getColor())){
+			i = rand.nextInt(cartes.size());
+			numPassejantsAMoure = Math.min(jugador.getTotalPassejants(), cartes.get(i).getValor());
+		}
 		return cartes.get(i);
 	}
 	

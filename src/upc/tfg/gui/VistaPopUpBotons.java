@@ -32,11 +32,12 @@ public class VistaPopUpBotons extends JPanel {
 	private static final long serialVersionUID = 939723317900635307L;
 	public int boxWidth = 550;
 	public int boxWidth2 = 700;
-	public int boxHeight = 300;
+	public int boxHeight = 310;
 	private Image img = null;
 	private Image boxImg = null;
 	private JLabel titolLabel;
 	private JLabel textLabel;
+	private JLabel errorLabel;
 	private JTextField nameField;
 	private PopupButtonsListener listener;
 	private CustomDefaultButton saveButton;
@@ -46,6 +47,7 @@ public class VistaPopUpBotons extends JPanel {
 	public static final int TIPUS_PREGUNTA = 2;
 	private int tipus = TIPUS_GUARDAR;
 	private boolean typeChanged = false;
+	private static VistaPopUpBotons instance;
 	
 	public VistaPopUpBotons(PopupButtonsListener listener) {
 		setOpaque(false);
@@ -54,8 +56,14 @@ public class VistaPopUpBotons extends JPanel {
 		setBounds(0, 0, Constants.width, Constants.height);
 		addLabel();
 		addNameField();
+		addLabelError();
 		addButtons();
 		addBackgroundButton();
+		instance = this;
+	}
+	
+	public static VistaPopUpBotons getInstance(){
+		return instance;
 	}
 	
 	private void addBackgroundButton() {
@@ -80,6 +88,8 @@ public class VistaPopUpBotons extends JPanel {
 //		textLabel.setFont(Constants.fontAnnaVives);
 		titolLabel.setFont(Constants.fontTitle);
 		titolLabel.setBounds(Constants.centerX-boxWidth/2+40, Constants.centerY-boxHeight/2+40, boxWidth-100, 40);
+		titolLabel.setVerticalAlignment(JLabel.CENTER);
+		titolLabel.setHorizontalAlignment(JLabel.CENTER);
 		
 		add(titolLabel);
 		
@@ -87,9 +97,20 @@ public class VistaPopUpBotons extends JPanel {
 		textLabel.setOpaque(false);
 //		textLabel.setFont(Constants.fontAnnaVives);
 		textLabel.setFont(Constants.fontKristen);
-		textLabel.setBounds(Constants.centerX-boxWidth/2+40, Constants.centerY-boxHeight/2+100, boxWidth-100, boxHeight-265);
+		textLabel.setBounds(Constants.centerX-boxWidth/2+40, titolLabel.getLocation().y + titolLabel.getHeight()+10, boxWidth-100, boxHeight-275);
 		
 		add(textLabel);
+	}
+	
+	private void addLabelError(){
+		errorLabel = new JLabel("HOLA");
+		errorLabel.setOpaque(false);
+		errorLabel.setFont(Constants.fontKristen);
+		errorLabel.setBounds(Constants.centerX-boxWidth/2+40, nameField.getLocation().y+nameField.getHeight()+5, boxWidth-100, 25);
+		errorLabel.setVisible(false);
+		errorLabel.setForeground(Color.RED);
+		
+		add(errorLabel);
 	}
 	
 	private void addNameField(){
@@ -103,7 +124,7 @@ public class VistaPopUpBotons extends JPanel {
 	
 	private void addButtons(){
 		saveButton = new CustomDefaultButton("GUARDAR");
-		saveButton.setBounds(Constants.centerX+boxWidth/2-CustomDefaultButton.BUTTON_WIDTH-40, (int) (nameField.getLocation().y+nameField.getSize().getHeight())+15, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
+		saveButton.setBounds(Constants.centerX+boxWidth/2-CustomDefaultButton.BUTTON_WIDTH-40, (int) (errorLabel.getLocation().y+errorLabel.getSize().getHeight())+10, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -129,7 +150,7 @@ public class VistaPopUpBotons extends JPanel {
 		add(saveButton);
 		
 		cancelButton = new CustomDefaultButton("CANCELAR");
-		cancelButton.setBounds(Constants.centerX-boxWidth2/2+40, (int) (nameField.getLocation().y+nameField.getSize().getHeight())+15, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
+		cancelButton.setBounds(Constants.centerX-boxWidth2/2+40, (int) (errorLabel.getLocation().y+errorLabel.getSize().getHeight())+10, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
 		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -140,7 +161,7 @@ public class VistaPopUpBotons extends JPanel {
 		add(cancelButton);
 		
 		noSaveButton = new CustomDefaultButton("NO GUARDAR");
-		noSaveButton.setBounds(Constants.centerX-CustomDefaultButton.BUTTON_WIDTH/2, (int) (nameField.getLocation().y+nameField.getSize().getHeight())+15, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
+		noSaveButton.setBounds(Constants.centerX-CustomDefaultButton.BUTTON_WIDTH/2, (int) (errorLabel.getLocation().y+errorLabel.getSize().getHeight())+10, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
 		noSaveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -183,6 +204,7 @@ public class VistaPopUpBotons extends JPanel {
 			ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
 			if(tipus == TIPUS_GUARDAR){
 				boxWidth = 550;
+				textLabel.setBounds(Constants.centerX-boxWidth/2+40, titolLabel.getLocation().y + titolLabel.getHeight()+10, boxWidth-100, boxHeight-275);
 				textLabel.setText("<html>" + bundle.getString("text_guardar") + "</html>");
 				titolLabel.setText(bundle.getString("titol_guardar"));
 				cancelButton.setVisible(false);
@@ -191,13 +213,15 @@ public class VistaPopUpBotons extends JPanel {
 			}
 			else{
 				boxWidth = boxWidth2;
+				textLabel.setBounds(Constants.centerX-boxWidth/2+40, titolLabel.getLocation().y + titolLabel.getHeight()+20, boxWidth-100, boxHeight-235);
 				textLabel.setText("<html>" + bundle.getString("text_noGuardar") + "</html>");
 				titolLabel.setText(bundle.getString("titol_noGuardar"));
 				cancelButton.setVisible(true);
 				noSaveButton.setVisible(true);
 				nameField.setVisible(false);
 			}
-			saveButton.setBounds(Constants.centerX+boxWidth/2-CustomDefaultButton.BUTTON_WIDTH-40, (int) (nameField.getLocation().y+nameField.getSize().getHeight())+15, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
+			errorLabel.setVisible(false);
+			saveButton.setBounds(Constants.centerX+boxWidth/2-CustomDefaultButton.BUTTON_WIDTH-40, (int) (errorLabel.getLocation().y+errorLabel.getSize().getHeight())+10, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_HEIGHT);
 			typeChanged = true;
 			repaint();
 		}
@@ -211,4 +235,8 @@ public class VistaPopUpBotons extends JPanel {
 		this.tipus = tipus;
 	}
 	
+	public void showError(String error){
+		errorLabel.setText(error);
+		errorLabel.setVisible(true);;
+	}
 }

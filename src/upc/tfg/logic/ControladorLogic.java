@@ -3,8 +3,10 @@ package upc.tfg.logic;
 import java.util.Date;
 
 import upc.tfg.agora.Agora;
+import upc.tfg.gui.VistaAlertes;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.DefaultDataBase;
+import upc.tfg.utils.ErrorController;
 import upc.tfg.utils.PassejantsAMoure;
 import upc.tfg.utils.ResultatsFinals;
 
@@ -101,7 +103,17 @@ public class ControladorLogic {
 	
 	public void cartaSeleccionada(Carta carta, int jugadorID){
 		Jugador j = partida.getJugador(jugadorID);
-		partida.setPassejantsAMoure(Math.min(j.getTotalPassejants(), carta.getValor()));
+		//Si es produeix empat per afegir els passejants mostrem un error
+		int numPassejantsAMoure = Math.min(j.getTotalPassejants(), carta.getValor());
+		if(partida.hiHauraDistricteAmbMateixNombrePassejants(numPassejantsAMoure, carta.getDistricte(), j.getColor())){
+			ErrorController.showError(jugadorID, ErrorController.DISTRICTE_CARTA_AMB_MATEIX_NOMBRE_PASSEJANTS, carta.getDistricte(), carta.getValor());
+			partida.setPassejantsAMoure(0);
+			return;
+		}
+		else{
+			VistaAlertes.getInstance().setVisible(false);
+		}
+		partida.setPassejantsAMoure(numPassejantsAMoure);
 		if(partida.getPassejantsAMoure() == 0){
 			if(jugadorID != 1){
 				carta.girar();

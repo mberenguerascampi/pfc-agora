@@ -348,7 +348,6 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 							vistaCartaSeleccionada.setBounds(rect.x, rect.y+25, rect.width, rect.height);
 						}
 						
-						
 						//Si el jugador no te cap passejant es selecciona automaticament
 						if(Partida.getInstance().getJugador(jugadorID).getTotalPassejants() == 0){
 							seleccionaCartaiMouPassejants(jugadorID, cartaEntity);
@@ -701,13 +700,26 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	}
 	
 	public void treureCartaSeleccionada(){
-		visualitzaMarcCarta(vistaCartaSeleccionada);
+		Point origin = null;
+		VistaCarta vcAux = vistaCartaSeleccionada;
+		if(vistaCartaSeleccionada != null){
+			if(Partida.getInstance().hihaCartesDisponibles()){
+				visualitzaMarcCarta(vistaCartaSeleccionada);
+			}
+			else{
+				origin = vistaCartaSeleccionada.getLocation();
+				origin.y += 25;
+				vistaCartaSeleccionada.setSeleccionada(false);
+				vistaCartaSeleccionada = null;
+			}
+		}
 		Point goal = new Point(CARTA_DESCARTADA_X, CARTA_DESCARTADA_Y);
 		animationOn = true;
 		cartaSeleccionada = false;
 		cartaEntitySeleccionada = null;
-		AnimacioCartes anim = new AnimacioCartes(vistaCartaSeleccionada, goal);
+		AnimacioCartes anim = new AnimacioCartes(vcAux, goal);
 		anim.descartada = true;
+		anim.origin = origin;
 		Thread t = new Thread(anim);
 		t.start();
 		System.out.println("Main thread");
@@ -905,6 +917,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	          }
 	          else {
 	        	  if(Partida.getInstance().getPas() != 2)return;
+	        	  if(Partida.getInstance().getPassejantsAMoure() <= 0)return;
 	        	  if(vistaCartaSeleccionada!=null){
 	        		  cartaSeleccionada = true;
 	        		  vistaCartaSeleccionada.setSeleccionada(cartaSeleccionada);
@@ -1144,7 +1157,10 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 				carta.setEstaBuida(true);
 				carta.updateView();
 				cartesDescartades.setVisible(true);
-				if(origin != null)carta.setLocation(origin);
+				if(origin != null){
+					carta.setLocation(origin);
+					carta.setEnabled(true);
+				}
 				else carta.setBounds(cartesDescartades.getBounds());
 				cartesDescartades.setCartaEntity(carta.getCartaEntity());
 			}

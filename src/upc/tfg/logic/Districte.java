@@ -115,8 +115,11 @@ public class Districte {
 		int min1 = Math.min(passejantsBlaus.size(), passejantsVermells.size());
 		int max2 = Math.max(passejantsGrocs.size(), passejantsVerds.size());
 		int min2 = Math.min(passejantsGrocs.size(), passejantsVerds.size());
-		if (max1 != 0 && max1 == max2)return true; 
+		//Empat entre (blau o vermell) i (groc o verd)
+		if ((max1 != 0 || Partida.getInstance().getTorn() >= 5) && max1 == max2)return true; 
+		//Empat entre blau i vermell)
 		if (max1 > max2 && max1 == min1)return true;
+		//Empat entre groc i verd
 		if (max2 > max1 && max2 == min2)return true;
 		return false;
 	}
@@ -151,10 +154,12 @@ public class Districte {
 		ArrayList<Passejant>temp2 = getMaxArray();
 		//Si els passejants del determinat color no són els que predominen es poden treure
 		if(!temp.equals(temp2)) return true;
+		//Estem treient un passejant del color que predomina
 		else {
 			int newSize = temp.size()-1;
 			//Si es zero permetem treure
-			if(newSize == 0)return true;
+			if(Partida.getInstance().getTorn() < 5 && newSize == 0)return true;
+			//Si el treure un passejant implica que es produeixi un empat tornem false
 			if(passejantsBlaus.size() == newSize || passejantsVermells.size() == newSize 
 					|| passejantsGrocs.size() == newSize || passejantsVerds.size() == newSize){
 				return false;
@@ -268,5 +273,14 @@ public class Districte {
 
 	public void setDistricteID(int districteID) {
 		this.districteID = districteID;
+	}
+
+	public boolean tindraMateixNombrePassejants(int numPassejants, int color) {
+		ArrayList<Passejant>temp = getArray(color);
+		ArrayList<Passejant>temp2 = getMaxArray();
+		//Si els passejants del determinat color són els que predominen es poden afegir
+		if(temp.equals(temp2)) return false;
+		else if(temp2.size() == temp.size() + numPassejants) return true;
+		return false;
 	}
 }

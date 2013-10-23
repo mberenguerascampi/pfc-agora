@@ -66,7 +66,7 @@ public class Partida {
 		this.passejantsAMoure = passejantsAMoure;
 		this.jugadors = jugadors;
 		tauler = new Tauler();
-		tauler.setDistrictes(districtes);
+		Tauler.setDistrictes(districtes);
 		baralla = new Baralla(cartesB1);
 		baralla2 = new Baralla(cartesB2);
 	}
@@ -83,11 +83,12 @@ public class Partida {
 	
 	public boolean guardar(String nom){
 		Map<String,String> noms = DefaultDataBase.getNomsPartides();
+		if(cartaSeleccionada != null)System.out.println(cartaSeleccionada.getNom() + " -> " + cartaSeleccionada.getValor());
 		if(noms.keySet().contains(nom)){
 			return false;
 		}
 		//Només es pot guardar en el torn de l'usuari i si no s'ha seleccionat cap carta en el torn 2
-		else if(idJugadorActual != 1 || (pas == 2 && (passejantsAMoure != 0 || 
+		else if(idJugadorActual != 1 || (pas == 2 && (passejantsAMoure > 0 && 
 				(cartaSeleccionada != null && cartaSeleccionada.getValor() > passejantsAMoure)))){
 			ErrorController.showError(idJugadorActual, ErrorController.NO_ES_POT_GUARDAR, null, null);
 			return false;
@@ -442,6 +443,12 @@ public class Partida {
 			}
 		}
 		return false;
+	}
+	
+	public boolean hiHauraDistricteAmbMateixNombrePassejants(int numPassejants, Districte d, int color){
+		System.out.println("Puc afegir " + numPassejants + " passejants a " + d.getNom() + "?");
+		if(numPassejants == 0)return false;
+		return d.tindraMateixNombrePassejants(numPassejants, color);
 	}
 	
 	public boolean potAfegirPassejant(Districte districte, int color){
