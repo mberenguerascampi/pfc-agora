@@ -268,6 +268,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		logic.cartaSeleccionada(cartaEntity, jugadorID);
 	}
 	
+	public void cartaDescartada(Carta carta, int jugadorID){
+		logic.cartaDescartada(carta, jugadorID);
+	}
+	
 	public void cartaRobada(int jugadorID, Carta cartaEntity)
 	{
 		logic.cartaRobada(jugadorID, cartaEntity);

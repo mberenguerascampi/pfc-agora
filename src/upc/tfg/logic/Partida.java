@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import upc.tfg.gui.VistaAlertes;
 import upc.tfg.gui.VistaEstat;
@@ -169,7 +171,9 @@ public class Partida {
 	
 	public void avancarJugador(){
 		VistaAlertes.getInstance().setVisible(false);
-		if(idJugadorActual == 2){
+		int idJugadorNouTorn = (idJugadorInici+1);
+		if (idJugadorNouTorn == 5) idJugadorNouTorn = 1;
+		if(idJugadorActual == idJugadorNouTorn){
 			avancarPas();
 		}
 		else{
@@ -179,7 +183,22 @@ public class Partida {
 			System.out.println("Jugador " + idJugadorActual);
 		}
 		
-		if(pas == 3) passejantsAMoure = 2;
+
+		Locale defaultLocale = Locale.getDefault();
+		ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
+		
+		if(pas == 2 && idJugadorActual == 1){
+			if(!potSeleccionarAlgunaCarta(idJugadorActual)){
+				VistaAlertes.getInstance().setWarningText(bundle.getString("text_no_pot_seleccionar_carta"));
+			}
+		}
+		if(pas == 3) {
+			passejantsAMoure = 2;
+			System.out.println("Passejants a moure2 -> " + passejantsAMoure );
+			if(idJugadorActual == 1 && torn == ultimTorn){
+				VistaAlertes.getInstance().setWarningText(bundle.getString("text_ultims_torns"));
+			}
+		}
 	}
 	
 	public boolean finalitzarPartida(){
@@ -449,6 +468,15 @@ public class Partida {
 		System.out.println("Puc afegir " + numPassejants + " passejants a " + d.getNom() + "?");
 		if(numPassejants == 0)return false;
 		return d.tindraMateixNombrePassejants(numPassejants, color);
+	}
+	
+	public boolean potSeleccionarAlgunaCarta(int idJugador){
+		Jugador j = getJugador(idJugador);
+		for(Carta c:j.getCartes()){
+			int numPassejants = Math.min(c.getValor(), j.getTotalPassejants());
+			if(!hiHauraDistricteAmbMateixNombrePassejants(numPassejants, c.getDistricte(), j.getColor())) return true;
+		}
+		return false;
 	}
 	
 	public boolean potAfegirPassejant(Districte districte, int color){

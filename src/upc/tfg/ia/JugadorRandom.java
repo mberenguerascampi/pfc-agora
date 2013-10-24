@@ -33,6 +33,7 @@ public class JugadorRandom implements JugadorRobot{
 		ArrayList<Carta> cartes = jugador.getCartes();
 		Random rand = new Random(System.currentTimeMillis());
 		if(cartes.size() == 0)return null;
+		if(!Partida.getInstance().potSeleccionarAlgunaCarta(jugador.getId()))return null;
 		int i = rand.nextInt(cartes.size());
 		int numPassejantsAMoure = Math.min(jugador.getTotalPassejants(), cartes.get(i).getValor());
 		while(Partida.getInstance().hiHauraDistricteAmbMateixNombrePassejants(numPassejantsAMoure, cartes.get(i).getDistricte(), jugador.getColor())){

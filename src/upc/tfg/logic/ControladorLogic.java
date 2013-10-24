@@ -101,10 +101,17 @@ public class ControladorLogic {
 		return partida.getBaralla().getCartes(numCartes);
 	}
 	
+	public void cartaDescartada(Carta carta, int jugadorID){
+		treuCarta(jugadorID, carta);
+		partida.avancarJugador();
+		getProximMoviment();
+	}
+	
 	public void cartaSeleccionada(Carta carta, int jugadorID){
 		Jugador j = partida.getJugador(jugadorID);
 		//Si es produeix empat per afegir els passejants mostrem un error
 		int numPassejantsAMoure = Math.min(j.getTotalPassejants(), carta.getValor());
+		System.out.println("Passejants a Moure -> " + numPassejantsAMoure);
 		if(partida.hiHauraDistricteAmbMateixNombrePassejants(numPassejantsAMoure, carta.getDistricte(), j.getColor())){
 			ErrorController.showError(jugadorID, ErrorController.DISTRICTE_CARTA_AMB_MATEIX_NOMBRE_PASSEJANTS, carta.getDistricte(), carta.getValor());
 			partida.setPassejantsAMoure(0);
@@ -130,7 +137,7 @@ public class ControladorLogic {
 		else{
 			//Actualitzam la capa de domini
 			carta.girar();
-			for(int i = 0; i < carta.getValor(); ++i){
+			for(int i = 0; i < numPassejantsAMoure; ++i){
 				mouPassejantADistricte(carta.getDistricte().getNom(), partida.getIdJugadorActual());
 			}
 			treuCarta(jugadorID, carta);
@@ -239,5 +246,21 @@ public class ControladorLogic {
 
 	public void esborraPartida(String nom) {
 		DefaultDataBase.deletePartida(nom);
+	}
+
+	/**
+	 * Funció que selecciona qualsevol carta del jugador jugadorID, però no mou els passejants perquè el jugador
+	 * no té cap carta amb les condicions necessàries per tirar.
+	 * @param jugadorID
+	 */
+	public void seleccionaQualsevolCarta(int jugadorID) {
+		partida.setPassejantsAMoure(0);
+		Carta carta = Partida.getInstance().getJugador(jugadorID).getCartes().get(0);
+		carta.girar();
+		treuCarta(jugadorID, carta);
+		//Actualitzem la capa de presentacio
+		agora.seleccionaCartaiMouPassejants(jugadorID, carta);
+		partida.avancarJugador();
+		getProximMoviment();
 	}
 }

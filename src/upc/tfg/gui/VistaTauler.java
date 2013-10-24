@@ -341,18 +341,33 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if(!cartaSeleccionada && Partida.getInstance().getPas() == 2 && Partida.getInstance().getIdJugadorActual() == jugadorID){
-						listener.cartaSeleccionada(jugadorSeleccionat, cartaEntity);
 						Rectangle rect = null;
-						if(vistaCartaSeleccionada != null){
-							rect = vistaCartaSeleccionada.getBounds();
-							vistaCartaSeleccionada.setBounds(rect.x, rect.y+25, rect.width, rect.height);
-						}
 						
 						//Si el jugador no te cap passejant es selecciona automaticament
-						if(Partida.getInstance().getJugador(jugadorID).getTotalPassejants() == 0){
-							seleccionaCartaiMouPassejants(jugadorID, cartaEntity);
+						boolean potSeleccionar = Partida.getInstance().potSeleccionarAlgunaCarta(jugadorID);
+						if(Partida.getInstance().getJugador(jugadorID).getTotalPassejants() == 0 || 
+								!potSeleccionar){
+							Thread t = new Thread(new Runnable() {	
+								@Override
+								public void run() {
+									descartaCarta(carta, jugadorID);
+								}
+							});
+							t.start();
+							try {
+								Thread.sleep(700);
+							} catch (InterruptedException e1) {
+								e1.printStackTrace();
+							}
+							//listener.cartaDescartada(cartaEntity, jugadorSeleccionat);
 						}
 						else{
+							listener.cartaSeleccionada(jugadorSeleccionat, cartaEntity);
+							if(vistaCartaSeleccionada != null){
+								rect = vistaCartaSeleccionada.getBounds();
+								vistaCartaSeleccionada.setBounds(rect.x, rect.y+25, rect.width, rect.height);
+							}
+							
 							rect = carta.getBounds();
 							carta.setBounds(rect.x, rect.y-25, rect.width, rect.height);
 							cartaEntitySeleccionada = cartaEntity;
@@ -725,12 +740,13 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		System.out.println("Main thread");
 	}
 	
-	public void treureCarta(VistaCarta vc, Point origin){
+	public void treureCarta(VistaCarta vc, Point origin, boolean descartadaDirectament){
 		Point goal = new Point(CARTA_DESCARTADA_X, CARTA_DESCARTADA_Y);
 		animationOn = true;
 		AnimacioCartes anim = new AnimacioCartes(vc, goal);
 		anim.descartada = true;
 		anim.origin = origin;
+		anim.descartadaSenseMourePassejants = descartadaDirectament;
 		Thread t = new Thread(anim);
 		t.start();
 	}
@@ -803,7 +819,18 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		if(cartaSeleccionadaAux == null){
 			System.out.println("NULL");
 		}
-		treureCarta(cartaSeleccionadaAux, origin);
+		treureCarta(cartaSeleccionadaAux, origin, false);
+	}
+	
+	public void descartaCarta(VistaCarta vc, int jugadorID){
+		seleccionaCarta(vc, jugadorID);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		vc.setLocation(vc.getLocation().x, vc.getLocation().y+25);
+		treureCarta(vc, vc.getLocation(), true);
 	}
 	
 	private void seleccionaCarta(VistaCarta vc, int jugadorID){
@@ -1107,6 +1134,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		Point goal;
 		Point origin = null;
 		boolean descartada = false;
+		boolean descartadaSenseMourePassejants = false;
 		
 		public AnimacioCartes(VistaCarta carta, Point goal) {
 			this.carta = carta;
@@ -1163,6 +1191,9 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 				}
 				else carta.setBounds(cartesDescartades.getBounds());
 				cartesDescartades.setCartaEntity(carta.getCartaEntity());
+			}
+			if(descartadaSenseMourePassejants){
+				listener.cartaDescartada(carta.getCartaEntity(), carta.getJugadorID());
 			}
 		}
 	}

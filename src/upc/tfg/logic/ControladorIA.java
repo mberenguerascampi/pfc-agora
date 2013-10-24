@@ -37,8 +37,9 @@ public class ControladorIA {
 				return;
 			}*/
 			Carta cartaSeleccionada = robot.getCartaSeleccionada();
-			logic.cartaSeleccionada(cartaSeleccionada, jugadorID);
-			System.out.println("Carta seleccionada -> " + cartaSeleccionada.getNom() + " del districte " + cartaSeleccionada.getDistricte().getNom());
+			if(cartaSeleccionada == null)logic.seleccionaQualsevolCarta(jugadorID);
+			else logic.cartaSeleccionada(cartaSeleccionada, jugadorID);
+			//System.out.println("Carta seleccionada -> " + cartaSeleccionada.getNom() + " del districte " + cartaSeleccionada.getDistricte().getNom());
 		}
 		else if (pas == 3){
 			for (int i = 0; i < 2; ++i){
