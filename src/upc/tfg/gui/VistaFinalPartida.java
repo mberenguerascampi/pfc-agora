@@ -52,12 +52,12 @@ public class VistaFinalPartida extends DefaultView {
 			savePuntacio(resultats);
 		}
 		nomGuanyador = new JLabel();
-		nomGuanyador.setText("<html> EL GUANYADOR HA ESTAT EL JUGADOR "+Partida.getInstance().getNomJugador(resultats.getIdJugadorGuanyador()) + "!!!</html>");
+		nomGuanyador.setText("<html> EL GUANYADOR: "+Partida.getInstance().getNomJugador(resultats.getIdJugadorGuanyador()) + "!!!</html>");
 		nomGuanyador.setLayout(null);
 		int originX = Constants.width/2-PlayerCell.CELL_WIDTH/2; 
-		int originY = Constants.height/2-100/2;
+		int originY = Constants.height/2-70/2;
 		nomGuanyador.setFont(Constants.fontPlayerWinner);
-		nomGuanyador.setBounds(originX, originY-80, PlayerCell.CELL_WIDTH, 40);
+		nomGuanyador.setBounds(originX-50, originY-80, PlayerCell.CELL_WIDTH+100, 80);
 		nomGuanyador.setAlignmentX(CENTER_ALIGNMENT);
 		
 		JLabel nomJugadors = new JLabel("NOM");

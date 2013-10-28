@@ -153,6 +153,10 @@ public class DefaultDataBase {
 	                  " p_vermells INTEGER, " + 
 	                  " p_verds INTEGER, " + 
 	                  " p_grocs INTEGER, " + 
+	                  " p_blaus_bloq INTEGER, " + 
+	                  " p_vermells_bloq INTEGER, " + 
+	                  " p_verds_bloq INTEGER, " + 
+	                  " p_grocs_bloq INTEGER, " + 
 	                  " nomPartida VARCHAR(255), " + 
 	                  " PRIMARY KEY (nomDistricte, nomPartida))"; 
 			  stmt.executeUpdate(sql);
@@ -222,9 +226,12 @@ public class DefaultDataBase {
 		       }
 		       
 		       for(Districte d:partida.getTauler().getDistrictes()){
-		    	   sql = "INSERT INTO DISTRICTE (nomDistricte,p_blaus,p_vermells,p_verds,p_grocs,nomPartida) " +
+		    	   sql = "INSERT INTO DISTRICTE (nomDistricte,p_blaus,p_vermells,p_verds," +
+		    	   		"p_grocs,p_blaus_bloq,p_vermells_bloq,p_verds_bloq,p_grocs_bloq,nomPartida) " +
 		                    "VALUES ('"+ d.getNom() +"', "+ d.getNumPassejantsBlaus() +", " + d.getNumPassejantsVermells() + 
-		                    ", "+ d.getNumPassejantsVerds() +", " + d.getNumPassejantsGrocs() + ", '"+ partida.getNom() +"');"; 
+		                    ", "+ d.getNumPassejantsVerds() +", " + d.getNumPassejantsGrocs()
+		                     +", " + d.getNumPassejantsBloquejats(Constants.BLAU)  +", " + d.getNumPassejantsBloquejats(Constants.VERMELL)
+		                      +", " + d.getNumPassejantsBloquejats(Constants.VERD)  +", " + d.getNumPassejantsBloquejats(Constants.GROC)+ ", '"+ partida.getNom() +"');"; 
 					stmt.executeUpdate(sql);
 		       }
 	
@@ -295,10 +302,10 @@ public class DefaultDataBase {
 			   while ( rs.next() ) {
 				   for(Districte d:districtes){
 					   if(d.getNom().equals(rs.getString("nomDistricte"))){
-						   d.inicialitzaIAfefeixPassejants(Constants.BLAU, rs.getInt("p_blaus"));
-						   d.inicialitzaIAfefeixPassejants(Constants.VERMELL, rs.getInt("p_vermells"));
-						   d.inicialitzaIAfefeixPassejants(Constants.VERD, rs.getInt("p_verds"));
-						   d.inicialitzaIAfefeixPassejants(Constants.GROC, rs.getInt("p_grocs"));
+						   d.inicialitzaIAfefeixPassejants(Constants.BLAU, rs.getInt("p_blaus"), rs.getInt("p_blaus_bloq"));
+						   d.inicialitzaIAfefeixPassejants(Constants.VERMELL, rs.getInt("p_vermells"), rs.getInt("p_vermells_bloq"));
+						   d.inicialitzaIAfefeixPassejants(Constants.VERD, rs.getInt("p_verds"), rs.getInt("p_verds_bloq"));
+						   d.inicialitzaIAfefeixPassejants(Constants.GROC, rs.getInt("p_grocs"), rs.getInt("p_grocs_bloq"));
 					   }
 				   }
 			   }

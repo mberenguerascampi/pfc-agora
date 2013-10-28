@@ -88,10 +88,13 @@ public class Districte {
 		
 	}
 	
-	public void inicialitzaIAfefeixPassejants(int color, int numP){
+	public void inicialitzaIAfefeixPassejants(int color, int numP, int numBloquejats){
+		int bloquejatsActualment = 0;
 		for(int i = 0; i < numP; ++i){
-			Passejant p = new Passejant(color, false);
+			boolean bloquejat = (bloquejatsActualment <= numBloquejats);
+			Passejant p = new Passejant(color, bloquejat);
 			afegeixPassejant(p);
+			if(bloquejat)++bloquejatsActualment;
 		}
 	}
 	
@@ -282,5 +285,14 @@ public class Districte {
 		if(temp.equals(temp2)) return false;
 		else if(temp2.size() == temp.size() + numPassejants) return true;
 		return false;
+	}
+	
+	public int getNumPassejantsBloquejats(int color){
+		int numBloquejats = 0;
+		ArrayList<Passejant> passejants = getArray(color);
+		for(Passejant p:passejants){
+			if(p.getBloquejat()) ++numBloquejats;
+		}
+		return numBloquejats;
 	}
 }
