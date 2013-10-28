@@ -220,11 +220,12 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	 */
 	public void afegeixPassejants(int numPassejants, int jugadorID){
 		String color = Partida.getInstance().getNomColor(Partida.getInstance().getColor(jugadorID));
+		System.out.println("Color " + jugadorID + " es " + Partida.getInstance().getColor(jugadorID));
 		final VistaPassejant vp = new VistaPassejant(color, numPassejants);
 		Rectangle frame = getFramePassejant(jugadorID);
 		vp.setBounds(frame);
 		if (jugadorID == 1){
-			passejantEstatic = new VistaPassejant(VistaPassejant.PASSEJANT_BLAU, numPassejants);
+			passejantEstatic = new VistaPassejant(color, numPassejants);
 			passejantEstatic.setBounds(frame);
 			passejantEstatic.setMinValue(1);
 			vp.setMinValue(1);
@@ -1181,6 +1182,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 					catch(Exception e) {}
 				}
 			}
+			animationOn = false;
 			if(descartada){
 				carta.setEstaBuida(true);
 				carta.updateView();

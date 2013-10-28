@@ -5,6 +5,7 @@ public interface MenuBarListener {
 	public void desferJugada();
 	public void exitApplication();
 	public void mostraPopupGuardar();
+	public void mostraPuntuacionsTemporals();
 	public void carregarPartida();
 	public void crearPartida();
 }

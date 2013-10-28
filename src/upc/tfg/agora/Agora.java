@@ -117,6 +117,8 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		menubar = new CustomMenuBar(this);
 	}
 	
+	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL MENU SUPERIOR
+	
 	public void desferJugada(){
 		logic.desfesJugada();
 	}
@@ -152,8 +154,15 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	
 	public void crearPartida(){
 		començarPartida(Partida.getInstance().getNomJugador(1), Partida.getInstance().getNomJugador(2), 
-				Partida.getInstance().getNomJugador(3), Partida.getInstance().getNomJugador(4));
+				Partida.getInstance().getNomJugador(3), Partida.getInstance().getNomJugador(4), 
+				logic.getColors());
 	}
+	
+	public void mostraPuntuacionsTemporals(){
+		ResultatsFinals resultats = Partida.getInstance().getPuntuacioFinal();
+		mostraFinalPartida(resultats, false);
+	}
+	//////
 	
 	private void amagaVistes(){
 		menuPrincipal.setVisible(false);
@@ -302,11 +311,11 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		return logic.guardarPartida(nom);
 	}
 	
-	public void començarPartida(String nomJ1, String nomJ2, String nomJ3, String nomJ4){
+	public void començarPartida(String nomJ1, String nomJ2, String nomJ3, String nomJ4, int[] colors){
 		 menuPrincipal.setVisible(false);
 		 tauler.reset();
 		 tauler.removeAll();
-		 logic.comencarPartida(nomJ1, nomJ2, nomJ3, nomJ4);
+		 logic.comencarPartida(nomJ1, nomJ2, nomJ3, nomJ4, colors);
 		 afegeixCartesJugador(1);
 		 afegeixCartesJugador(2);
 		 afegeixCartesJugador(3);
@@ -316,6 +325,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 tauler.afegeixPassejants(Partida.getInstance().getJugador(1).getTotalPassejants(), 1);
 		 tauler.setVisible(true);
 		 addMenu();
+		 logic.getProximMoviment();
 	}
 	
 	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL FINAL DE PARTIDA
@@ -370,9 +380,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		tauler.seleccionaCartaARobar(jugadorID, cartaEntity);
 	}
 	
-	public void mostraFinalPartida(ResultatsFinals resultats){
+	public void mostraFinalPartida(ResultatsFinals resultats, boolean isFinalPartida){
 		removeMenu();
-		finalPartida.setResultats(resultats);
+		backToTauler = !isFinalPartida;
+		finalPartida.setResultats(resultats,isFinalPartida);
 		tauler.setVisible(false);
 		menuPrincipal.setVisible(false);
 		finalPartida.setVisible(true);

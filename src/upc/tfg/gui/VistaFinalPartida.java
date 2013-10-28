@@ -43,10 +43,16 @@ public class VistaFinalPartida extends DefaultView {
 		add(tornar);
 	}
 	
-	public void setResultats(ResultatsFinals resultats){
-		savePuntacio(resultats);
+	public void setResultats(ResultatsFinals resultats, boolean finalPartida){
+		removeAll();
+		if(!finalPartida){
+			afegeixBarraSuperior("Resultats provisionals", listener);
+		}
+		else{
+			savePuntacio(resultats);
+		}
 		nomGuanyador = new JLabel();
-		nomGuanyador.setText("Guanyador!!!");
+		nomGuanyador.setText("<html> EL GUANYADOR HA ESTAT EL JUGADOR "+Partida.getInstance().getNomJugador(resultats.getIdJugadorGuanyador()) + "!!!</html>");
 		nomGuanyador.setLayout(null);
 		int originX = Constants.width/2-PlayerCell.CELL_WIDTH/2; 
 		int originY = Constants.height/2-100/2;
@@ -80,6 +86,7 @@ public class VistaFinalPartida extends DefaultView {
 		add(playerCell4);
 		
 		addSkin("imatgePortada.jpg");
+		
 	}
 	
 	private void savePuntacio(ResultatsFinals resultats){

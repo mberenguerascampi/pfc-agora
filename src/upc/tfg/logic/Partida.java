@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import upc.tfg.gui.VistaAlertes;
-import upc.tfg.gui.VistaEstat;
 import upc.tfg.gui.VistaPassejant;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.DefaultDataBase;
@@ -60,11 +60,17 @@ public class Partida {
 		instance = this;
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
 		this.nom = nom;
-		this.data = null;//df.parse(data);
+		this.data = null;
+//		try {
+//			if(data.equals("null"))this.data = null;
+//			else this.data = df.parse(data);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
 		this.torn = torn;
 		this.pas = pas;
 		this.idJugadorInici = idJugadorInici;
-		idJugadorActual = idJugadorInici;
+		this.idJugadorActual = 1;
 		this.passejantsAMoure = passejantsAMoure;
 		this.jugadors = jugadors;
 		tauler = new Tauler();
@@ -80,6 +86,10 @@ public class Partida {
 	
 	//Public Methods
 	public boolean crear(){
+		Random rand = new Random(System.currentTimeMillis());
+		idJugadorInici = rand.nextInt(4)+1;
+		idJugadorActual = idJugadorInici;
+		System.out.println("JUGADOR INICI = " + idJugadorInici);
 		return true;
 	}
 	
@@ -97,6 +107,8 @@ public class Partida {
 		}
 		else{
 			this.nom = nom;
+			Date date = new Date();
+			this.data = date;
 			DefaultDataBase.guardarPartida(this);
 			return true;
 		}
@@ -208,6 +220,7 @@ public class Partida {
 	
 	public boolean afegirJugador(Jugador jugador){
 		jugadors.add(jugador);
+		System.out.println("COLORRRRRRRRR "+jugador.getColor());
 		return true;
 	}
 	
@@ -331,6 +344,16 @@ public class Partida {
 		Districte[] districtes = tauler.getDistrictes();
 		for(Districte districte:districtes){
 			if(districte.getNom().equalsIgnoreCase(nom)){
+				return districte;
+			}
+		}
+		return null;
+	}
+	
+	public Districte getDistricte(int idDistricte){
+		Districte[] districtes = tauler.getDistrictes();
+		for(Districte districte:districtes){
+			if(districte.getDistricteID() == idDistricte){
 				return districte;
 			}
 		}
@@ -556,13 +579,7 @@ public class Partida {
 	}
 
 	public int getColor(int jugadorID) {
-		switch(jugadorID){
-			case 1: return Constants.BLAU;
-			case 2: return Constants.VERMELL;
-			case 3: return Constants.VERD;
-			case 4: return Constants.GROC;
-		}
-		return 0;
+		return jugadors.get(jugadorID-1).getColor();
 	}
 
 	public int desfesJugada() {
@@ -581,5 +598,13 @@ public class Partida {
 
 	public ArrayList<Jugador> getJugadors() {
 		return jugadors;
+	}
+
+	public int getUltimTorn() {
+		return ultimTorn;
+	}
+
+	public void setUltimTorn(int ultimTorn) {
+		this.ultimTorn = ultimTorn;
 	}
 }

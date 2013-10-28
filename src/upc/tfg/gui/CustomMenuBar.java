@@ -128,7 +128,7 @@ public class CustomMenuBar extends JMenuBar{
         eMenuItem.setToolTipText("Exit application");
         eMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                System.exit(0);
+                listener.mostraPuntuacionsTemporals();
             }
         });
         

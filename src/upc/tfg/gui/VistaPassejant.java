@@ -178,4 +178,19 @@ public class VistaPassejant extends JButton {
 		public void setMinValue(int minValue) {
 			this.minValue = minValue;
 		}
+		
+		public static String getStrColor(int color){
+			if (color == Constants.BLAU){
+				return PASSEJANT_BLAU;
+			}
+			else if (color == Constants.VERMELL){
+				return PASSEJANT_VERMELL;
+			}
+			else if (color == Constants.VERD){
+				return PASSEJANT_VERD;
+			}
+			else {
+				return PASSEJANT_GROC;
+			}
+		}
 }

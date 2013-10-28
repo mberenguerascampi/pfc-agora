@@ -1,5 +1,6 @@
 package upc.tfg.logic;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import upc.tfg.agora.Agora;
@@ -15,6 +16,7 @@ public class ControladorLogic {
 	private Agora agora;
 	private ControladorIA controladorIA;
 	private PassejantsAMoure lastPAM;
+	private int[] colors;
 	
 	public ControladorLogic() {
 		
@@ -24,13 +26,14 @@ public class ControladorLogic {
 		this.agora = agora;
 	}
 	
-	public void comencarPartida(String nomJ1, String nomJ2, String nomJ3, String nomJ4){
+	public void comencarPartida(String nomJ1, String nomJ2, String nomJ3, String nomJ4, int[] colors){
+		this.colors = colors;
 		Date date = new Date();
 		partida = new Partida("",date,1,1);
-		Jugador j1 = new Jugador(nomJ1,1,Constants.BLAU);
-		Jugador j2 = new Jugador(nomJ2,2,Constants.VERMELL);
-		Jugador j3 = new Jugador(nomJ3,3,Constants.VERD);
-		Jugador j4 = new Jugador(nomJ4,4,Constants.GROC);
+		Jugador j1 = new Jugador(nomJ1,1,colors[0]);
+		Jugador j2 = new Jugador(nomJ2,2,colors[1]);
+		Jugador j3 = new Jugador(nomJ3,3,colors[2]);
+		Jugador j4 = new Jugador(nomJ4,4,colors[3]);
 		partida.afegirJugador(j1);
 		partida.afegirJugador(j2);
 		partida.afegirJugador(j3);
@@ -42,6 +45,10 @@ public class ControladorLogic {
 	
 	public void carregarPartida(Partida partida){
 		this.partida = partida;
+		ArrayList<Jugador> jugadors = partida.getJugadors();
+		int[] colorsACarregar = {jugadors.get(0).getColor(), jugadors.get(1).getColor(), jugadors.get(2).getColor(),
+				jugadors.get(3).getColor()};
+		this.colors = colorsACarregar;
 		controladorIA = new ControladorIA(this);
 		controladorIA.setJugadors(partida.getJugadorsRobot());
 	}
@@ -207,7 +214,7 @@ public class ControladorLogic {
 				agora.updateView();
 				if (partida.finalitzarPartida()){
 					ResultatsFinals resultats = partida.getPuntuacioFinal();
-					agora.mostraFinalPartida(resultats);
+					agora.mostraFinalPartida(resultats, true);
 					return;
 				}
 				if (partida.getIdJugadorActual() == 1) return;
@@ -237,6 +244,9 @@ public class ControladorLogic {
 			agora.afegeixPassejants(partida.getIdJugadorActual());
 			agora.updateView();
 		}
+		else{
+			ErrorController.showError(partida.getIdJugadorActual(), ErrorController.NO_ES_POT_TIRAR_ENDERRERE, null, null);
+		}
 	}
 	
 	public void retornaPassejantAJugador(Jugador j, Districte d, int color){
@@ -262,5 +272,13 @@ public class ControladorLogic {
 		agora.seleccionaCartaiMouPassejants(jugadorID, carta);
 		partida.avancarJugador();
 		getProximMoviment();
+	}
+
+	public int[] getColors() {
+		return colors;
+	}
+
+	public void setColors(int[] colors) {
+		this.colors = colors;
 	}
 }

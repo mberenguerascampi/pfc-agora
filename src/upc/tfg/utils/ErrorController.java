@@ -12,6 +12,8 @@ public class ErrorController {
 	public static final int NO_POT_AFEGIR_PASSEJANT = 4;
 	public static final int NO_ES_POT_GUARDAR = 5;
 	public static final int DISTRICTE_CARTA_AMB_MATEIX_NOMBRE_PASSEJANTS = 6;
+	public static final int NO_ES_POT_GUARDAR_NOM_EXISTENT = 7;
+	public static final int NO_ES_POT_TIRAR_ENDERRERE = 8;
 	
 	public static void showError(int idJugador, int idError, Object arg1, Object arg2){
 		String errorText = "";
@@ -33,9 +35,16 @@ public class ErrorController {
 				else errorText = "No pots guardar mentre quedin passejants a afegir";
 				VistaPopUpBotons.getInstance().showError(errorText);
 				return;
+			case NO_ES_POT_GUARDAR_NOM_EXISTENT:
+				errorText = "Ja existeix una partida amb aquest nom. Sisplau, tria un atre nom.";
+				VistaPopUpBotons.getInstance().showError(errorText);
+				return;
 			case DISTRICTE_CARTA_AMB_MATEIX_NOMBRE_PASSEJANTS:
 				errorText = "No pots afegir " + (int)arg2 + " passejant/s al districte de " + 
 						((Districte)arg1).getNom() + " perquè es produiria un empat";
+				break;
+			case NO_ES_POT_TIRAR_ENDERRERE:
+				errorText = "Només pots tirar enderrere si ja has afegit algun passejant a un districte en el pas 2 i 3 durant el teu torn";
 				break;
 			default:
 				break;
