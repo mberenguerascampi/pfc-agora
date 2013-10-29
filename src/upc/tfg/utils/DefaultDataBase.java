@@ -9,7 +9,6 @@ import upc.tfg.logic.Carta;
 import upc.tfg.logic.Districte;
 import upc.tfg.logic.Jugador;
 import upc.tfg.logic.Partida;
-import upc.tfg.logic.Passejant;
 import upc.tfg.logic.Tauler;
 
 public class DefaultDataBase {
@@ -165,7 +164,8 @@ public class DefaultDataBase {
 			  sql = "CREATE TABLE IF NOT EXISTS CARTA" +
 	                  "(nomCarta VARCHAR(255), " +
 	                  " nomPartida VARCHAR(255), " + 
-	                  " idJugador INTEGER, " + 
+	                  " idJugador INTEGER, " +
+	                  " seleccionada INTEGER, " +
 	                  " PRIMARY KEY (nomCarta, nomPartida, idJugador))"; 
 			  stmt.executeUpdate(sql);
 			      
@@ -205,23 +205,26 @@ public class DefaultDataBase {
 					stmt.executeUpdate(sql);
 					//Guardem les cartes del jugador
 					for(Carta carta:j.getCartes()){
-						sql = "INSERT INTO CARTA (nomCarta,nomPartida,idJugador) " +
-			                    "VALUES ('"+ carta.getNom() +"', '"+ partida.getNom() +"', " + j.getId() + ");"; 
+						int seleccionada = 0;
+						if(partida.getCartesAIntercanviar().containsValue(carta)) seleccionada = 1;
+						sql = "INSERT INTO CARTA (nomCarta,nomPartida,idJugador,seleccionada) " +
+			                    "VALUES ('"+ carta.getNom() +"', '"+ partida.getNom() +"', " + j.getId()+ ", "+
+								seleccionada + ");"; 
 						stmt.executeUpdate(sql);
 					}
 		       }
 		       
 		       //Guardem les cartes que estan a la baralla1
 		       for(Carta carta:partida.getBaralla().getCartes()){
-		    	   sql = "INSERT INTO CARTA (nomCarta,nomPartida,idJugador) " +
-		                    "VALUES ('"+ carta.getNom() +"', '"+ partida.getNom() +"', " + -1 + ");"; 
+		    	   sql = "INSERT INTO CARTA (nomCarta,nomPartida,idJugador,seleccionada) " +
+		                    "VALUES ('"+ carta.getNom() +"', '"+ partida.getNom() +"', " + -1 + ", "+ 0 +");"; 
 					stmt.executeUpdate(sql);
 		       }
 		       
 		       //Guardem les cartes que estan a la baralla2
 		       for(Carta carta:partida.getBaralla2().getCartes()){
-		    	   sql = "INSERT INTO CARTA (nomCarta,nomPartida,idJugador) " +
-		                    "VALUES ('"+ carta.getNom() +"', '"+ partida.getNom() +"', " + -2 + ");"; 
+		    	   sql = "INSERT INTO CARTA (nomCarta,nomPartida,idJugador,seleccionada) " +
+		                    "VALUES ('"+ carta.getNom() +"', '"+ partida.getNom() +"', " + -2 + ", "+ 0 + ");"; 
 					stmt.executeUpdate(sql);
 		       }
 		       
@@ -313,15 +316,20 @@ public class DefaultDataBase {
 			   Tauler.setDistrictes(districtes);
 			   
 			   //Aconseguim les cartes
+			   Map<Integer,Carta> cartesAIntercanviar = new HashMap<Integer,Carta>();
 			   for(Jugador j:jugadors){
 				   rs = stmt.executeQuery( "SELECT * FROM CARTA "+
 				       		"WHERE nomPartida='"+ nom + "' AND idJugador='"+ j.getId()+"';" );
+				   int idJugadorAnterior = j.getId()+1;
+				   if (idJugadorAnterior == 5)idJugadorAnterior = 1;
 				   while ( rs.next() ) {
 					   String nomCarta = rs.getString("nomCarta");
+					   int seleccionada = rs.getInt("seleccionada");
 					   for(int i = 0; i < CartesBD.nomsCartesComplets.length; ++i){
 						   if(CartesBD.nomsCartesComplets[i].equalsIgnoreCase(nomCarta)){
 							   Carta cAux = new Carta(CartesBD.nomsCartes[i], CartesBD.valorsCartes[i], CartesBD.nomsCartesComplets[i]);
 							   j.afegirCarta(cAux);
+							   if(seleccionada == 1)cartesAIntercanviar.put(idJugadorAnterior, cAux);
 						   }
 					   }
 				   }
@@ -358,7 +366,7 @@ public class DefaultDataBase {
 			       		"WHERE nom='"+ nom + "';" );
 			   partida = new Partida(nom,rs.getString("data"),rs.getInt("torn"),rs.getInt("pas"),
 					   jugadors,districtes, rs.getInt("idJugadorInici"), rs.getInt("passejantsAMoure"),
-					   cartesB1, cartesB2);
+					   cartesB1, cartesB2, cartesAIntercanviar);
 			       
 		       rs.close();
 		       stmt.close();

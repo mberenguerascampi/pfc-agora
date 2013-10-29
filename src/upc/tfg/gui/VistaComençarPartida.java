@@ -53,16 +53,17 @@ public class VistaComençarPartida extends DefaultView {
 	}
 	
 	private void afegirDescripcio(){
-		labelDescription = new JLabel(bundle.getString("començar_des"));
-		labelDescription.setBounds((int) (Constants.width*0.39 - HighscoreCell.CELL_WIDTH/2)-70, Constants.height/2 - (HighscoreCell.CELL_HEIGHT+10)* PuntuacionsBD.NUM_MAX_SCORES/2, 500, 30);
+		labelDescription = new JLabel("<html>"+bundle.getString("començar_des")+"</html>");
+		labelDescription.setBounds((int) (Constants.width*0.39 - HighscoreCell.CELL_WIDTH/2)-100, Constants.height/2 - (HighscoreCell.CELL_HEIGHT+10)* PuntuacionsBD.NUM_MAX_SCORES/2, 800, 60);
 		labelDescription.setFont(Constants.fontDescription);
 		add(labelDescription);
 	}
 	
 	private void afegeixLabelsJugador(){
 		for(int i = 0; i < 4; ++i){
-			JLabel nom = new JLabel(bundle.getString("nom")+(i+1));
-			nom.setBounds(labelDescription.getLocation().x, textFields[i].getLocation().y, 100, 30);
+			JLabel nom = new JLabel(bundle.getString("nomCPU")+i);
+			if(i == 0)nom.setText(bundle.getString("nomJugador"));
+			nom.setBounds(textFields[i].getLocation().x-230, textFields[i].getLocation().y, 210, 30);
 			nom.setFont(Constants.fontDescription);
 			add(nom);
 		}
@@ -73,7 +74,8 @@ public class VistaComençarPartida extends DefaultView {
 		for(JTextField itextField:textFields){
 			itextField.setText("J"+(i+1));
 			itextField.setFont(Constants.fontKristen);
-			itextField.setBounds(labelDescription.getLocation().x+120, labelDescription.getLocation().y+60+i*55, 200, 30);
+			itextField.setBounds(labelDescription.getLocation().x+labelDescription.getWidth()/2-100,
+					labelDescription.getLocation().y+130+i*55, 200, 30);
 			//itextField.setText(Partida.getInstance().getNom());
 			
 			add(itextField);
@@ -125,9 +127,9 @@ public class VistaComençarPartida extends DefaultView {
 						textFields[i].getLocation().y, 30, 30);
 			iaJ.setFocusPainted(false); 
 			iaJ.setContentAreaFilled(false); 
-			iaJ.setBorderPainted(false);
+			iaJ.setBorderPainted(true);
 			iaJ.setOpaque(false);
-			iaJ.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+			iaJ.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 			if(i == 0)iaJ.setIcon(new ImageIcon(humanIcon));
 			else {
 				iaJ.setIcon(new ImageIcon(iaSources[i-1]));

@@ -140,7 +140,7 @@ public class CustomMenuBar extends JMenuBar{
         eMenuItem2.setToolTipText("");
         eMenuItem2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-               // listener.tornarAlMenu();
+            	listener.mostraCalculPuntuacions();
             }
         });
 
@@ -164,7 +164,7 @@ public class CustomMenuBar extends JMenuBar{
         eMenuItem.setToolTipText("Exit application");
         eMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                System.exit(0);
+                listener.mostraAjuda();
             }
         });
 

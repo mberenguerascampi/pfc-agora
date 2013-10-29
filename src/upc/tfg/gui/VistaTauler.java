@@ -614,7 +614,11 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	  	  }
 	  	  
 	  	  Districte d = Partida.getInstance().getDistricte(nomDistricteSeleccionat);
-	  	  if(d!=null)infoView.setDistricte(d);
+	  	  if(d!=null){
+	  		  cardInfoView.setVisible(false);
+	  		  infoView.setVisible(true);
+	  		  infoView.setDistricte(d);
+	  	  }
 	}
 	
 	public void afegeixMarcCarta(){

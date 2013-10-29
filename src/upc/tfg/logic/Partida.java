@@ -56,8 +56,9 @@ public class Partida {
 	
 	public Partida(String nom, String data, int torn, int pas, ArrayList<Jugador> jugadors, 
 			Districte[] districtes, int idJugadorInici, int passejantsAMoure,
-			ArrayList<Carta> cartesB1, ArrayList<Carta> cartesB2) {
+			ArrayList<Carta> cartesB1, ArrayList<Carta> cartesB2, Map<Integer,Carta> cartesAIntercanviar) {
 		instance = this;
+		this.cartesAIntercanviar = cartesAIntercanviar;
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
 		this.nom = nom;
 		this.data = null;
@@ -155,6 +156,10 @@ public class Partida {
 		else {
 			return false;
 		}
+	}
+	
+	public Carta getCartaARobar(int jugadorID){
+		return cartesAIntercanviar.get(jugadorID);
 	}
 	
 	private void intercanviarCartes(){
@@ -606,5 +611,9 @@ public class Partida {
 
 	public void setUltimTorn(int ultimTorn) {
 		this.ultimTorn = ultimTorn;
+	}
+
+	public Map<Integer, Carta> getCartesAIntercanviar() {
+		return cartesAIntercanviar;
 	}
 }

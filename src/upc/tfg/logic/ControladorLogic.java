@@ -2,6 +2,7 @@ package upc.tfg.logic;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 import upc.tfg.agora.Agora;
 import upc.tfg.gui.VistaAlertes;
@@ -51,6 +52,14 @@ public class ControladorLogic {
 		this.colors = colorsACarregar;
 		controladorIA = new ControladorIA(this);
 		controladorIA.setJugadors(partida.getJugadorsRobot());
+	}
+	
+	public void carregarCartesARobar(Partida partida){
+		Map<Integer,Carta> cartesAIntercanviar = partida.getCartesAIntercanviar();
+		for(int key:cartesAIntercanviar.keySet()){
+			agora.seleccionaCartaPerRobar(key, cartesAIntercanviar.get(key));
+			System.out.println("ROBAR -> jugador: "+ key + ", carta " + cartesAIntercanviar.get(key).getNom());
+		}
 	}
 	
 	public boolean guardarPartida(String nom){

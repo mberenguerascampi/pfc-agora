@@ -162,6 +162,22 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		ResultatsFinals resultats = Partida.getInstance().getPuntuacioFinal();
 		mostraFinalPartida(resultats, false);
 	}
+	
+	public void mostraCalculPuntuacions(){
+		amagaVistes();
+		vInstruccions.setVisible(true);
+		vInstruccions.showCalcularPuntacionsText();
+		backToTauler = true;
+        removeMenu();
+	}
+	
+	public void mostraAjuda(){
+		amagaVistes();
+		vInstruccions.setVisible(true);
+		backToTauler = true;
+        removeMenu();
+	}
+	
 	//////
 	
 	private void amagaVistes(){
@@ -415,6 +431,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 			 afegeixCartesJugador(j.getId(), j.getCartes());
 		 }
 		 mostraBaralla(true);
+		 logic.carregarCartesARobar(partida);
 		 tauler.afegeixPassejants(partida.getJugador(1).getTotalPassejants(), 1);
 		 tauler.setVisible(true);
 		 addMenu();
