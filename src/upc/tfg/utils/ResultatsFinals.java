@@ -1,5 +1,7 @@
 package upc.tfg.utils;
 
+import java.util.Arrays;
+
 public class ResultatsFinals {
 	private int puntsJ1;
 	private int puntsJ2;
@@ -33,5 +35,33 @@ public class ResultatsFinals {
 
 	public int getIdJugadorGuanyador() {
 		return idJugadorGuanyador;
+	}
+	
+	public int getPunts(int idJugador){
+		switch(idJugador){
+			case 1:
+				return getPuntsJ1();
+			case 2:
+				return getPuntsJ2();
+			case 3:
+				return getPuntsJ3();
+			case 4:
+				return getPuntsJ4();
+			default:
+				return 0;
+		}
+	}
+	
+	public int getMaxPunts(int idJugadorExcepcio){
+		int[] punts = new int[3];
+		int index = 0;
+		for(int i = 1; i <= 4; ++i){
+			if(i != idJugadorExcepcio){
+				punts[index] = getPunts(i);
+				++index;
+			}
+		}
+		Arrays.sort(punts);
+		return punts[2];
 	}
 }

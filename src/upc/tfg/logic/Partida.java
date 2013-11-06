@@ -241,11 +241,19 @@ public class Partida {
 		}
 	}
 	
+	public Districte[] getDistrictes(){
+		return tauler.getDistrictes();
+	}
+	
 	public ResultatsFinals getPuntuacioFinal(){
+		return getPuntuacioFinal(tauler.getDistrictes());
+	}
+	
+	public ResultatsFinals getPuntuacioFinal(Districte[] districtes){
 		int puntsBlau, puntsVermell, puntsVerd, puntsGroc, distBlau, distVermell, distVerd, distGroc;
 		puntsBlau = puntsVermell = puntsVerd = puntsGroc = 0;
 		distBlau = distVermell = distVerd = distGroc = 0;
-		for(Districte d:tauler.getDistrictes()){
+		for(Districte d:districtes){
 			int colorGuanyador = d.getColorGuanyador();
 			if(colorGuanyador == Constants.BLAU){
 				++distBlau;

@@ -1,5 +1,6 @@
 package upc.tfg.logic;
 
+import upc.tfg.ia.JugadorGreedy;
 import upc.tfg.ia.JugadorRandom;
 import upc.tfg.utils.PassejantsAMoure;
 import upc.tfg.interfaces.JugadorRobot;
@@ -18,7 +19,7 @@ public class ControladorIA {
 	public void setJugadors(Jugador[] jugadors){
 		this.jugadors = jugadors;
 		for(int i = 0; i < jugadors.length; ++i){
-			robots[i] = new JugadorRandom(jugadors[i]);
+			robots[i] = new JugadorGreedy(jugadors[i]);
 		}
 	}
 	

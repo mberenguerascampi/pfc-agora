@@ -76,6 +76,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	private VistaCarta vCartaBaralla2;
 	private VistaCarta cartesDescartades;
 	private int previousDistrict = -1;
+	private VistaPassejant[] vistesPassejants = new VistaPassejant[4] ;
 	
 	private VistaPopUp popup;
 	private VistaPopUpBotons buttonsPopup;
@@ -220,8 +221,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	 */
 	public void afegeixPassejants(int numPassejants, int jugadorID){
 		String color = Partida.getInstance().getNomColor(Partida.getInstance().getColor(jugadorID));
-		System.out.println("Color " + jugadorID + " es " + Partida.getInstance().getColor(jugadorID));
-		final VistaPassejant vp = new VistaPassejant(color, numPassejants);
+		final VistaPassejant vp = new VistaPassejant(color, numPassejants, jugadorID);
 		Rectangle frame = getFramePassejant(jugadorID);
 		vp.setBounds(frame);
 		if (jugadorID == 1){
@@ -256,6 +256,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		}
 		
 		add(vp);
+		vistesPassejants[jugadorID-1] = vp;
 		if(jugadorID == 1)add(passejantEstatic);
 	}
 	
@@ -264,21 +265,33 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		passejantDinamic.setNum(passejantEstatic.getNum());
 	}
 	
+	public void updatePassejants(){
+		for(VistaPassejant vp:vistesPassejants){
+			vp.setNum(Partida.getInstance().getJugador(vp.getIdJugador()).getTotalPassejants());
+		}
+	}
+	
+	public void setVisibleNumPassejants(boolean aFlag, int jugadorID){
+		vistesPassejants[jugadorID-1].setVisible(aFlag);
+	}
+	
 	private Rectangle getFramePassejant(int idJugador){
 		if(idJugador == 1){
 			return new Rectangle(taulerX+IMG_TAULER_WIDTH-VistaPassejant.PASSEJANT_WIDTH, taulerY+IMG_TAULER_HEIGHT, 
 					VistaPassejant.PASSEJANT_WIDTH, VistaPassejant.PASSEJANT_HEIGHT);
 		}
 		else if(idJugador == 2){
-			return new Rectangle(taulerX+IMG_TAULER_WIDTH-VistaPassejant.PASSEJANT_WIDTH, taulerY+IMG_TAULER_HEIGHT, 
+			return new Rectangle(taulerX+IMG_TAULER_WIDTH+VistaPassejant.PASSEJANT_HEIGHT+20, 
+					taulerY+IMG_TAULER_HEIGHT/2-VistaPassejant.PASSEJANT_WIDTH/2, 
 					VistaPassejant.PASSEJANT_WIDTH, VistaPassejant.PASSEJANT_HEIGHT);
 		}
 		else if(idJugador == 3){
-			return new Rectangle(taulerX+IMG_TAULER_WIDTH-VistaPassejant.PASSEJANT_WIDTH, taulerY+IMG_TAULER_HEIGHT, 
+			return new Rectangle(taulerX, taulerY-VistaPassejant.PASSEJANT_HEIGHT, 
 					VistaPassejant.PASSEJANT_WIDTH, VistaPassejant.PASSEJANT_HEIGHT);
 		}
 		else{
-			return new Rectangle(taulerX+IMG_TAULER_WIDTH-VistaPassejant.PASSEJANT_WIDTH, taulerY+IMG_TAULER_HEIGHT, 
+			return new Rectangle(taulerX-2*VistaPassejant.PASSEJANT_HEIGHT-20, 
+					taulerY+IMG_TAULER_HEIGHT/2-VistaPassejant.PASSEJANT_WIDTH/2, 
 					VistaPassejant.PASSEJANT_WIDTH, VistaPassejant.PASSEJANT_HEIGHT);
 		}
 	}
@@ -298,6 +311,17 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		int y = pos.y;
 		setCardSize(x, y, carta, jugadorID);
 		afegeixListenerACarta(cartaEntity, jugadorID, carta);
+	    cartes.add(carta);
+	}
+	
+	public void afegeixCartaAgora(int jugadorID){
+		Carta cartaEntity = new Carta("agora", 0, "Agora Barcelona");
+		cartaEntity.setShowing(true);
+		final VistaCarta carta = new VistaCarta(cartaEntity, jugadorID, 6);
+		Posicio pos = getCardPosition(jugadorID, 6);
+		int x = pos.x;
+		int y = pos.y;
+		setCardSize(x, y, carta, jugadorID);
 	    cartes.add(carta);
 	}
 	
@@ -768,6 +792,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		updateBaralla(vCartaBaralla2, vBaralla2, Partida.getInstance().getBaralla2());
 		if(vCartaBaralla1 != null)vCartaBaralla1.setBounds(vBaralla1.getLocation().x+10, vBaralla1.getLocation().y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
 		if(vCartaBaralla2 != null)vCartaBaralla2.setBounds(vBaralla2.getLocation().x+10, vBaralla2.getLocation().y, VistaTauler.CARTA_WIDTH, VistaTauler.CARTA_HEIGHT);
+		updatePassejants();
 	}
 	
 	private void updateBaralla(VistaCarta vCartaBaralla, VistaBaralla vBaralla,Baralla baralla){

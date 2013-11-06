@@ -10,10 +10,9 @@ import upc.tfg.logic.Carta;
 import upc.tfg.logic.Districte;
 import upc.tfg.logic.Jugador;
 import upc.tfg.logic.Partida;
-import upc.tfg.logic.Passejant;
 import upc.tfg.utils.Constants;
 
-public class JugadorRandom implements JugadorRobot{
+public class JugadorRandom extends DefaultJugador implements JugadorRobot{
 	private Jugador jugador;
 	
 	public JugadorRandom(Jugador jugador) {
@@ -126,65 +125,6 @@ public class JugadorRandom implements JugadorRobot{
 			if(numIntents < dAdjacents.size()*2){
 				trobat = true;
 				return new PassejantsAMoure(color, d, dDesti);
-			}
-		}
-		return null;
-	}
-	
-	private boolean teSolucioEnFutur(Districte[] districtes, Districte dOrigin, Districte dFi, int color){
-		int passejantsAMoure = Partida.getInstance().getPassejantsAMoure();
-		System.out.println("Abans de retornar true");
-		if(passejantsAMoure == 1)return true;
-		else {
-			Partida.getInstance().setPassejantsAMoure(1);
-		}
-		Districte[] districtesFutur = new Districte[districtes.length];
-		Passejant p = null;
-		Districte dAux = null;
-		System.out.println("Abans de crear districtes auxiliars");
-		for(int i = 0; i < districtes.length; ++i){
-			if(districtes[i].equals(dOrigin)){
-				Districte aux = new Districte(dOrigin);
-				p = aux.removePassejant(color);
-				districtesFutur[i] = aux;
-			}
-			else if(districtes[i].equals(dFi)){
-				dAux = new Districte(dFi);
-				districtesFutur[i] = dAux;
-			}
-			else{
-				districtesFutur[i] = districtes[i];
-			}
-		}
-		dAux.afegeixPassejant(p);
-		System.out.println("Abans de buscar solucio");
-		if (getSolucioPassejantDistricte(districtesFutur, true) != null){
-			System.out.println("Abans de retornar true2");
-			Partida.getInstance().setPassejantsAMoure(passejantsAMoure);
-			return true;
-		}
-		else{
-			System.out.println("Abans de retornar false");
-			Partida.getInstance().setPassejantsAMoure(passejantsAMoure);
-			return false;
-		}
-	}
-	
-	private PassejantsAMoure getSolucioPassejantDistricte(Districte[] districtes, boolean futur){
-		for(int i = 0; i < districtes.length; ++i){
-			if(districtes[i].tePassejantsDisponibles()){
-				for(int k = 0; k < Constants.COLORS.length; ++k){
-					if(districtes[i].tePassejantsDisponibles(Constants.COLORS[k])){
-						for(int j = 0; j < districtes.length; ++j){
-							System.out.println(districtes[i].getNom());
-							if(i != j && Partida.getInstance().potMoure(districtes[i], districtes[j], Constants.COLORS[k])){
-								if(futur || teSolucioEnFutur(districtes, districtes[i], districtes[j], Constants.COLORS[k])){
-									return new PassejantsAMoure(Constants.COLORS[k], districtes[i], districtes[j]);
-								}
-							}
-						}
-					}
-				}
 			}
 		}
 		return null;

@@ -2,15 +2,18 @@ package upc.tfg.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.RotatedIcon;
 
 public class VistaPassejant extends JButton {
 	public static final String PASSEJANT_BLAU 		= "Blau";
@@ -25,19 +28,33 @@ public class VistaPassejant extends JButton {
 	private String color;
 	private int iColor;
 	private int num;
-	private JLabel numLabel;
+	private RotateLabel numLabel;
 	private boolean showZero;
 	private boolean draggingPassejant;
 	private boolean bloquejat = false;
 	private Image img = null;
 	private Image imgBloquejat = null;
 	private int minValue = 0;
+	private int idJugador;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5239720982932512754L;
 
 	public VistaPassejant(String color, int num) {
+		this.color = color;
+		this.num = num;
+		configureVistaPassejant();
+	}
+	
+	public VistaPassejant(String color, int num, int idJugador) {
+		this.idJugador = idJugador;
+		this.color = color;
+		this.num = num;
+		configureVistaPassejant();
+	}
+	
+	private void configureVistaPassejant(){
 		setLayout(null);
 		setOpaque(false);
 		setFocusPainted(false); 
@@ -45,10 +62,24 @@ public class VistaPassejant extends JButton {
 		setBorderPainted(false);
 		setRolloverEnabled(false);
 		repaint();
-		this.color = color;
-		this.num = num;
 		
-		numLabel = new JLabel("");
+		switch(idJugador){
+	    	case 1:
+	    		numLabel = new RotateLabel("", 0);
+	    		break;
+	    	case 2:
+	    		numLabel = new RotateLabel("", -Math.PI/2);
+	    		break;
+	    	case 3:
+	    		numLabel = new RotateLabel("", Math.PI);
+	    		break;
+	    	case 4:
+	    		numLabel = new RotateLabel("", Math.PI/2);
+	    		break;
+	    	default:
+	    		numLabel = new RotateLabel("", 0);
+	    		break;
+		}
 		numLabel.setLayout(null);
 		numLabel.setText(String.valueOf(num));
 		numLabel.setBounds(2, PASSEJANT_HEIGHT/2 - NUM_HEIGHT + 25, NUM_WIDTH, NUM_HEIGHT);
@@ -106,7 +137,29 @@ public class VistaPassejant extends JButton {
 				e.printStackTrace();
 			}
 		}
-	    graphics.drawImage(img, 0, 0, null);
+		ImageIcon icon = new ImageIcon(img);
+	    RotatedIcon rIcon = null;
+		switch(idJugador){
+	    	case 1:
+	    		graphics.drawImage(img, 0, 0, null);
+	    		break;
+	    	case 2:
+	    		rIcon = new RotatedIcon(icon, -90);
+	    		setIcon(rIcon);
+	    		break;
+	    	case 3:
+	    		rIcon = new RotatedIcon(icon, 180);
+	    		setIcon(rIcon);
+	    		break;
+	    	case 4:
+	    		rIcon = new RotatedIcon(icon, 90);
+	    		setIcon(rIcon);
+	    		break;
+	    	default:
+	    		graphics.drawImage(img, 0, 0, null);
+	    		break;
+	    }
+	    //graphics.drawImage(img, 0, 0, null);
 	    if(bloquejat){
 			if (imgBloquejat == null){
 				URL urlImg = getClass().getResource(Constants.fileUrl+"passejants/passejantBloquejat.png");
@@ -193,4 +246,36 @@ public class VistaPassejant extends JButton {
 				return PASSEJANT_GROC;
 			}
 		}
+
+		public int getIdJugador() {
+			return idJugador;
+		}
+
+		public void setIdJugador(int idJugador) {
+			this.idJugador = idJugador;
+		}
+		
+		  private class RotateLabel extends JLabel {
+			 
+			     /**
+				 * 
+				 */
+				private static final long serialVersionUID = 2984598422034191467L;
+				private double rotation = 0;
+						
+				public RotateLabel(String text, double rotation) {
+					super(text);
+					this.rotation = rotation;   
+					repaint();
+				}
+				          
+				@Override
+	           public void paintComponent(Graphics g) {
+				       Graphics2D gx = (Graphics2D) g;
+				       gx.rotate(rotation, getWidth() / 2, getHeight() / 2);
+				       super.paintComponent(g);
+				}
+
+			}
+
 }

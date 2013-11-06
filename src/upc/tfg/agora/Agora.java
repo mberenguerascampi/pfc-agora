@@ -336,9 +336,13 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 afegeixCartesJugador(2);
 		 afegeixCartesJugador(3);
 		 afegeixCartesJugador(4);
+		 afegeixCartaAgora(Partida.getInstance().getIdJugadorInici());
 		 mostraBaralla(false);
 		 //tauler.comencaIntercanviCartes();
 		 tauler.afegeixPassejants(Partida.getInstance().getJugador(1).getTotalPassejants(), 1);
+		 tauler.afegeixPassejants(Partida.getInstance().getJugador(2).getTotalPassejants(), 2);
+		 tauler.afegeixPassejants(Partida.getInstance().getJugador(3).getTotalPassejants(), 3);
+		 tauler.afegeixPassejants(Partida.getInstance().getJugador(4).getTotalPassejants(), 4);
 		 tauler.setVisible(true);
 		 addMenu();
 		 logic.getProximMoviment();
@@ -368,6 +372,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	{
 		if(jugadorID == 1 && cartaEntity != null)cartaEntity.setShowing(true);
 		tauler.afegeixCarta(jugadorID, posicio, cartaEntity);
+	}
+	
+	public void afegeixCartaAgora(int jugadorID){
+		tauler.afegeixCartaAgora(jugadorID);
 	}
 	
 	public void afegeixCartaAPosicioBuida(int jugadorID, Carta cartaEntity)
@@ -431,8 +439,12 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 			 afegeixCartesJugador(j.getId(), j.getCartes());
 		 }
 		 mostraBaralla(true);
+		 afegeixCartaAgora(partida.getIdJugadorInici());
 		 logic.carregarCartesARobar(partida);
 		 tauler.afegeixPassejants(partida.getJugador(1).getTotalPassejants(), 1);
+		 tauler.afegeixPassejants(partida.getJugador(2).getTotalPassejants(), 2);
+		 tauler.afegeixPassejants(partida.getJugador(3).getTotalPassejants(), 3);
+		 tauler.afegeixPassejants(partida.getJugador(4).getTotalPassejants(), 4);
 		 tauler.setVisible(true);
 		 addMenu();
 	}
