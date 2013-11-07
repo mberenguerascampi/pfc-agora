@@ -5,17 +5,30 @@ import upc.tfg.ia.JugadorRandom;
 import upc.tfg.utils.PassejantsAMoure;
 import upc.tfg.interfaces.JugadorRobot;
 
+/**
+ * Controlador de la Intel·ligència Artificial del sistema
+ * @author Marc
+ *
+ */
 public class ControladorIA {
 	private ControladorLogic logic;
 	private Jugador[] jugadors;
 	private JugadorRobot[] robots;
 	
+	/**
+	 * Constructora de la classe
+	 * @param logic Controlador logic
+	 */
 	public ControladorIA(ControladorLogic logic) {
 		this.logic = logic;
 		jugadors = new Jugador[3];
 		robots = new JugadorRobot[3];
 	}
 	
+	/**
+	 * Acció per definir els jugadors que ha de tenir els sistema de la IA
+	 * @param jugadors Array amb els jugadors que dirigeix la CPU
+	 */
 	public void setJugadors(Jugador[] jugadors){
 		this.jugadors = jugadors;
 		for(int i = 0; i < jugadors.length; ++i){
@@ -23,6 +36,11 @@ public class ControladorIA {
 		}
 	}
 	
+	/**
+	 * Acció que en funció del pas i del jugador realitza l'acció corresponent
+	 * @param jugadorID Identificador del jugador que li toca tirar
+	 * @param pas Pas actual en el que està la partida
+	 */
 	public void getProximMoviment(int jugadorID, int pas){
 		if(jugadorID == 1)return;
 		JugadorRobot robot = robots[jugadorID-2];

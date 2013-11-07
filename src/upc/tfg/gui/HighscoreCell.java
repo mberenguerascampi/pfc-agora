@@ -17,13 +17,19 @@ import upc.tfg.utils.Constants;
 public class HighscoreCell extends JPanel{
 
 	/**
-	 * 
+	 * Vista que mostra una cel·la on es mostra una puntuació
 	 */
 	private static final long serialVersionUID = 3804869214193693532L;
 	public static final int CELL_WIDTH = 600;
 	public static final int CELL_HEIGHT = 60;
 	public String nomPartida = "";
 	
+	/**
+	 * Constructora de la classe
+	 * @param nomJugador Nom del jugador
+	 * @param punts Número de punts que ha aconseguit el jugador
+	 * @param data Data del moment en que el jugador va aconseguir la puntuació
+	 */
 	public HighscoreCell(String nomJugador, String punts, String data){
 		setLayout(null);
 		setOpaque(false);
@@ -50,6 +56,12 @@ public class HighscoreCell extends JPanel{
 		add(dataLabel);
 	}
 	
+	/**
+	 * 
+	 * @param nomPartida
+	 * @param data
+	 * @param listener
+	 */
 	public HighscoreCell(final String nomPartida, String data, final CellListener listener){
 		this.nomPartida = nomPartida;
 		setLayout(null);

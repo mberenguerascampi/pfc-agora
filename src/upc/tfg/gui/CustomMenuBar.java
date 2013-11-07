@@ -17,13 +17,17 @@ import upc.tfg.utils.Constants;
 public class CustomMenuBar extends JMenuBar{
 
 	/**
-	 * 
+	 * Menú superior 
 	 */
 	private static final long serialVersionUID = -4255834552318081441L;
 	MenuBarListener listener;
 	Locale defaultLocale = Locale.getDefault();
 	public ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
 
+	/**
+	 * Constructora de la classe
+	 * @param listener Listener que s'encarregan d'escoltar les accions que l'usuari faci a la vista
+	 */
 	public CustomMenuBar(final MenuBarListener listener) {
 		this.listener = listener;
 		afegeixPestanyaPartida();

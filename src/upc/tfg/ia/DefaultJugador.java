@@ -10,11 +10,24 @@ import upc.tfg.logic.Passejant;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.PassejantsAMoure;
 
+/**
+ * Classe per defecte d'un jugador robot que conté funcions auxiliars
+ * @author Marc
+ *
+ */
 public class DefaultJugador {
 	
 	public DefaultJugador() {
 	}
 	
+	/**
+	 * Mètode que ens permet conèixer si un possible moviment és una soolució o no
+	 * @param districtes Array amb els districtes
+	 * @param dOrigin Districte d'on volem treure un Passejant
+	 * @param dFi Districte on volem afegir el passejant
+	 * @param color Color del passejant que volem moure
+	 * @return True si és solució, false en cas contrari
+	 */
 	public boolean teSolucioEnFutur(Districte[] districtes, Districte dOrigin, Districte dFi, int color){
 		int passejantsAMoure = Partida.getInstance().getPassejantsAMoure();
 		System.out.println("Abans de retornar true");
@@ -54,6 +67,12 @@ public class DefaultJugador {
 		}
 	}
 	
+	/**
+	 * Funció que ens retorna una solució segura per moure un passejant entre districtes
+	 * @param districtes
+	 * @param futur
+	 * @return
+	 */
 	public PassejantsAMoure getSolucioPassejantDistricte(Districte[] districtes, boolean futur){
 		for(int i = 0; i < districtes.length; ++i){
 			if(districtes[i].tePassejantsDisponibles()){
@@ -103,7 +122,7 @@ public class DefaultJugador {
 	
 	/**
 	 * Funció que retorna les cartes que poden ser seleccionades
-	 * @return
+	 * @return Un llista amb totes les cartes que poden ser seleccionades
 	 */
 	public ArrayList<Carta> getPossiblesCartes(Jugador jugador){
 		ArrayList<Carta> cartes = jugador.getCartes();

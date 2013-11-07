@@ -5,10 +5,17 @@ import java.util.Random;
 
 import upc.tfg.utils.CartesBD;
 
+/**
+ * Classe que representa l'entitat d'una baralla de cartes
+ * @author Marc
+ *
+ */
 public class Baralla {
-	private int id;
 	private ArrayList<Carta> cartes;
 	
+	/**
+	 * Constructora de la classe amb totes les cartes possibles
+	 */
 	public Baralla(){
 		cartes = new ArrayList<Carta>();
 		for(int i = 0; i < CartesBD.nomsCartes.length; ++i){
@@ -16,6 +23,10 @@ public class Baralla {
 		}
 	}
 	
+	/**
+	 * Constructora de la classe
+	 * @param cartes Array de cartes amb el que es vol crear la baralla
+	 */
 	public Baralla(Carta[] cartes){
 		this.cartes = new ArrayList<Carta>();
 		if(cartes == null) return;
@@ -24,10 +35,17 @@ public class Baralla {
 		}
 	}
 	
+	/**
+	 * Constructora de la classe
+	 * @param cartes ArrayList de cartes amb el que es vol crear la baralla
+	 */
 	public Baralla(ArrayList<Carta> cartes){
 		this.cartes = cartes;
 	}
 	
+	/**
+	 * Funció que barreja tote les cartes que hi ha a la baralla
+	 */
 	public void barrejar(){
 		Random rand = new Random();
 		rand.setSeed(System.currentTimeMillis());
@@ -43,19 +61,31 @@ public class Baralla {
 		}
 	}
 	
+	/**
+	 * Funció que true un cert nombre de cartes de la baralla en l'ordre en el qual estan
+	 * @param numCartes Nombre de cartes que es vol treue
+	 * @return Un array amb les cartes que s'han eliminat de la baralla
+	 */
 	public Carta[] getCartes(int numCartes){
 		Carta[] cartesADonar = new Carta[numCartes];
 		for (int i = 0; i < numCartes; ++i){
 			cartesADonar[i] = cartes.remove(i);
 		}
-		
 		return cartesADonar;
 	}
 	
+	/**
+	 * Funció que retorn les cartes que actualment hi ha a la baralla
+	 * @return ArrayList amb les cartes
+	 */
 	public ArrayList<Carta> getCartes(){
 		return this.cartes;
 	}
 	
+	/**
+	 * Mètode per consultar el nombre de cartes
+	 * @return El número de cartes de la baralla
+	 */
 	public int getNumCartes(){
 		return cartes.size();
 	}

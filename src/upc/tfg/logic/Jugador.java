@@ -2,6 +2,11 @@ package upc.tfg.logic;
 
 import java.util.ArrayList;
 
+/**
+ * Classe que representa l'entitat d'un jugador
+ * @author Marc
+ *
+ */
 public class Jugador {
 	private String nom;
 	private int id;
@@ -10,6 +15,12 @@ public class Jugador {
 	private ArrayList<Carta> cartes;
 	int totalPassejants;
 	
+	/**
+	 * Constructora de la classe
+	 * @param nom Nom del jugador
+	 * @param id Identificador del jugador
+	 * @param color Color del jugador
+	 */
 	public Jugador(String nom, int id, int color) {
 		this.nom = nom;
 		this.id = id;
@@ -23,30 +34,49 @@ public class Jugador {
 		}
 	}
 	
-	
+	/**
+	 * Funció que treu un passejant del jugador
+	 * @return El passejant que s'ha tret
+	 */
 	public Passejant getUnPassejant(){
 		--totalPassejants;
 		if(totalPassejants < 0)return null;
 		return passejants.remove(totalPassejants);
 	}
 	
+	/**
+	 * Acció que afegeix una carta a la mà del jugador
+	 * @param carta Carta que s'afegeix
+	 */
 	public void afegirCarta(Carta carta){
 		if(carta == null)return;
 		System.out.println("Jugador" + id + " -> " + "Carta afegida -> " + carta.getNom());
 		cartes.add(carta);
 	}
 	
+	/**
+	 * Acció que treu una carta de la mà del jugador
+	 * @param carta Carta que es treu
+	 */
 	public void treureCarta(Carta carta){
 		if(carta == null)return;
 		System.out.println("Jugador" + id + " -> " + "Carta esborrada -> " + carta.getNom());
 		cartes.remove(carta);
 	}
 	
+	/**
+	 * Acció que afegeix un determinat passejant al jugador
+	 * @param p Passejant que es vol afegir
+	 */
 	public void afegeixUnPassejant(Passejant p){
 		passejants.add(p);
 		++totalPassejants;
 	}
 	
+	/**
+	 * Acció que permet determinar el nombre de passejants que volem que tingui el jugador
+	 * @param num Nou nombre de passejants del jugador
+	 */
 	public void setNumPassejants(int num){
 		passejants.clear();
 		for (int i = 0; i < num; ++i){

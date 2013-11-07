@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Classe que conté valors constants utilitzats per diferentes classes
+ * @author Marc
+ *
+ */
 public class Constants {
 	//Paths
 	public static final String fileUrl = "/resources/images/";
@@ -65,22 +70,26 @@ public class Constants {
 	public static final int[] COLORS    = {BLAU, VERMELL, VERD, GROC};
 	
 	//Graf dels districtes adjacents
+	@SuppressWarnings("serial")
 	private static final List<Integer> valuesCorts = new ArrayList<Integer>(){{
 		add(SANTS_MONTJUIC);
 		add(SARRIA_SANT_GERVASI);
 		add(EIXAMPLE);
 	}};
+	@SuppressWarnings("serial")
 	private static final List<Integer> valuesSants = new ArrayList<Integer>(){{
 		add(LES_CORTS);
 		add(EIXAMPLE);
 		add(CIUTAT_VELLA);
 	}};
+	@SuppressWarnings("serial")
 	private static final List<Integer> valuesSarria = new ArrayList<Integer>(){{
 		add(LES_CORTS);
 		add(EIXAMPLE);
 		add(GRACIA);
 		add(HORTA_GUINARDO);
 	}};
+	@SuppressWarnings("serial")
 	private static final List<Integer> valuesEixample = new ArrayList<Integer>(){{
 		add(SANTS_MONTJUIC);
 		add(LES_CORTS);
@@ -90,16 +99,19 @@ public class Constants {
 		add(SANT_MARTI);
 		add(CIUTAT_VELLA);
 	}};
+	@SuppressWarnings("serial")
 	private static final List<Integer> valuesCiutatVella = new ArrayList<Integer>(){{
 		add(SANTS_MONTJUIC);
 		add(EIXAMPLE);
 		add(SANT_MARTI);
 	}};
+	@SuppressWarnings("serial")
 	private static final List<Integer> valuesGracia = new ArrayList<Integer>(){{
 		add(SARRIA_SANT_GERVASI);
 		add(HORTA_GUINARDO);
 		add(EIXAMPLE);
 	}};
+	@SuppressWarnings("serial")
 	private static final List<Integer> valuesHorta = new ArrayList<Integer>(){{
 		add(SARRIA_SANT_GERVASI);
 		add(GRACIA);
@@ -108,21 +120,25 @@ public class Constants {
 		add(EIXAMPLE);
 		add(SANT_MARTI);
 	}};
+	@SuppressWarnings("serial")
 	private static final List<Integer> valuesSantMarti = new ArrayList<Integer>(){{
 		add(CIUTAT_VELLA);
 		add(EIXAMPLE);
 		add(HORTA_GUINARDO);
 		add(SANT_ANDREU);
 	}};
+	@SuppressWarnings("serial")
 	private static final List<Integer> valuesNouBarris = new ArrayList<Integer>(){{
 		add(HORTA_GUINARDO);
 		add(SANT_ANDREU);
 	}};
+	@SuppressWarnings("serial")
 	private static final List<Integer> valuesSantAndreu = new ArrayList<Integer>(){{
 		add(NOU_BARIS);
 		add(HORTA_GUINARDO);
 		add(SANT_MARTI);
 	}};
+	@SuppressWarnings("serial")
 	public static final HashMap<Integer,List<Integer>> grafDistrictes  = new HashMap<Integer, List<Integer>>(){{
         put(LES_CORTS, valuesCorts);
         put(SANTS_MONTJUIC, valuesSants);

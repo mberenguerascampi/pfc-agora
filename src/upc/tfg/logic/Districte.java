@@ -5,6 +5,11 @@ import java.util.ArrayList;
 
 import upc.tfg.utils.Constants;
 
+/**
+ * Classe que representa l'entitat d'un districte
+ * @author Marc
+ *
+ */
 public class Districte {
 	private String nom;
 	private int valor;
@@ -15,6 +20,9 @@ public class Districte {
 	private ArrayList<Passejant> passejantsVerds;
 	private ArrayList<Passejant> passejantsGrocs;
 	
+	/**
+	 * Constructora de la classe
+	 */
 	public Districte() {
 		passejantsBlaus = new ArrayList<Passejant>();
 		passejantsVermells = new ArrayList<Passejant>();
@@ -22,6 +30,10 @@ public class Districte {
 		passejantsGrocs = new ArrayList<Passejant>();
 	}
 	
+	/**
+	 * Constructora de la classe que fa una còpia del districte que es passa per paràmetre
+	 * @param d Districte que volem copiar
+	 */
 	public Districte(Districte d){
 		this.nom = d.getNom();
 		this.valor = d.getValor();
@@ -37,14 +49,13 @@ public class Districte {
 		addPassejants(passejantsGrocs, Constants.GROC, d);
 	}
 	
-	private void addPassejants(ArrayList<Passejant> arrayP, int color, Districte d){
-		ArrayList<Passejant> auxArray = d.getArray(color);
-		for(int i = 0; i < auxArray.size(); ++i) {
-			Passejant p = new Passejant(auxArray.get(i).getColor(), auxArray.get(i).getBloquejat());
-			arrayP.add(p);
-		}
-	}
-	
+	/**
+	 * Constructora de la classe que crea un districte a partir de les caractterístiques que li passem
+	 * @param nom Nom del districte
+	 * @param valor Valor del districte
+	 * @param imatge Imatge que té el districte
+	 * @param districteID Identificador del districte
+	 */
 	public Districte(String nom, int valor, Image imatge, int districteID) {
 		this.nom = nom;
 		this.valor = valor;
@@ -67,6 +78,25 @@ public class Districte {
 //		afegeixPassejant(p5);
 	}
 	
+	/**
+	 * Acció que permet afegir un passejant a un array el conjunt de passejant que té un districte
+	 * d'un determinat color
+	 * @param arrayP ArrayList on volem afgir els passejants
+	 * @param color Color del qual volem obtenir els passejants
+	 * @param d Districte d'on volem treure'n els passejants
+	 */
+	private void addPassejants(ArrayList<Passejant> arrayP, int color, Districte d){
+		ArrayList<Passejant> auxArray = d.getArray(color);
+		for(int i = 0; i < auxArray.size(); ++i) {
+			Passejant p = new Passejant(auxArray.get(i).getColor(), auxArray.get(i).getBloquejat());
+			arrayP.add(p);
+		}
+	}
+	
+	/**
+	 * Acció que afegeix un determinat passejant al districte
+	 * @param passejant Passejant que volem afegir
+	 */
 	public void afegeixPassejant(Passejant passejant){
 		System.out.println("Passejant afegit");
 		switch (passejant.getColor()){
@@ -88,6 +118,12 @@ public class Districte {
 		
 	}
 	
+	/**
+	 * Acció que inicialitza un determinat nombre de passejant, de un determinat color, i els afegeix al districte
+	 * @param color Color dels passejants a afegir
+	 * @param numP Nombre de passejants que volem afegir
+	 * @param numBloquejats Nombre de passejants que han d'estar bloquejats del total 
+	 */
 	public void inicialitzaIAfefeixPassejants(int color, int numP, int numBloquejats){
 		int bloquejatsActualment = 0;
 		for(int i = 0; i < numP; ++i){
@@ -98,6 +134,11 @@ public class Districte {
 		}
 	}
 	
+	/**
+	 * Funció que esborra un passejant del districte
+	 * @param color Color del passejant que volem esborrar
+	 * @return El passsejant que hem tre d'aquest districte
+	 */
 	public Passejant removePassejant(int color){
 		switch (color){
 			case Constants.BLAU:
@@ -113,6 +154,10 @@ public class Districte {
 		}
 	}
 	
+	/**
+	 * Funció que ens indica si en el districte hi ha dos o més jugadors amb el nombre més alt de passejants
+	 * @return True si es produeix empat, false en cas contrari
+	 */
 	public boolean teMateixNombreMaxPassejants(){
 		int max1 = Math.max(passejantsBlaus.size(), passejantsVermells.size());
 		int min1 = Math.min(passejantsBlaus.size(), passejantsVermells.size());
@@ -127,6 +172,11 @@ public class Districte {
 		return false;
 	}
 	
+	/**
+	 * Funció que indica si el districte té cap passejant no bloquejat d'un determinat color
+	 * @param color Color del qual volem conèixer la disponibilitat
+	 * @return True si hi ha cap passejant disponible, false en cas contrari
+	 */
 	public boolean tePassejantsDisponibles(int color){
 		ArrayList<Passejant>temp = getArray(color);
 		if(temp.size() == 0)return false;
@@ -136,10 +186,19 @@ public class Districte {
 		return false;
 	}
 	
+	/**
+	 * Funció que diu si hi ha cap passejant disponible per moure d'algun color
+	 * @return True si n'hi ha algun de disponible, false en cas contrari
+	 */
 	public boolean tePassejantsDisponibles(){
 		return (tePassejantsDisponibles(Constants.BLAU) || tePassejantsDisponibles(Constants.VERMELL) || tePassejantsDisponibles(Constants.VERD) || tePassejantsDisponibles(Constants.GROC));
 	}
 	
+	/**
+	 * Funció que indica si es pot afegir un passejant al districte d'un determinat color
+	 * @param color Color a tenir en compte per mirar si es pot afegir el passejant
+	 * @return True si es pot afegir, false en cas contrari
+	 */
 	public boolean potAfegirPassejant(int color){
 		ArrayList<Passejant>temp = getArray(color);
 		if(temp.size()+1 >= passejantsBlaus.size() && temp.size()+1 >= passejantsVermells.size()
@@ -152,6 +211,11 @@ public class Districte {
 		return true;
 	}
 	
+	/**
+	 * Funció que indica si es pot treure un passejant del districte d'un determinat color
+	 * @param color Color a tenir en compte per mirar si es pot treure el passejant
+	 * @return True si es pot treure, false en cas contrari
+	 */
 	public boolean potTreurePassejant(int color){
 		ArrayList<Passejant>temp = getArray(color);
 		ArrayList<Passejant>temp2 = getMaxArray();
@@ -171,6 +235,10 @@ public class Districte {
 		return true;
 	}
 	
+	/**
+	 * Funció per obtenir la llista de passejants que més predominen
+	 * @return ArrayList dels passejants del color que és més abundant en el districte
+	 */
 	private ArrayList<Passejant> getMaxArray(){
 		int maxSize = Math.max(Math.max(passejantsBlaus.size(), passejantsVermells.size()), 
 					Math.max(passejantsGrocs.size(), passejantsVerds.size()));
@@ -180,22 +248,12 @@ public class Districte {
 		else return passejantsVerds;
 	}
 	
-	public int getNumPassejantsBlaus(){
-		return passejantsBlaus.size();
-	}
 	
-	public int getNumPassejantsVermells(){
-		return passejantsVermells.size();
-	}
-	
-	public int getNumPassejantsVerds(){
-		return passejantsVerds.size();
-	}
-	
-	public int getNumPassejantsGrocs(){
-		return passejantsGrocs.size();
-	}
-	
+	/**
+	 * Funció per obtenir el nombre de passejants d'un determinat color
+	 * @param color Color del qual volem obtenir el nombre de passejants
+	 * @return El nombre de passejants del color
+	 */
 	public int getNumPassejants(int color){
 		switch (color){
 			case Constants.BLAU:
@@ -211,6 +269,11 @@ public class Districte {
 		}
 	}
 	
+	/**
+	 * Funció que peremt obtenir la llista de passejants d'un determinat color
+	 * @param color Color del qual voleem obtenir la llista de passejants
+	 * @return ArrayList amb els passejants del color pasat com a paràmetre
+	 */
 	private ArrayList<Passejant> getArray(int color){
 		ArrayList<Passejant>temp = null;
 		switch (color){
@@ -232,6 +295,9 @@ public class Districte {
 		return temp;
 	}
 	
+	/**
+	 * Acció que desbloqueja tots els passejants del districte
+	 */
 	public void restartPassejants(){
 		for(Passejant p:passejantsBlaus)p.desbloquejar();
 		for(Passejant p:passejantsVermells)p.desbloquejar();
@@ -239,6 +305,10 @@ public class Districte {
 		for(Passejant p:passejantsGrocs)p.desbloquejar();
 	}
 	
+	/**
+	 * Funció que indica quin és el color que més abunda en el districte
+	 * @return L'identificador del color que predomina en el districte
+	 */
 	public int getColorGuanyador(){
 		int sizes[] = {passejantsBlaus.size(), passejantsVermells.size(), passejantsVerds.size(), passejantsGrocs.size()};
 		int colors[] = {Constants.BLAU, Constants.VERMELL, Constants.VERD, Constants.GROC};
@@ -247,6 +317,36 @@ public class Districte {
 			if(sizes[i] == max) return colors[i];
 		}
 		return 0;
+	}
+	
+	/**
+	 * Funció que ens indica si es produïrà un empat en nombre màxim de passejants si afegim un
+	 * determinat nombre de passejants d'un determinat color
+	 * @param numPassejants Nombre de passejants a afegir
+	 * @param color Color dels passejants a afegir
+	 * @return True si es produeix empat, false en cas contrari
+	 */
+	public boolean tindraMateixNombrePassejants(int numPassejants, int color) {
+		ArrayList<Passejant>temp = getArray(color);
+		ArrayList<Passejant>temp2 = getMaxArray();
+		//Si els passejants del determinat color són els que predominen es poden afegir
+		if(temp.equals(temp2)) return false;
+		else if(temp2.size() == temp.size() + numPassejants) return true;
+		return false;
+	}
+	
+	/**
+	 * Funció per obtenir el nombre de passejants bloquejats d'un determinat color
+	 * @param color Color del qual volem obtenir el nombre de passejants bloquejats
+	 * @return El nombre de passejants bloquejats del color 
+	 */
+	public int getNumPassejantsBloquejats(int color){
+		int numBloquejats = 0;
+		ArrayList<Passejant> passejants = getArray(color);
+		for(Passejant p:passejants){
+			if(p.getBloquejat()) ++numBloquejats;
+		}
+		return numBloquejats;
 	}
 	
 	//Getters & Setters
@@ -277,22 +377,20 @@ public class Districte {
 	public void setDistricteID(int districteID) {
 		this.districteID = districteID;
 	}
-
-	public boolean tindraMateixNombrePassejants(int numPassejants, int color) {
-		ArrayList<Passejant>temp = getArray(color);
-		ArrayList<Passejant>temp2 = getMaxArray();
-		//Si els passejants del determinat color són els que predominen es poden afegir
-		if(temp.equals(temp2)) return false;
-		else if(temp2.size() == temp.size() + numPassejants) return true;
-		return false;
+	
+	public int getNumPassejantsBlaus(){
+		return passejantsBlaus.size();
 	}
 	
-	public int getNumPassejantsBloquejats(int color){
-		int numBloquejats = 0;
-		ArrayList<Passejant> passejants = getArray(color);
-		for(Passejant p:passejants){
-			if(p.getBloquejat()) ++numBloquejats;
-		}
-		return numBloquejats;
+	public int getNumPassejantsVermells(){
+		return passejantsVermells.size();
+	}
+	
+	public int getNumPassejantsVerds(){
+		return passejantsVerds.size();
+	}
+	
+	public int getNumPassejantsGrocs(){
+		return passejantsGrocs.size();
 	}
 }

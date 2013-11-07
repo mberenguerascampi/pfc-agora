@@ -9,6 +9,11 @@ import javax.imageio.ImageIO;
 import upc.tfg.utils.CartesBD;
 import upc.tfg.utils.Constants;
 
+/**
+ * Classe que representa la entitat d'una carta
+ * @author Marc
+ *
+ */
 public class Carta {
 	private String nom = "";
 	private int valor;
@@ -16,10 +21,19 @@ public class Carta {
 	private Image image;
 	private Districte districte;
 	
+	/**
+	 * Constructor de la classe
+	 */
 	public Carta() {
 		
 	}
 	
+	/**
+	 * Constructor de la classe
+	 * @param nom Nom de la carta (coincideix amb el nom del fitxer amb la imatge)
+	 * @param valor Valor que té la carta
+	 * @param nomcomplert Nom complet que es vol mostrar de la carta
+	 */
 	public Carta(String nom, int valor, String nomcomplert) {
 		this.nom = nomcomplert;
 		this.valor = valor;
@@ -33,6 +47,9 @@ public class Carta {
 	}
 	
 	//Public Methods
+	/**
+	 * Acció que gira la carta de maner que si estava visible deixa de estar-ho i a l'inrevés.
+	 */
 	public void girar(){
 		showing = !showing;
 	}

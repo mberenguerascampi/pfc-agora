@@ -18,12 +18,11 @@ import upc.tfg.utils.Constants;
 
 public class DefaultView extends JPanel{
 	/**
-	 * 
+	 * Vista per defecte
 	 */
 	private static final long serialVersionUID = -4952576131782945923L;
 	Locale defaultLocale = Locale.getDefault();
 	public ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
-	private String backgroundName;
 	public JLabel skin;
 	private Image img = null;
 	public int marginX = 0;
@@ -47,6 +46,10 @@ public class DefaultView extends JPanel{
 	    page.drawImage(img, 0, 0, this);
 	}
 	
+	/**
+	 * Acció per afegir un background 
+	 * @param name Nom de la imatge que utilitzarem de background
+	 */
 	public void addSkin(String name)
 	{
 		skin = new JLabel("");
@@ -64,6 +67,10 @@ public class DefaultView extends JPanel{
         add(skin);
 	}
 	
+	/**
+	 * Acció per definir un nom per a la imatge de background
+	 * @param backgroundName Nom de la imatge de background
+	 */
 	public void setBackgroundName(String backgroundName){
 		if(backgroundName.contains(".gif")){
 			URL urlImg = getClass().getResource(Constants.fileUrl+backgroundName);
@@ -80,11 +87,19 @@ public class DefaultView extends JPanel{
 		img = img.getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height,  java.awt.Image.SCALE_SMOOTH);
 	}
 	
+	/**
+	 * Acció que actualitza l'idioma en que agafem els Strings
+	 */
 	public void updateBundle(){
 		defaultLocale = Locale.getDefault();
 		bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
 	}
 	
+	/**
+	 * Acció per afegir la vista VistaBarraSuperior
+	 * @param title Títol que es mostra en la barra
+	 * @param listener Listener que s'encarregan d'escoltar les accions que l'usuari faci a la vista
+	 */
 	public void afegeixBarraSuperior(String title, VistaAmbBotoTornarListener listener){
 		vbs = new VistaBarraSuperior(title, listener);
 		vbs.setBounds(0, 0, VistaBarraSuperior.BAR_WIDTH, VistaBarraSuperior.BAR_HEIGHT);

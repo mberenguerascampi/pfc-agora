@@ -9,13 +9,25 @@ import javax.imageio.ImageIO;
 import upc.tfg.agora.Agora;
 import upc.tfg.utils.Constants;
 
+/**
+ * Classe que representa l'entitat del tauler
+ * @author Marc
+ *
+ */
 public class Tauler {
 	private static Districte[] districtes = null;
 	
+	/**
+	 * Constructora de la classe
+	 */
 	public Tauler() {
 		districtes = creaDistrictes();
 	}
 	
+	/**
+	 * Funció per obtenir els districtes per primera vegada
+	 * @return Array amb tots els districtes
+	 */
 	public static Districte[] creaDistrictes(){
 		Districte districtes[] = new Districte[10];
 		String[] noms = {"Les Corts", "Sarrià Sant Gervasi", "Gràcia", "Horta Guinardo", "Nou Barris", "Sant Andreu", "Sants Montjuic", "Eixample", "Sant Martí", "Ciutat Vella"};
@@ -24,7 +36,6 @@ public class Tauler {
 		int[] districtesID = {Constants.LES_CORTS, Constants.SARRIA_SANT_GERVASI, Constants.GRACIA, Constants.HORTA_GUINARDO, Constants.NOU_BARIS, Constants.SANT_ANDREU, Constants.SANTS_MONTJUIC, Constants.EIXAMPLE, Constants.SANT_MARTI, Constants.CIUTAT_VELLA};
 		
 		for (int i = 0; i < 10; ++i){
-			//TODO: Afegir imatge districte
 			URL urlImg = Agora.class.getResource(Constants.fileUrl+"cartes/"+ nomsImatges[i] + ".png");
 			Image img = null;
 			try {
@@ -38,6 +49,11 @@ public class Tauler {
 		return districtes;
 	}
 	
+	/**
+	 * Funció per obtenir un determinat districte
+	 * @param nom Nom de districte que volem obtenir
+	 * @return El Districte a obtenir
+	 */
 	public static Districte getDistricte(String nom){
 		if(districtes == null)districtes = creaDistrictes();
 		for(Districte districte:districtes){
@@ -46,10 +62,6 @@ public class Tauler {
 			}
 		}
 		return null;
-	}
-	
-	public void reiniciar(){
-		
 	}
 	
 	//Getters & setters

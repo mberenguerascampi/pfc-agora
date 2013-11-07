@@ -6,34 +6,25 @@ import java.awt.Container;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 
 import upc.tfg.gui.CustomMenuBar;
 import upc.tfg.gui.VistaAbout;
-import upc.tfg.gui.VistaBaralla;
 import upc.tfg.gui.VistaCarregarPartida;
 import upc.tfg.gui.VistaComençarPartida;
 import upc.tfg.gui.VistaFinalPartida;
 import upc.tfg.gui.VistaIdioma;
 import upc.tfg.gui.VistaInstruccions;
 import upc.tfg.gui.VistaMenuPrincipal;
-import upc.tfg.gui.VistaPopUp;
 import upc.tfg.gui.VistaPuntuacions;
 import upc.tfg.gui.VistaTauler;
 import upc.tfg.interfaces.MenuBarListener;
 import upc.tfg.interfaces.MenuPrincipalListener;
-import upc.tfg.interfaces.PopupButtonsListener;
 import upc.tfg.interfaces.VistaAmbBotoTornarListener;
 import upc.tfg.interfaces.TaulerListener;
 import upc.tfg.logic.Carta;
@@ -41,12 +32,14 @@ import upc.tfg.logic.ControladorLogic;
 import upc.tfg.logic.Districte;
 import upc.tfg.logic.Jugador;
 import upc.tfg.logic.Partida;
-import upc.tfg.logic.Tauler;
 import upc.tfg.utils.Constants;
-import upc.tfg.utils.DefaultDataBase;
-import upc.tfg.utils.ImageToNumberArray;
 import upc.tfg.utils.ResultatsFinals;
 
+/**
+ * Controlador de tota la capa de presentació
+ * @author Marc
+ *
+ */
 public class Agora extends JFrame implements MenuPrincipalListener, TaulerListener,
 										VistaAmbBotoTornarListener, ActionListener, MenuBarListener{
 	/**
@@ -70,6 +63,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	private boolean backToTauler = false;
 	public boolean finish = false;
 	
+	/**
+	 * Constructora de la classe
+	 * @throws IOException
+	 */
 	public Agora() throws IOException {
 		contentPane = getContentPane();
 		cardLayout = new CardLayout();
@@ -86,6 +83,11 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		//pack();
 	}
 	
+	/**
+	 * Funció que permet obtenir la instància de la classe
+	 * @return La instància de la classe Agora
+	 * @throws IOException
+	 */
 	public static Agora getInstance() throws IOException{
 		if(instance != null)return instance;
 		else return new Agora();
@@ -96,6 +98,9 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		// playPressed();
 	}
 	
+	/**
+	 * Acció que inicialitza el frame de l'aplicació
+	 */
 	private void initFrame(){
 		setTitle("Àgora Barcelona");
 		setVisible(true);
@@ -112,74 +117,17 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		Image icon =  new ImageIcon(urlIconImg).getImage();
 		setIconImage(icon);
 	}
-	
+	 
+	/**
+	 * Acció que inicialitza el menú superior que hi mentre juguem
+	 */
 	private void initMenu(){
 		menubar = new CustomMenuBar(this);
 	}
 	
-	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL MENU SUPERIOR
-	
-	public void desferJugada(){
-		logic.desfesJugada();
-	}
-	
-	public void tornarAlMenu(){
-		amagaVistes();
-		menuPrincipal.updateView();
-        menuPrincipal.setVisible(true);
-        removeMenu();
-	}
-	
-	public void acabarPartidaiTornarAlMenu(){
-		if(tauler.showGoMenuPopup()){
-			tornarAlMenu();
-		}
-	}
-	
-	public void exitApplication(){
-		//System.exit(0);
-		tauler.showPopupConfirmar();
-	}
-	
-	public void mostraPopupGuardar(){
-		tauler.showPopupGuardar();
-	}
-	
-	public void carregarPartida(){
-		amagaVistes();
-		vCarregarPartida.setVisible(true);
-		backToTauler = true;
-        removeMenu();
-	}
-	
-	public void crearPartida(){
-		començarPartida(Partida.getInstance().getNomJugador(1), Partida.getInstance().getNomJugador(2), 
-				Partida.getInstance().getNomJugador(3), Partida.getInstance().getNomJugador(4), 
-				logic.getColors());
-	}
-	
-	public void mostraPuntuacionsTemporals(){
-		ResultatsFinals resultats = Partida.getInstance().getPuntuacioFinal();
-		mostraFinalPartida(resultats, false);
-	}
-	
-	public void mostraCalculPuntuacions(){
-		amagaVistes();
-		vInstruccions.setVisible(true);
-		vInstruccions.showCalcularPuntacionsText();
-		backToTauler = true;
-        removeMenu();
-	}
-	
-	public void mostraAjuda(){
-		amagaVistes();
-		vInstruccions.setVisible(true);
-		backToTauler = true;
-        removeMenu();
-	}
-	
-	//////
-	
+	/**
+	 * Acció que oculta totes les vistes del frame
+	 */
 	private void amagaVistes(){
 		menuPrincipal.setVisible(false);
 		tauler.setVisible(false);
@@ -192,16 +140,25 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		vComençarPartida.setVisible(false);
 	}
 	
+	/**
+	 * Acció que posa el menú superior en la pantalla
+	 */
 	private void addMenu()
 	{
 		setJMenuBar(menubar);
 	}
 	
+	/**
+	 * Acció que treu el menú superior de la pantalla
+	 */
 	private void removeMenu()
 	{
 		setJMenuBar(null);
 	}
 	
+	/**
+	 * Acció que inicialitza totes les vistes que hia
+	 */
 	private void initViews(){
 		menuPrincipal = new VistaMenuPrincipal(this);
 		menuPrincipal.setVisible(true);
@@ -233,6 +190,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		contentPane.add(vInstruccions);
 	}
 	
+	/**
+	 * Acció que afegeix les cartes d'un determinat jugador
+	 * @param jugadorID Identificador del jugador al qual volem afegir les cartes
+	 */
 	private void afegeixCartesJugador(int jugadorID){
 		Carta[] cartes = logic.getCartes(5);
 		 for(int i = 0; i < 5; ++i){
@@ -241,6 +202,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 }
 	}
 	
+	/**
+	 * Acció per visulalitzar les baralles en el tauler
+	 * @param barallaDividida Boolean que indica si la baralla està dividida o encar no
+	 */
 	private void mostraBaralla(boolean barallaDividida){
 		if(!barallaDividida)logic.divideixBaralla();
 		tauler.afegeixBaralles();
@@ -360,6 +325,68 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		backToTauler = false;
 	}
 	
+	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL MENU SUPERIOR
+	public void desferJugada(){
+		logic.desfesJugada();
+	}
+	
+	public void tornarAlMenu(){
+		amagaVistes();
+		menuPrincipal.updateView();
+        menuPrincipal.setVisible(true);
+        removeMenu();
+	}
+	
+	public void acabarPartidaiTornarAlMenu(){
+		if(tauler.showGoMenuPopup()){
+			tornarAlMenu();
+		}
+	}
+	
+	public void exitApplication(){
+		//System.exit(0);
+		tauler.showPopupConfirmar();
+	}
+	
+	public void mostraPopupGuardar(){
+		tauler.showPopupGuardar();
+	}
+	
+	public void carregarPartida(){
+		amagaVistes();
+		vCarregarPartida.setVisible(true);
+		backToTauler = true;
+        removeMenu();
+	}
+	
+	public void crearPartida(){
+		començarPartida(Partida.getInstance().getNomJugador(1), Partida.getInstance().getNomJugador(2), 
+				Partida.getInstance().getNomJugador(3), Partida.getInstance().getNomJugador(4), 
+				logic.getColors());
+	}
+	
+	public void mostraPuntuacionsTemporals(){
+		ResultatsFinals resultats = Partida.getInstance().getPuntuacioFinal();
+		mostraFinalPartida(resultats, false);
+	}
+	
+	public void mostraCalculPuntuacions(){
+		amagaVistes();
+		vInstruccions.setVisible(true);
+		vInstruccions.showCalcularPuntacionsText();
+		backToTauler = true;
+        removeMenu();
+	}
+	
+	public void mostraAjuda(){
+		amagaVistes();
+		vInstruccions.setVisible(true);
+		backToTauler = true;
+        removeMenu();
+	}
+	
+	//////
+	
 	//FUNCIONS PÜBLIQUES PER MODIFiCAR LA CAPA DE PRESENTACIÓ
 	/**
 	 * Mostra en la pantalla del tauler la carta amb identificador cartaID en les cartes del jugador amb 
@@ -374,36 +401,70 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		tauler.afegeixCarta(jugadorID, posicio, cartaEntity);
 	}
 	
+	/**
+	 * Acció per mostrar la carta Àgora en un deteminat jugador
+	 * @param jugadorID Identificador del jugador al que afegir la carta Àgora
+	 */
 	public void afegeixCartaAgora(int jugadorID){
 		tauler.afegeixCartaAgora(jugadorID);
 	}
 	
+	/**
+	 * Permet afegir una carta determinada en la posició buida de la mà d'un jugador
+	 * @param jugadorID Identificador del jugador al que afegir la carta
+	 * @param cartaEntity Carta que volem afegir
+	 */
 	public void afegeixCartaAPosicioBuida(int jugadorID, Carta cartaEntity)
 	{
 		if(jugadorID == 1)cartaEntity.setShowing(true);
 		tauler.afegeixCartaAPosicioBuida(jugadorID, cartaEntity);
 	}
 	
+	/**
+	 * Acció per treure de la mà del jugador humà la carta que ha seleccionat
+	 */
 	public void treureCartaSeleccionada(){
 		tauler.treureCartaSeleccionada();
 	}
 	
+	/**
+	 * Actualitza tota la capa de presentació per tal de mostrar les dades de la capa de domini
+	 */
 	public void updateView(){
 		tauler.updateView();
 	}
 	
+	/**
+	 * Acció per intercanvia les cartes seleccionades en el pas 1 en el tauler
+	 */
 	public void intercanviaCartes(){
 		tauler.intercanviaCartes();
 	}
 	
+	/**
+	 * Acció que selecciona una determinada carta d'un cert jugador i en mou tants passejants com el 
+	 * valor de la carta
+	 * @param jugadorID Identificador del jugador del qual seleccionem la carta
+	 * @param carta Carta que volem seleccionar
+	 */
 	public void seleccionaCartaiMouPassejants(int jugadorID, Carta carta){
 		tauler.seleccionaCartaiMouPassejants(jugadorID, carta);
 	}
 	
+	/**
+	 * Acció que selecciona una determinada carta d'un cert jugador per tal de ser robada en el futur
+	 * @param jugadorID Identificador del jugador del qual seleccionem la carta
+	 * @param cartaEntity Carta que volem robar
+	 */
 	public void seleccionaCartaPerRobar(int jugadorID, Carta cartaEntity){
 		tauler.seleccionaCartaARobar(jugadorID, cartaEntity);
 	}
 	
+	/**
+	 * Mostra la pantalla del final de partida
+	 * @param resultats Puntuació obtinguda per cada jugador en la partida
+	 * @param isFinalPartida Boolean que indica si els reultats són definitius o provisional
+	 */
 	public void mostraFinalPartida(ResultatsFinals resultats, boolean isFinalPartida){
 		removeMenu();
 		backToTauler = !isFinalPartida;
@@ -413,23 +474,43 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		finalPartida.setVisible(true);
 	}
 
+	/**
+	 * Acció que mou un passejant d'un determinat color entre dos districtes
+	 * @param districteA Districte origen d'on treure el passejant
+	 * @param districteB Districte destí on afegir el passejant
+	 * @param color Color del passejant
+	 */
 	public void mouPassejant(Districte districteA, Districte districteB,
 			int color) {
 		tauler.mouPassejant(districteA, districteB, color);
 	}
 
+	/**
+	 * Funció que indica si s'està realiutzant alguna animació
+	 * @return True si s'està realitzant, false en cas contrari
+	 */
 	public boolean isAnimationOn() {
 		return tauler.animationOn;
 	}
 
+	/**
+	 * Acció que deselecciona una carta prèviament seleccionada pel jugador humà
+	 */
 	public void deseleccionaCarta() {
 		tauler.deseleccionaCarta();
 	}
 
+	/**
+	 * Acció per mostrar el nombre de passejants d'un determinat jugador
+	 * @param jugadorID Identificador del jugador del quen volem mostrar els passejants
+	 */
 	public void afegeixPassejants(int jugadorID) {
 		tauler.updatePassejants(jugadorID);
 	}
 	
+	/**
+	 * Acció que carrega una partida en la Capa de Presentació
+	 */
 	public void loadGame(Partida partida){
 		menuPrincipal.setVisible(false);
 		 tauler.reset();
@@ -449,10 +530,19 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 addMenu();
 	}
 	
+	/**
+	 * Acció per borrar una partida 
+	 * @param nom Nom de la partida que volem borrar
+	 */
 	public void deleteGame(String nom){
 		logic.esborraPartida(nom);
 	}
 	
+	/**
+	 * Afegeix a la mà d'un determinat jugador un conjunt de cartes
+	 * @param jugadorID Identificador del jugador al que volem afegir les cartes
+	 * @param cartes ArrayList de les cartes a afegir
+	 */
 	private void afegeixCartesJugador(int jugadorID, ArrayList<Carta>cartes){
 		 //Afegim les cartes que tenia el jugador
 		 for(int i = 0; i < cartes.size(); ++i){
