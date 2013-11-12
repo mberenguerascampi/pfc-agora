@@ -39,6 +39,7 @@ public class Partida {
 	private Carta cartaSeleccionada = null;
 	private Map<Integer,Carta> cartesAIntercanviar = new HashMap<Integer,Carta>();
 	private int ultimTorn = 12;
+	private int[] arrayIA = {};
 	
 	public Partida() {
 		
@@ -51,12 +52,13 @@ public class Partida {
 	 * @param torn Torn actual de la partida
 	 * @param pas Pas actual de la partida
 	 */
-	public Partida(String nom, Date data, int torn, int pas) {
+	public Partida(String nom, Date data, int torn, int pas, int[]arrayIA) {
 		instance = this;
 		this.nom = nom;
 		this.data = data;
 		this.torn = torn;
 		this.pas = pas;
+		this.arrayIA = arrayIA;
 		idJugadorInici = 1;
 		idJugadorActual = idJugadorInici;
 		jugadors = new ArrayList<Jugador>();
@@ -81,12 +83,14 @@ public class Partida {
 	 */
 	public Partida(String nom, String data, int torn, int pas, ArrayList<Jugador> jugadors, 
 			Districte[] districtes, int idJugadorInici, int passejantsAMoure,
-			ArrayList<Carta> cartesB1, ArrayList<Carta> cartesB2, Map<Integer,Carta> cartesAIntercanviar) {
+			ArrayList<Carta> cartesB1, ArrayList<Carta> cartesB2,
+			Map<Integer,Carta> cartesAIntercanviar, int[]arrayIA) {
 		instance = this;
 		this.cartesAIntercanviar = cartesAIntercanviar;
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy"); 
 		this.nom = nom;
 		this.data = null;
+		this.arrayIA = arrayIA;
 //		try {
 //			if(data.equals("null"))this.data = null;
 //			else this.data = df.parse(data);
@@ -633,6 +637,18 @@ public class Partida {
 		return 0;
 	}
 	
+	public ArrayList<Districte> getDistrictesGuanyats(int idJugador){
+		ArrayList<Districte> districtesGuanyats = new ArrayList<Districte>();
+		int colorJugador = getJugador(idJugador).getColor();
+		for(Districte d:tauler.getDistrictes()){
+			int colorGuanyador = d.getColorGuanyador();
+			if(colorGuanyador == colorJugador){
+				districtesGuanyats.add(d);
+			}
+		}
+		return districtesGuanyats;
+	}
+	
 	
 	//Getters & Setters
 
@@ -796,5 +812,13 @@ public class Partida {
 	
 	public int getColor(int jugadorID) {
 		return jugadors.get(jugadorID-1).getColor();
+	}
+
+	public int[] getArrayIA() {
+		return arrayIA;
+	}
+
+	public void setArrayIA(int[] arrayIA) {
+		this.arrayIA = arrayIA;
 	}
 }

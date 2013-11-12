@@ -14,7 +14,7 @@ import upc.tfg.utils.Constants;
 
 public class VistaBaralla extends JPanel{
 	/**
-	 * 
+	 * Vista que representa una baralla de cartes
 	 */
 	private static final long serialVersionUID = 8352073768985693808L;
 	public static final int BARALLA_HEIGHT = 115;//VistaTauler.CARTA_HEIGHT+10;
@@ -24,6 +24,10 @@ public class VistaBaralla extends JPanel{
 	Baralla baralla;
 	VistaCarta vistaCarta;
 
+	/**
+	 * Constructora de la classe
+	 * @param baralla Baralla que es vol representar en la capa de presentació
+	 */
 	public VistaBaralla(Baralla baralla) {
 		setLayout(null);
 		setOpaque(false);
@@ -33,6 +37,9 @@ public class VistaBaralla extends JPanel{
 		add(vistaCarta);
 	}
 	
+	/**
+	 * Acció per actualitzar la vista amb la informació correcte de la capa de domini
+	 */
 	public void updateView(){
 		if(baralla.getCartes().size() > 1){
 			vistaCarta.setCartaEntity(baralla.getCartes().get(1));

@@ -1,31 +1,32 @@
 package upc.tfg.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JLabel;
 
 import upc.tfg.interfaces.VistaAmbBotoTornarListener;
 import upc.tfg.utils.Constants;
-import upc.tfg.utils.CustomDefaultButton;
 
 public class VistaAbout extends DefaultView {
 	
 	/**
-	 * 
+	 * Vista que mostra la informació de l'aplicació
 	 */
 	private static final long serialVersionUID = 6434182862743054982L;
-	private VistaAmbBotoTornarListener listener;
 
+	/**
+	 * Constructora de la classe
+	 * @param listener Listener que escolta quan es prem el botó per tornar enderrere
+	 */
 	public VistaAbout(VistaAmbBotoTornarListener listener) {
 		setLayout(null);
-		this.listener = listener;
 		setSize(Constants.width, Constants.height);
 		afegeixBarraSuperior(bundle.getString("sobre"), listener);
 		afegirLabels();
 		addSkin("backgroundWithWhiteBox.png");
 	}
 	
+	/**
+	 * Funció privada per afegir els labels en la vista
+	 */
 	private void afegirLabels(){
 		int originX = Constants.paddingX + 100;
 		int originY = (int) (Constants.paddingY + VistaBarraSuperior.BAR_HEIGHT + Constants.height*0.16);

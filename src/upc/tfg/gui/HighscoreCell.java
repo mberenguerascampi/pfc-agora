@@ -1,7 +1,6 @@
 package upc.tfg.gui;
 
 import java.awt.Color;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -96,6 +95,7 @@ public class HighscoreCell extends JPanel{
 		add(dataLabel);
 	}
 	
+	//Getter & Setters
 	public String getNomPartida(){
 		return nomPartida;
 	}

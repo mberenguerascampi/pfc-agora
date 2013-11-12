@@ -2,6 +2,7 @@ package upc.tfg.logic;
 
 import upc.tfg.ia.JugadorGreedy;
 import upc.tfg.ia.JugadorRandom;
+import upc.tfg.ia.JugadorRegles;
 import upc.tfg.utils.PassejantsAMoure;
 import upc.tfg.interfaces.JugadorRobot;
 
@@ -29,10 +30,27 @@ public class ControladorIA {
 	 * Acció per definir els jugadors que ha de tenir els sistema de la IA
 	 * @param jugadors Array amb els jugadors que dirigeix la CPU
 	 */
-	public void setJugadors(Jugador[] jugadors){
+	public void setJugadors(Jugador[] jugadors, int[] ias){
 		this.jugadors = jugadors;
 		for(int i = 0; i < jugadors.length; ++i){
-			robots[i] = new JugadorGreedy(jugadors[i]);
+			switch(ias[i]){
+				case 0:
+					System.out.println("CREANT JUGADOR RANDOM PER AL JUGADOR " + (i+2));
+					robots[i] = new JugadorRandom(jugadors[i]);
+					break;
+				case 1:
+					System.out.println("CREANT JUGADOR GREEDY PER AL JUGADOR " + (i+2));
+					robots[i] = new JugadorGreedy(jugadors[i]);
+					break;
+				case 2:
+					System.out.println("CREANT JUGADOR TOP PER AL JUGADOR " + (i+2));
+					robots[i] = new JugadorRegles(jugadors[i]);
+					break;
+				default:
+					System.out.println("CREANT JUGADOR RANDOM PER AL JUGADOR default");
+					robots[i] = new JugadorRandom(jugadors[i]);
+					break;
+			}
 		}
 	}
 	

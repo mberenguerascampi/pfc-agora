@@ -366,7 +366,7 @@ public class DefaultDataBase {
 			       		"WHERE nom='"+ nom + "';" );
 			   partida = new Partida(nom,rs.getString("data"),rs.getInt("torn"),rs.getInt("pas"),
 					   jugadors,districtes, rs.getInt("idJugadorInici"), rs.getInt("passejantsAMoure"),
-					   cartesB1, cartesB2, cartesAIntercanviar);
+					   cartesB1, cartesB2, cartesAIntercanviar, null);
 			       
 		       rs.close();
 		       stmt.close();

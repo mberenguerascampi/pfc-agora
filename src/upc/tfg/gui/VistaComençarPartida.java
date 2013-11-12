@@ -9,13 +9,11 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import upc.tfg.interfaces.VistaAmbBotoTornarListener;
-import upc.tfg.logic.Partida;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.CustomDefaultButton;
 import upc.tfg.utils.PuntuacionsBD;
@@ -43,7 +41,7 @@ public class VistaComençarPartida extends DefaultView {
 	final JButton iaJ4 = new JButton();
 	private JButton[] buttonsIA = {iaJ1, iaJ2, iaJ3, iaJ4};
 	private int[] indexColors = new int[4];
-	private int[] indexIA = new int[4];
+	private int[] indexIA = new int[3];
 	private VistaAmbBotoTornarListener listener;
 	
 	public VistaComençarPartida(VistaAmbBotoTornarListener listener) {
@@ -115,9 +113,9 @@ public class VistaComençarPartida extends DefaultView {
 	
 	private void afegeixButtonsIA(){
 		final URL[] iaSources ={
+				getClass().getResource(Constants.fileUrl+"ia/green_icon.png"),
 				getClass().getResource(Constants.fileUrl+"ia/orange_icon.png"),
-				getClass().getResource(Constants.fileUrl+"ia/red_icon.png"),
-				getClass().getResource(Constants.fileUrl+"ia/green_icon.png")};
+				getClass().getResource(Constants.fileUrl+"ia/red_icon.png")};
 		URL humanIcon = getClass().getResource(Constants.fileUrl+"ia/human_icon.png");
 		
 		int i = 0;
@@ -167,7 +165,7 @@ public class VistaComençarPartida extends DefaultView {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(checkInputs()){
-					listener.començarPartida(jugador1.getText(), jugador2.getText(), jugador3.getText(), jugador4.getText(), indexColors);
+					listener.començarPartida(jugador1.getText(), jugador2.getText(), jugador3.getText(), jugador4.getText(), indexColors, indexIA);
 					setVisible(false);
 				}
 			}

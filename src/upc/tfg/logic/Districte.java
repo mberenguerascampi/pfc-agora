@@ -319,6 +319,18 @@ public class Districte {
 		return 0;
 	}
 	
+	public int getDiferenciaRespecteGuanyador(){
+		int sizes[] = {passejantsBlaus.size(), passejantsVermells.size(), passejantsVerds.size(), passejantsGrocs.size()};
+		int max = Math.max(Math.max(sizes[0],  sizes[1]), Math.max(sizes[2],  sizes[3]));
+		int max2 = Integer.MIN_VALUE;
+		for(int i = 0; i < sizes.length; ++i){
+			if(sizes[i] != max) {
+				max2 = Math.max(max2, sizes[i]);
+			}
+		}
+		return max-max2;
+	}
+	
 	/**
 	 * Funció que ens indica si es produïrà un empat en nombre màxim de passejants si afegim un
 	 * determinat nombre de passejants d'un determinat color

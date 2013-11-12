@@ -292,11 +292,11 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		return logic.guardarPartida(nom);
 	}
 	
-	public void començarPartida(String nomJ1, String nomJ2, String nomJ3, String nomJ4, int[] colors){
+	public void començarPartida(String nomJ1, String nomJ2, String nomJ3, String nomJ4, int[] colors, int[]ias){
 		 menuPrincipal.setVisible(false);
 		 tauler.reset();
 		 tauler.removeAll();
-		 logic.comencarPartida(nomJ1, nomJ2, nomJ3, nomJ4, colors);
+		 logic.comencarPartida(nomJ1, nomJ2, nomJ3, nomJ4, colors,ias);
 		 afegeixCartesJugador(1);
 		 afegeixCartesJugador(2);
 		 afegeixCartesJugador(3);
@@ -305,9 +305,9 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 mostraBaralla(false);
 		 //tauler.comencaIntercanviCartes();
 		 tauler.afegeixPassejants(Partida.getInstance().getJugador(1).getTotalPassejants(), 1);
-		 tauler.afegeixPassejants(Partida.getInstance().getJugador(2).getTotalPassejants(), 2);
-		 tauler.afegeixPassejants(Partida.getInstance().getJugador(3).getTotalPassejants(), 3);
-		 tauler.afegeixPassejants(Partida.getInstance().getJugador(4).getTotalPassejants(), 4);
+//		 tauler.afegeixPassejants(Partida.getInstance().getJugador(2).getTotalPassejants(), 2);
+//		 tauler.afegeixPassejants(Partida.getInstance().getJugador(3).getTotalPassejants(), 3);
+//		 tauler.afegeixPassejants(Partida.getInstance().getJugador(4).getTotalPassejants(), 4);
 		 tauler.setVisible(true);
 		 addMenu();
 		 logic.getProximMoviment();
@@ -362,7 +362,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	public void crearPartida(){
 		començarPartida(Partida.getInstance().getNomJugador(1), Partida.getInstance().getNomJugador(2), 
 				Partida.getInstance().getNomJugador(3), Partida.getInstance().getNomJugador(4), 
-				logic.getColors());
+				logic.getColors(), Partida.getInstance().getArrayIA());
 	}
 	
 	public void mostraPuntuacionsTemporals(){
@@ -523,9 +523,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 afegeixCartaAgora(partida.getIdJugadorInici());
 		 logic.carregarCartesARobar(partida);
 		 tauler.afegeixPassejants(partida.getJugador(1).getTotalPassejants(), 1);
-		 tauler.afegeixPassejants(partida.getJugador(2).getTotalPassejants(), 2);
-		 tauler.afegeixPassejants(partida.getJugador(3).getTotalPassejants(), 3);
-		 tauler.afegeixPassejants(partida.getJugador(4).getTotalPassejants(), 4);
+		 //TODO: Descomentar per afegir passejants
+//		 tauler.afegeixPassejants(partida.getJugador(2).getTotalPassejants(), 2);
+//		 tauler.afegeixPassejants(partida.getJugador(3).getTotalPassejants(), 3);
+//		 tauler.afegeixPassejants(partida.getJugador(4).getTotalPassejants(), 4);
 		 tauler.setVisible(true);
 		 addMenu();
 	}

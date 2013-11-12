@@ -8,8 +8,6 @@ import upc.tfg.logic.Districte;
 import upc.tfg.logic.Jugador;
 import upc.tfg.logic.Partida;
 import upc.tfg.logic.Passejant;
-import upc.tfg.logic.Tauler;
-import upc.tfg.utils.Constants;
 import upc.tfg.utils.PassejantsAMoure;
 import upc.tfg.utils.ResultatsFinals;
 
@@ -58,7 +56,7 @@ public class JugadorGreedy extends DefaultJugador implements JugadorRobot{
 	@Override
 	public PassejantsAMoure getPassejantDistricte() {
 		ArrayList<PassejantsAMoure> possiblesPam = getPossiblesPassejantsAMoure();
-		if(possiblesPam == null)return null;
+		if(possiblesPam == null || possiblesPam.size() == 0)return null;
 		PassejantsAMoure solucio = null;
 		int max = Integer.MIN_VALUE;
 		for(PassejantsAMoure pam:possiblesPam){

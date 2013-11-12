@@ -267,7 +267,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	
 	public void updatePassejants(){
 		for(VistaPassejant vp:vistesPassejants){
-			vp.setNum(Partida.getInstance().getJugador(vp.getIdJugador()).getTotalPassejants());
+			if(vp != null)vp.setNum(Partida.getInstance().getJugador(vp.getIdJugador()).getTotalPassejants());
 		}
 	}
 	

@@ -2,13 +2,11 @@ package upc.tfg.gui;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import upc.tfg.logic.ControladorLogic;
 import upc.tfg.utils.Constants;
 
 public class PlayerCell  extends JPanel{
 	/**
-	 * 
+	 * Vista que representa un cel·la en la que es mostra el nom d'un jugador i la seva puntuació
 	 */
 	private static final long serialVersionUID = -3510270781971405841L;
 	public static final int CELL_WIDTH = 410;
@@ -16,6 +14,11 @@ public class PlayerCell  extends JPanel{
 	private JLabel nomJugador;
 	private JLabel puntsJugador;
 	
+	/**
+	 * Constructora de la classe
+	 * @param strNomJugador Nom del jugador
+	 * @param intPuntsJugador Punts obtinguts pel jugador
+	 */
 	public PlayerCell(String strNomJugador, int intPuntsJugador) {
 		setLayout(null);
 		setOpaque(false);

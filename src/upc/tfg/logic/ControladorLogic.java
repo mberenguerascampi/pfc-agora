@@ -43,10 +43,10 @@ public class ControladorLogic {
 	 * @param nomJ4 Nom del jugador amb identificador 4
 	 * @param colors Array amb els colors per cada jugador
 	 */
-	public void comencarPartida(String nomJ1, String nomJ2, String nomJ3, String nomJ4, int[] colors){
+	public void comencarPartida(String nomJ1, String nomJ2, String nomJ3, String nomJ4, int[] colors, int[]ias){
 		this.colors = colors;
 		Date date = new Date();
-		partida = new Partida("",date,1,1);
+		partida = new Partida("",date,1,1,ias);
 		Jugador j1 = new Jugador(nomJ1,1,colors[0]);
 		Jugador j2 = new Jugador(nomJ2,2,colors[1]);
 		Jugador j3 = new Jugador(nomJ3,3,colors[2]);
@@ -57,7 +57,7 @@ public class ControladorLogic {
 		partida.afegirJugador(j4);
 		partida.crear();
 		controladorIA = new ControladorIA(this);
-		controladorIA.setJugadors(partida.getJugadorsRobot());
+		controladorIA.setJugadors(partida.getJugadorsRobot(), ias);
 	}
 	
 	/**
@@ -71,7 +71,7 @@ public class ControladorLogic {
 				jugadors.get(3).getColor()};
 		this.colors = colorsACarregar;
 		controladorIA = new ControladorIA(this);
-		controladorIA.setJugadors(partida.getJugadorsRobot());
+		controladorIA.setJugadors(partida.getJugadorsRobot(), partida.getArrayIA());
 	}
 	
 	/**

@@ -11,7 +11,9 @@ import upc.tfg.utils.Constants;
 public class VistaAlertes extends TransparentView{
 
 	/**
-	 * 
+	 * Vista que mostra les alertes que es produeixen mentre es juga, ja sigui per alguna acció que no es 
+	 * realitzar, per advertir d'algun succes o simplement per donar feedback al usuari sobre una acció
+	 * realitzada
 	 */
 	private static final long serialVersionUID = 9174551117712932495L;
 	public static final int WARNING_WIDTH = 250;
@@ -21,6 +23,9 @@ public class VistaAlertes extends TransparentView{
 	private JLabel titleLabel;
 	static VistaAlertes instance;
 	
+	/**
+	 * Constructora de la classe
+	 */
 	public VistaAlertes(){
 		setLayout(null);
 		setOpaque(false);
@@ -54,10 +59,18 @@ public class VistaAlertes extends TransparentView{
 		instance = this;
 	}
 	
+	/**
+	 * Funció per obtenir la instància de la classe
+	 * @return
+	 */
 	public static VistaAlertes getInstance(){
 		return instance;
 	}
 
+	/**
+	 * Acció pe mostrar per pantalla un determinat text com a una alerta
+	 * @param text Text que es vol mostrar
+	 */
 	public void setWarningText(String text){
 		URL url = getClass().getResource(Constants.fileUrl+"icons/warning_icon.png");
 		ImageIcon icon = new ImageIcon(url);
@@ -67,6 +80,10 @@ public class VistaAlertes extends TransparentView{
 		setVisible(true);
 	}
 	
+	/**
+	 * Acció pe mostrar per pantalla un determinat text com a resultat d'una acció realitzada correctament
+	 * @param text Text que es vol mostrar
+	 */
 	public void setOkText(String text){
 		URL url = getClass().getResource(Constants.fileUrl+"icons/ok_icon.png");
 		ImageIcon icon = new ImageIcon(url);

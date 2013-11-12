@@ -2,7 +2,6 @@ package upc.tfg.gui;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -20,7 +19,8 @@ import upc.tfg.utils.Constants;
 public class VistaBarraSuperior extends JPanel{
 
 	/**
-	 * 
+	 * Vista que es mostra a la part superior de la pantalla i que consta d'un títol i un botó per tornar
+	 * a la pantalla anterior
 	 */
 	private static final long serialVersionUID = 6596321216452950051L;
 	public static final int BAR_WIDTH = Constants.width;
@@ -28,6 +28,11 @@ public class VistaBarraSuperior extends JPanel{
 	private VistaAmbBotoTornarListener listener;
 	JButton backButton = null;
 
+	/**
+	 * Constructora de la classe
+	 * @param title Títol que es vol mostrar
+	 * @param listener Listener que escolta quan s'ha premut el botó per tornar enderrere
+	 */
 	public VistaBarraSuperior(String title, VistaAmbBotoTornarListener listener) {
 		setLayout(null);
 		this.listener = listener;
@@ -36,6 +41,10 @@ public class VistaBarraSuperior extends JPanel{
 		afegeixBotoEnderrere();
 	}
 	
+	/**
+	 * Acció privada per afegir el títol
+	 * @param title Text del títol
+	 */
 	private void afegeixTitol(String title){
 		JLabel titleLabel = new JLabel(title);
 		titleLabel.setBounds(0, 0, BAR_WIDTH, BAR_HEIGHT);
@@ -45,6 +54,9 @@ public class VistaBarraSuperior extends JPanel{
 		add(titleLabel);
 	}
 	
+	/**
+	 * Acció privada per afegir el botó per tornar a la pantalla anterior a la vista
+	 */
 	private void afegeixBotoEnderrere(){
 		backButton = new JButton();
 		
@@ -81,6 +93,10 @@ public class VistaBarraSuperior extends JPanel{
 		add(backButton);
 	}
 	
+	/**
+	 * Acció privada per afegir al botó el listener
+	 * @param backButton
+	 */
 	private void addActionListener(JButton backButton){
 		for(ActionListener l:backButton.getActionListeners())backButton.removeActionListener(l);
 		backButton.addActionListener(new ActionListener() {

@@ -67,6 +67,20 @@ public class ResultatsFinals {
 		Arrays.sort(punts);
 		return punts[2];
 	}
+	
+	public int getIdJugadorGuanyador(int idJugadorExcepcio) {
+		int max = Integer.MIN_VALUE;
+		int idGuanyador = 1;
+		for(int i = 1; i <= 4; ++i){
+			if(i != idJugadorExcepcio){
+				if(max < getPunts(i)){
+					max = getPunts(i);
+					idGuanyador = i;
+				}
+			}
+		}
+		return idGuanyador;
+	}
 
 	//Getters & Setters
 	public int getPuntsJ1() {
