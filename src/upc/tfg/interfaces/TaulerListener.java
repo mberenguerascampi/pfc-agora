@@ -1,6 +1,7 @@
 package upc.tfg.interfaces;
 
 import upc.tfg.logic.Carta;
+import upc.tfg.utils.ResultatsFinals;
 
 public interface TaulerListener {
 	public void cartaSeleccionada(int jugadorID, Carta cartaEntity);
@@ -13,4 +14,5 @@ public interface TaulerListener {
 	public void infoButtonPressed();
 	public boolean saveButtonPressed(String nom);
 	public void tornarAlMenu();
+	public void mostraFinalPartida(ResultatsFinals res, boolean resFinals);
 }

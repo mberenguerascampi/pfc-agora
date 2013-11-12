@@ -142,6 +142,7 @@ public class DefaultDataBase {
 	                  " numPassejants INTEGER, " +
 	                  " nomPartida VARCHAR(255), " +
 	                  " color INTEGER, " +
+	                  " tipus INTEGER, " +
 	                  " PRIMARY KEY (nomJugador, nomPartida))"; 
 			  stmt.executeUpdate(sql);
 			  
@@ -199,9 +200,9 @@ public class DefaultDataBase {
 			//Guardem els jugadors	
 		       for(int i = 0; i < 4; ++i){
 		    	   Jugador j = partida.getJugador(i+1);
-					sql = "INSERT INTO JUGADOR (nomJugador,id,numPassejants,nomPartida,color) " +
+					sql = "INSERT INTO JUGADOR (nomJugador,id,numPassejants,nomPartida,color,tipus) " +
 		                    "VALUES ('"+ j.getNom() +"', "+ j.getId() +", " + j.getTotalPassejants() + 
-		                    ", '"+ partida.getNom()+"', "+ j.getColor() +");"; 
+		                    ", '"+ partida.getNom()+"', "+ j.getColor() + ", "+ j.getTipusJugador() +");"; 
 					stmt.executeUpdate(sql);
 					//Guardem les cartes del jugador
 					for(Carta carta:j.getCartes()){
@@ -291,12 +292,18 @@ public class DefaultDataBase {
 		       stmt = c.createStatement();
 		       
 		       //Aconseguim els jugadors
+		       int[] arrayIA = new int[3];
+		       int k = 0;
 		       ResultSet rs = stmt.executeQuery( "SELECT * FROM JUGADOR "+
 			       		"WHERE nomPartida='"+ nom + "';" );
 			   while ( rs.next() ) {
-				   Jugador j = new Jugador(rs.getString("nomJugador"), rs.getInt("id"), rs.getInt("color"));
+				   Jugador j = new Jugador(rs.getString("nomJugador"), rs.getInt("id"), rs.getInt("color"), rs.getInt("tipus"));
 				   j.setNumPassejants(rs.getInt("numPassejants"));
 				   jugadors.add(j);
+				   if(j.getTipusJugador() != Constants.HUMA){
+					   arrayIA[k] = j.getTipusJugador();
+					   ++k;
+				   }
 			   }
 			   
 			   //Aconseguim els districtes
@@ -366,7 +373,7 @@ public class DefaultDataBase {
 			       		"WHERE nom='"+ nom + "';" );
 			   partida = new Partida(nom,rs.getString("data"),rs.getInt("torn"),rs.getInt("pas"),
 					   jugadors,districtes, rs.getInt("idJugadorInici"), rs.getInt("passejantsAMoure"),
-					   cartesB1, cartesB2, cartesAIntercanviar, null);
+					   cartesB1, cartesB2, cartesAIntercanviar, arrayIA);
 			       
 		       rs.close();
 		       stmt.close();

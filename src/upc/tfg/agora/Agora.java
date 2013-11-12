@@ -539,6 +539,11 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		logic.esborraPartida(nom);
 	}
 	
+	public void mostraSituacioFinalTauler(){
+		amagaVistes();
+		tauler.showSituacioFinal();
+	}
+	
 	/**
 	 * Afegeix a la mà d'un determinat jugador un conjunt de cartes
 	 * @param jugadorID Identificador del jugador al que volem afegir les cartes

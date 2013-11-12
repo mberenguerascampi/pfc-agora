@@ -6,6 +6,7 @@ import java.util.Map;
 
 import upc.tfg.agora.Agora;
 import upc.tfg.gui.VistaAlertes;
+import upc.tfg.utils.Constants;
 import upc.tfg.utils.DefaultDataBase;
 import upc.tfg.utils.ErrorController;
 import upc.tfg.utils.PassejantsAMoure;
@@ -47,10 +48,10 @@ public class ControladorLogic {
 		this.colors = colors;
 		Date date = new Date();
 		partida = new Partida("",date,1,1,ias);
-		Jugador j1 = new Jugador(nomJ1,1,colors[0]);
-		Jugador j2 = new Jugador(nomJ2,2,colors[1]);
-		Jugador j3 = new Jugador(nomJ3,3,colors[2]);
-		Jugador j4 = new Jugador(nomJ4,4,colors[3]);
+		Jugador j1 = new Jugador(nomJ1,1,colors[0], Constants.HUMA);
+		Jugador j2 = new Jugador(nomJ2,2,colors[1], ias[0]);
+		Jugador j3 = new Jugador(nomJ3,3,colors[2], ias[1]);
+		Jugador j4 = new Jugador(nomJ4,4,colors[3], ias[2]);
 		partida.afegirJugador(j1);
 		partida.afegirJugador(j2);
 		partida.afegirJugador(j3);
@@ -365,11 +366,13 @@ public class ControladorLogic {
 	 */
 	public void seleccionaQualsevolCarta(int jugadorID) {
 		partida.setPassejantsAMoure(0);
-		Carta carta = Partida.getInstance().getJugador(jugadorID).getCartes().get(0);
-		carta.girar();
-		treuCarta(jugadorID, carta);
-		//Actualitzem la capa de presentacio
-		agora.seleccionaCartaiMouPassejants(jugadorID, carta);
+		if(Partida.getInstance().getJugador(jugadorID).getCartes().size() > 0){
+			Carta carta = Partida.getInstance().getJugador(jugadorID).getCartes().get(0);
+			carta.girar();
+			treuCarta(jugadorID, carta);
+			//Actualitzem la capa de presentacio
+			agora.seleccionaCartaiMouPassejants(jugadorID, carta);
+		}
 		partida.avancarJugador();
 		getProximMoviment();
 	}

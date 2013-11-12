@@ -50,6 +50,12 @@ public class Constants {
 	public static final int centerX = width/2 + paddingX;
 	public static final int centerY = height/2 + paddingY;
 	
+	//Tipus de jugador
+	public static final int HUMA = -1;
+	public static final int ROBOT1 = 0;
+	public static final int ROBOT2 = 1;
+	public static final int ROBOT3 = 2;
+	
 	//Identificadors dels districtes
 	public static final int LES_CORTS 				= 3;
 	public static final int SARRIA_SANT_GERVASI 	= 4;

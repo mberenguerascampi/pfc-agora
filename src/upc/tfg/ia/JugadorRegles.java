@@ -28,6 +28,8 @@ public class JugadorRegles extends DefaultJugador implements JugadorRobot{
 		Carta cartaARetornar = null;
 		ArrayList<Districte>districtesGuanyats = Partida.getInstance().getDistrictesGuanyats(jugador.getId());
 		ArrayList<Districte>districtesGuanyatsJugEsq = Partida.getInstance().getDistrictesGuanyats(idJugadorAnterior);
+		if(districtesGuanyats.size() == 0)districtesGuanyats = null;
+		if(districtesGuanyatsJugEsq.size() == 0)districtesGuanyatsJugEsq = null;
 		int numRegla = 1;
 		while(numRegla <= NUM_REGLES_PAS1 && cartaARetornar == null){
 			for (Carta c:cartes){

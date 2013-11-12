@@ -28,8 +28,10 @@ import upc.tfg.logic.Carta;
 import upc.tfg.logic.Districte;
 import upc.tfg.logic.Partida;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.CustomDefaultButton;
 import upc.tfg.utils.ImageToNumberArray;
 import upc.tfg.utils.Posicio;
+import upc.tfg.utils.ResultatsFinals;
 
 public class VistaTauler extends DefaultView implements VistaEstatListener, PopupButtonsListener{
 	
@@ -443,7 +445,6 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	}
 	
 	public void seleccionaCartaARobar(int jugadorID, Carta cartaEntity){
-		System.out.println("GUI Carta a robar del jugador" + jugadorID + " del districte " + cartaEntity.getDistricte().getNom());
 		int idPropietariCarta = jugadorID-1;
 		if (idPropietariCarta == 0)idPropietariCarta = 4;
 		for(VistaCarta vc:cartes){
@@ -575,7 +576,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	private void selectDistrict(int x, int y){
 		if(x > 0 && x < IMG_TAULER_WIDTH && y > 0 && y < IMG_TAULER_HEIGHT){
 	      if(cardInfoView.isVisible())cardInfoView.setVisible(false);
-	      if(!infoView.isVisible())infoView.setVisible(true);
+	     // if(!infoView.isVisible())infoView.setVisible(true);
       	  if(map[y][x] != previousDistrict){
 	        	  previousDistrict = map[y][x];
 	        	  setSelectedDistrict(map[y][x]);
@@ -1313,5 +1314,32 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 			buttonsPopup.setVisible(true);
 			return false;
 		}
+	}
+	
+	/**
+	 * Acció que mostra unicament el tauler amb la informació per cada districte dels resultats obtinguts
+	 */
+	public void showSituacioFinal(){
+		super.setVisible(true);
+		stateView.setVisible(false);
+		marcCarta.setVisible(false);
+		passejantDinamic.setVisible(false);
+		passejantEstatic.setVisible(false);
+		infoView.setVisible(false);
+		selectDistrict(0, 0);
+		for(VistaCarta vc:cartes){
+			vc.setVisible(false);
+		}
+		CustomDefaultButton resultats = new CustomDefaultButton("Veure puntuació");
+		resultats.setBounds(200, Constants.height-200, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_WIDTH);
+		resultats.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ResultatsFinals resultats = Partida.getInstance().getPuntuacioFinal();
+				listener.mostraFinalPartida(resultats, true);
+			}
+		});
+		add(resultats);
 	}
 }

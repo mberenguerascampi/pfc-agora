@@ -464,6 +464,7 @@ public class Partida {
 	 * @return True si es pot moure, false en cas contrari
 	 */
 	public boolean potMoure(Districte d1, Districte d2, int color){
+		if(esUltimTorn() && color != getJugador(idJugadorActual).getColor()) return false;
 		if(!potAfegirPassejant(d2, color)) return false;
 		if(!potTreurePassejant(d1, color)) return false;
 		if(hiHaDistricteAmbMateixNombrePassejants(d1, d2))return false;

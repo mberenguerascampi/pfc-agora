@@ -31,16 +31,6 @@ public class VistaFinalPartida extends DefaultView {
 		setLayout(null);
 		this.listener = listener;
 		setSize(Constants.width, Constants.height);
-		tornar = new CustomDefaultButton("Tornar al menú principal");
-		tornar.setBounds(200, Constants.height-200, 400, 200);
-		tornar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				listener.backButtonPressed();
-			}
-		});
-		add(tornar);
 	}
 	
 	public void setResultats(ResultatsFinals resultats, boolean finalPartida){
@@ -50,6 +40,27 @@ public class VistaFinalPartida extends DefaultView {
 		}
 		else{
 			savePuntacio(resultats);
+			tornar = new CustomDefaultButton("Tornar al menú principal");
+			tornar.setBounds(200, Constants.height-200, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_WIDTH);
+			tornar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					listener.backButtonPressed();
+				}
+			});
+			add(tornar);
+			
+			CustomDefaultButton veureTauler = new CustomDefaultButton("Veure tauler");
+			veureTauler.setBounds(400, Constants.height-200, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_WIDTH);
+			veureTauler.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					listener.mostraSituacioFinalTauler();
+				}
+			});
+			add(veureTauler);
 		}
 		nomGuanyador = new JLabel();
 		nomGuanyador.setText("<html>GUANYADOR: "+Partida.getInstance().getNomJugador(resultats.getIdJugadorGuanyador()) + "!!!</html>");
@@ -85,7 +96,7 @@ public class VistaFinalPartida extends DefaultView {
 		add(playerCell3);
 		add(playerCell4);
 		
-		addSkin("imatgePortada.jpg");
+		addSkin("backgroundWithWhiteBox.png");
 		
 	}
 	

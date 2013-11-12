@@ -13,6 +13,7 @@ public class Jugador {
 	private int color;
 	private ArrayList<Passejant> passejants;
 	private ArrayList<Carta> cartes;
+	private int tipusJugador;
 	int totalPassejants;
 	
 	/**
@@ -21,10 +22,11 @@ public class Jugador {
 	 * @param id Identificador del jugador
 	 * @param color Color del jugador
 	 */
-	public Jugador(String nom, int id, int color) {
+	public Jugador(String nom, int id, int color, int tipus) {
 		this.nom = nom;
 		this.id = id;
 		this.color = color;
+		this.tipusJugador = tipus;
 		totalPassejants = 30;
 		passejants = new ArrayList<Passejant>();
 		cartes = new ArrayList<Carta>();
@@ -117,5 +119,13 @@ public class Jugador {
 
 	public ArrayList<Carta> getCartes(){
 		return cartes;
+	}
+
+	public int getTipusJugador() {
+		return tipusJugador;
+	}
+
+	public void setTipusJugador(int tipusJugador) {
+		this.tipusJugador = tipusJugador;
 	}
 }
