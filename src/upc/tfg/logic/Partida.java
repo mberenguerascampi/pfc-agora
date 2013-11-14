@@ -822,4 +822,11 @@ public class Partida {
 	public void setArrayIA(int[] arrayIA) {
 		this.arrayIA = arrayIA;
 	}
+	
+	public int getIDJugador(int color){
+		for(Jugador j:jugadors){
+			if(j.getColor() == color)return j.getId();
+		}
+		return 0;
+	}
 }

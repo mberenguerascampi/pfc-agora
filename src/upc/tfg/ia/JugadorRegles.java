@@ -14,7 +14,7 @@ public class JugadorRegles extends DefaultJugador implements JugadorRobot{
 	private Jugador jugador;
 	private final int NUM_REGLES_PAS1 = 5;
 	private final int NUM_REGLES_PAS2 = 4;
-	private final int NUM_REGLES_PAS3 = 7;
+	private final int NUM_REGLES_PAS3 = 8;
 	
 	public JugadorRegles(Jugador jugador) {
 		this.jugador = jugador;
@@ -67,6 +67,7 @@ public class JugadorRegles extends DefaultJugador implements JugadorRobot{
 			}
 			++numRegla;
 		}
+		if(cartaARetornar == null)cartaARetornar = cartes.get(0);
 		return cartaARetornar;
 	}
 
@@ -119,9 +120,8 @@ public class JugadorRegles extends DefaultJugador implements JugadorRobot{
 		int idJugadorGuanyador = Partida.getInstance().getPuntuacioFinal().getIdJugadorGuanyador(jugador.getId());
 		ArrayList<Districte>districtesGuanyatsPrimerJugador = Partida.getInstance().getDistrictesGuanyats(idJugadorGuanyador);
 		int numRegla = 1;
-		//TODO: Falta implementar regla 6
-		while(numRegla <= NUM_REGLES_PAS3-1 && solucio == null){
-			if(numRegla == NUM_REGLES_PAS3-1){
+		while(numRegla <= NUM_REGLES_PAS3 && solucio == null){
+			if(numRegla == NUM_REGLES_PAS3){
 				Random rand = new Random(System.currentTimeMillis());
 				return possiblesPam.get(rand.nextInt(possiblesPam.size()));
 			}
@@ -155,19 +155,40 @@ public class JugadorRegles extends DefaultJugador implements JugadorRobot{
 						break;
 					case 4:
 						if(districtesGuanyats != null && !districtesGuanyats.contains(pam.districteOrigen) &&
-								(esGuanyador(pam.districteDesti, 1) || empat(pam.districteDesti, 1)) &&
+								diferenciaAmbGuanyador(pam.districteDesti) < 3 &&
 								pam.color == jugador.getColor()){
 							
 							solucio = pam;
 						}
 						break;
 					case 5:
+						if(districtesGuanyats != null && !districtesGuanyats.contains(pam.districteDesti) &&
+							diferenciaAmbGuanyador(pam.districteOrigen) < 3 &&
+							pam.color == pam.districteOrigen.getColorGuanyador()){
+					
+								solucio = pam;
+						}
+						break;
+					case 6:
 						if(districtesGuanyatsPrimerJugador != null && 
 								districtesGuanyatsPrimerJugador.contains(pam.districteOrigen) &&
 								!districtesGuanyatsPrimerJugador.contains(pam.districteDesti) &&
+								difRespecteGuanyador(pam.districteOrigen) < 4 &&
 								pam.color == Partida.getInstance().getJugador(idJugadorGuanyador).getColor()){
 							
 							solucio = pam;
+						}
+						break;
+					case 7:
+						for(Jugador j:Partida.getInstance().getJugadors()){
+							if(!j.equals(jugador)){
+								ArrayList<Districte>districtesGuanyatsJug = Partida.getInstance().getDistrictesGuanyats(j.getId());
+								if(pam.color == j.getColor() &&
+										districtesGuanyatsJug.contains(pam.districteOrigen) && 
+										!districtesGuanyatsJug.contains(pam.districteDesti)){
+									solucio = pam;
+								}
+							}
 						}
 						break;
 				}
@@ -262,6 +283,10 @@ public class JugadorRegles extends DefaultJugador implements JugadorRobot{
 		Districte dCopy = new Districte(districte);
 		dCopy.inicialitzaIAfefeixPassejants(jugador.getColor(), valor, 0);
 		return(dCopy.getNumPassejants(dCopy.getColorGuanyador()) - dCopy.getNumPassejants(jugador.getColor()) == 0);
+	}
+	
+	private int diferenciaAmbGuanyador(Districte districte){
+		return districte.getNumPassejants(districte.getColorGuanyador())-districte.getNumPassejants(jugador.getColor());
 	}
 	
 	private Carta getCartaMinValue(ArrayList<Carta> cartes) {

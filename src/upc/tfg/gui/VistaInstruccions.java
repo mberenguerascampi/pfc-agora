@@ -1,19 +1,14 @@
 package upc.tfg.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import upc.tfg.interfaces.VistaAmbBotoTornarListener;
 import upc.tfg.utils.Constants;
-import upc.tfg.utils.CustomDefaultButton;
 
 public class VistaInstruccions extends DefaultView{
 	/**

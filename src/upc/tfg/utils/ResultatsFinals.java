@@ -2,16 +2,18 @@ package upc.tfg.utils;
 
 import java.util.Arrays;
 
+import upc.tfg.logic.Partida;
+
 /**
  * Classe que representa el resultats de calcular els punts en una partida
  * @author Marc
  *
  */
 public class ResultatsFinals {
-	private int puntsJ1;
-	private int puntsJ2;
-	private int puntsJ3;
-	private int puntsJ4;
+	private int puntsJ1 = 0;
+	private int puntsJ2 = 0;
+	private int puntsJ3 = 0;
+	private int puntsJ4 = 0;
 	private int idJugadorGuanyador;
 	
 	/**
@@ -22,12 +24,25 @@ public class ResultatsFinals {
 	 * @param puntsJ4 Punts que ha obtingut el jugador amb id=4
 	 * @param idJugadorGuanyador Identificador del jugador guanyador
 	 */
-	public ResultatsFinals(int puntsJ1, int puntsJ2, int puntsJ3, int puntsJ4, int idJugadorGuanyador) {
-		this.puntsJ1 = puntsJ1;
-		this.puntsJ2 = puntsJ2;
-		this.puntsJ3 = puntsJ3;
-		this.puntsJ4 = puntsJ4;
-		this.idJugadorGuanyador = idJugadorGuanyador;
+	public ResultatsFinals(int puntsBlau, int puntsVermell, int puntsVerd, int puntsGroc, int colorGuanyador) {
+		for(int i = 1; i <=4 ; ++i){
+			int color = Partida.getInstance().getJugador(i).getColor();
+			switch(color){
+				case Constants.BLAU:
+					setPunts(i, puntsBlau);
+					break;
+				case Constants.VERMELL:
+					setPunts(i, puntsVermell);
+					break;
+				case Constants.VERD:
+					setPunts(i, puntsVerd);
+					break;
+				case Constants.GROC:
+					setPunts(i, puntsGroc);
+					break;
+			}
+		}
+		this.idJugadorGuanyador = Partida.getInstance().getIDJugador(colorGuanyador);
 	}
 	
 	/**
@@ -48,6 +63,19 @@ public class ResultatsFinals {
 			default:
 				return 0;
 		}
+	}
+	
+	public void setPunts(int idJugador, int numPunts){
+		switch(idJugador){
+			case 1:
+				puntsJ1 = numPunts;
+			case 2:
+				puntsJ2 = numPunts;
+			case 3:
+				puntsJ3 = numPunts;
+			case 4:
+				puntsJ4 = numPunts;
+	}
 	}
 	
 	/**

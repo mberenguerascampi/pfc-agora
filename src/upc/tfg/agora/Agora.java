@@ -316,7 +316,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 	//FUNCIONS QUE IMPLEMENTEN EL LISTENER DEL FINAL DE PARTIDA
 	public void backButtonPressed(){
 		if(backToTauler){
-			tauler.setVisible(true);
+			tauler.tornaAMostrarTauler();
 			addMenu();
 		}
 		else{

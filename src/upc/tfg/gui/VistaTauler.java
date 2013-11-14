@@ -148,6 +148,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 			addWarningView();
 			mostraCartes();
 			if(marcCarta == null)afegeixMarcCarta();
+			else add(marcCarta);
 			addTauler();
 			setBackgroundName("tauler_background.jpg");
 			//addSkin("tauler_background.jpg");
@@ -1327,9 +1328,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		passejantEstatic.setVisible(false);
 		infoView.setVisible(false);
 		selectDistrict(0, 0);
-		for(VistaCarta vc:cartes){
-			vc.setVisible(false);
-		}
+		reset();
 		CustomDefaultButton resultats = new CustomDefaultButton("Veure puntuació");
 		resultats.setBounds(200, Constants.height-200, CustomDefaultButton.BUTTON_WIDTH, CustomDefaultButton.BUTTON_WIDTH);
 		resultats.addActionListener(new ActionListener() {
@@ -1341,5 +1340,12 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 			}
 		});
 		add(resultats);
+	}
+	
+	/**
+	 * Acció per tornar a mostrar el tauler desrpés d'haver anat a una altre pantalla
+	 */
+	public void tornaAMostrarTauler(){
+		super.setVisible(true);
 	}
 }
