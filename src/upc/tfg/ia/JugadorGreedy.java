@@ -1,6 +1,7 @@
 package upc.tfg.ia;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import upc.tfg.interfaces.JugadorRobot;
 import upc.tfg.logic.Carta;
@@ -166,6 +167,20 @@ public class JugadorGreedy extends DefaultJugador implements JugadorRobot{
 		}
 		ResultatsFinals res = Partida.getInstance().getPuntuacioFinal(districtesModif);
 		return res.getPunts(jugador.getId())-res.getMaxPunts(jugador.getId());
+	}
+	
+	public int getProximJugadorInici(){
+		int[] possiblesJugadors = getPossibleJugadorInici();
+		int solucio = 0;
+		int maxValue = Integer.MIN_VALUE;
+		ResultatsFinals puntuacio = Partida.getInstance().getPuntuacioFinal();
+		for(int i = 0; i < possiblesJugadors.length; ++i){
+			if(puntuacio.getPunts(possiblesJugadors[i]) > maxValue){
+				maxValue = puntuacio.getPunts(possiblesJugadors[i]);
+				solucio = possiblesJugadors[i];
+			}
+		}
+		return solucio;
 	}
 
 }

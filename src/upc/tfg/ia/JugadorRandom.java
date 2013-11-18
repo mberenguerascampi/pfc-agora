@@ -49,4 +49,11 @@ public class JugadorRandom extends DefaultJugador implements JugadorRobot{
 		int barallaID = rand.nextInt(6);
 		return (barallaID%2)+1;
 	}
+	
+	public int getProximJugadorInici(){
+		int[] possiblesJugadors = getPossibleJugadorInici();
+		Random rand = new Random(System.currentTimeMillis());
+		int indexJ = rand.nextInt(possiblesJugadors.length);
+		return possiblesJugadors[indexJ];
+	}
 }

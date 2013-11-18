@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,6 +16,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.jws.Oneway;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -32,6 +35,7 @@ import upc.tfg.utils.CustomDefaultButton;
 import upc.tfg.utils.ImageToNumberArray;
 import upc.tfg.utils.Posicio;
 import upc.tfg.utils.ResultatsFinals;
+import upc.tfg.utils.RotatedIcon;
 
 public class VistaTauler extends DefaultView implements VistaEstatListener, PopupButtonsListener{
 	
@@ -82,7 +86,9 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	
 	private VistaPopUp popup;
 	private VistaPopUpBotons buttonsPopup;
+	private VistaInfoJugador infoJugador;
 	private JButton lockScreen;
+	private JButton[] info_buttons = new  JButton[4];
 	
 	
 	public VistaTauler(TaulerListener tListener) {
@@ -155,13 +161,94 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 		}
 	}
 	
+	public void addButtonInfoJugador(){
+		for(int i= 1; i <= 4; ++i){
+			final JButton button = new JButton();
+			button.setOpaque(false);
+			button.setFocusPainted(false); 
+			button.setContentAreaFilled(false); 
+			button.setBorderPainted(false);
+			Posicio pos = getInfoPlayerPosition(i);
+			button.setBounds(pos.x, pos.y, 46, 46);
+			button.setSize(46, 46);
+			final int id = i;
+			button.addMouseListener(new MouseListener() {
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+				}
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					if(Partida.getInstance().getPas() == 5 && Partida.getInstance().getIdJugadorInici() == 1 && id != 1){
+						listener.seleccionatJugadorInici(id);
+						infoJugador.setVisible(false);
+						infoJugadorButtonPressedNouAgora(id);
+					}
+				}
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					if(infoJugador.isVisible())infoJugador.setVisible(false);
+				}
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					if(!infoJugador.isVisible())infoJugadorButtonPressed(id);
+				}
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					
+				}
+			});
+			button.setVisible(true);
+			info_buttons[i-1] = button;
+			add(button);
+		}
+	}
+	
+	public void setJugadorInici(int idJugador){
+		if(info_buttons[0] == null || info_buttons[0].getParent() == null)	addButtonInfoJugador();
+		int i = 1;
+		for(JButton button:info_buttons){
+			if(button == null)return;
+			URL urlImg = null;
+			if(i != idJugador){
+				urlImg = getClass().getResource(Constants.fileUrl+"icon_info_off.png");
+			}
+			else{
+				urlImg = getClass().getResource(Constants.fileUrl+"icon_info_off_agora.png");
+			}
+		    ImageIcon icon = new ImageIcon(urlImg);
+		    RotatedIcon rIcon = null;
+		    
+		    switch(i){
+		    	case 1:
+		    		button.setIcon(icon);
+		    		break;
+		    	case 2:
+		    		rIcon = new RotatedIcon(icon, -90);
+		    		button.setIcon(rIcon);
+		    		break;
+		    	case 3:
+		    		rIcon = new RotatedIcon(icon, 180);
+		    		button.setIcon(rIcon);
+		    		break;
+		    	case 4:
+		    		rIcon = new RotatedIcon(icon, 90);
+		    		button.setIcon(rIcon);
+		    		break;
+		    }
+		    ++i;
+		}
+	}
+	
 	private void addPopUp(){
 		popup = new VistaPopUp();
 		popup.setVisible(false);
 		buttonsPopup = new VistaPopUpBotons(this);
 		buttonsPopup.setVisible(false);
+		infoJugador = new VistaInfoJugador();
+		infoJugador.setVisible(false);
 		add(popup);
 		add(buttonsPopup);
+		add(infoJugador);
 		add(lockScreen);
 	}
 	
@@ -318,14 +405,15 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	}
 	
 	public void afegeixCartaAgora(int jugadorID){
-		Carta cartaEntity = new Carta("agora", 0, "Agora Barcelona");
-		cartaEntity.setShowing(true);
-		final VistaCarta carta = new VistaCarta(cartaEntity, jugadorID, 6);
-		Posicio pos = getCardPosition(jugadorID, 6);
-		int x = pos.x;
-		int y = pos.y;
-		setCardSize(x, y, carta, jugadorID);
-	    cartes.add(carta);
+//		Carta cartaEntity = new Carta("agora", 0, "Agora Barcelona");
+//		cartaEntity.setShowing(true);
+//		final VistaCarta carta = new VistaCarta(cartaEntity, jugadorID, 6);
+//		Posicio pos = getCardPosition(jugadorID, 6);
+//		int x = pos.x;
+//		int y = pos.y;
+//		setCardSize(x, y, carta, jugadorID);
+	    //cartes.add(carta);
+		setJugadorInici(jugadorID);
 	}
 	
 	public void afegeixCartaAPosicioBuida(int jugadorID, final Carta cartaEntity)
@@ -470,6 +558,38 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
             handler.exportAsDrag(c, e, TransferHandler.COPY);
         }
     }
+	
+	private Posicio getInfoPlayerPosition(int jugadorID)
+	{
+		//Inicialitzem x i y a la posició (0,0) en el tauler
+		int x = taulerX;
+	    int y = taulerY;
+	    
+	    final int margin = 10;
+	    final int margin_between_cards = CARTA_WIDTH + 4;
+	    
+	    switch(jugadorID){
+	    	case 1:
+	    		y += IMG_TAULER_HEIGHT + margin + 24;
+	    		x += margin_between_cards*5;
+	    		break;
+	    	case 2:
+	    		x += IMG_TAULER_WIDTH + margin + 24;
+	    		y += IMG_TAULER_HEIGHT - 48 - margin_between_cards*5;
+	    		break;
+	    	case 3:
+	    		y -= margin + CARTA_HEIGHT - 24;
+	    		x += IMG_TAULER_WIDTH - 48;
+	    		x -= margin_between_cards*5;
+	    		break;
+	    	case 4:
+	    		x -= margin + 72;
+	    		y += margin_between_cards*5;
+	    		break;
+	    }
+	    
+	    return new Posicio(x, y);
+	}
 	
 	private Posicio getCardPosition(int jugadorID, int posicio)
 	{
@@ -1242,6 +1362,14 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	public void infoButtonPressed() {
 		popup.setVisible(true);
 		listener.infoButtonPressed();
+	}
+	
+	public void infoJugadorButtonPressed(int id){
+		infoJugador.showJugador(id, info_buttons[id-1].getBounds(), info_buttons[id-1].getIcon(), false);
+	}
+	
+	public void infoJugadorButtonPressedNouAgora(int id){
+		infoJugador.showJugador(id, info_buttons[id-1].getBounds(), info_buttons[id-1].getIcon(), true);
 	}
 
 	public void deseleccionaCarta() {

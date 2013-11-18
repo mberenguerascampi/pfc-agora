@@ -141,4 +141,16 @@ public class DefaultJugador {
 		}
 		return solucio;
 	}
+	
+	public int[] getPossibleJugadorInici(){
+		int[] possiblesJugadors = new int[3];
+		int index = 0;
+		for(int i = 1; i<=4; ++i){
+			if(i != Partida.getInstance().getIdJugadorInici()){
+				possiblesJugadors[index] = i;
+				++index;
+			}
+		}
+		return possiblesJugadors;
+	}
 }

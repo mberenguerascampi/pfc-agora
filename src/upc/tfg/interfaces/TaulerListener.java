@@ -10,6 +10,7 @@ public interface TaulerListener {
 	public void passejantMogut(int jugadorID, String districtName);
 	public void passejantMogutEntreDistrictes(String districtName1, String districtName2, int color);
 	public void cartaAgafada(int jugadorID, int barallaID);
+	public void seleccionatJugadorInici(int idJugador);
 	public void nextPlayer();
 	public void infoButtonPressed();
 	public boolean saveButtonPressed(String nom);

@@ -284,6 +284,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		logic.cartaAgafadaDeLaBaralla(jugadorID, barallaID);
 	}
 	
+	public void seleccionatJugadorInici(int idJugador){
+		logic.jugadorIniciCanviat(idJugador);
+	}
+	
 	public void infoButtonPressed(){
 		
 	}
@@ -301,7 +305,6 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		 afegeixCartesJugador(2);
 		 afegeixCartesJugador(3);
 		 afegeixCartesJugador(4);
-		 afegeixCartaAgora(Partida.getInstance().getIdJugadorInici());
 		 mostraBaralla(false);
 		 //tauler.comencaIntercanviCartes();
 		 tauler.afegeixPassejants(Partida.getInstance().getJugador(1).getTotalPassejants(), 1);
@@ -309,6 +312,7 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 //		 tauler.afegeixPassejants(Partida.getInstance().getJugador(3).getTotalPassejants(), 3);
 //		 tauler.afegeixPassejants(Partida.getInstance().getJugador(4).getTotalPassejants(), 4);
 		 tauler.setVisible(true);
+		 afegeixCartaAgora(Partida.getInstance().getIdJugadorInici());
 		 addMenu();
 		 logic.getProximMoviment();
 	}
@@ -472,6 +476,10 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		tauler.setVisible(false);
 		menuPrincipal.setVisible(false);
 		finalPartida.setVisible(true);
+	}
+	
+	public void mostraJugadorInici(int idJugador){
+		tauler.setJugadorInici(idJugador);
 	}
 
 	/**

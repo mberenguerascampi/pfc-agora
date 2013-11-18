@@ -8,4 +8,5 @@ public interface JugadorRobot {
 	public Carta getCartaSeleccionada();
 	public PassejantsAMoure getPassejantDistricte();
 	public int getBarallaPerRobarCarta();
+	public int getProximJugadorInici();
 }

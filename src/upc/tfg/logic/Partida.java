@@ -165,8 +165,9 @@ public class Partida {
 		idJugadorActual = idJugadorInici;
 		System.out.println("Avancem pas, Torn jugador " + idJugadorInici);
 		++pas;
-		if (pas > 4){
+		if (pas > 5){
 			pas = 1;
+			if(!hihaCartesDisponibles()) pas = 2;
 			avancarTorn();
 		}
 		else if(pas == 2){
@@ -178,9 +179,16 @@ public class Partida {
 		else if(pas == 4){
 			restartPassejantsBloquejats();
 			if(!hihaCartesDisponibles()){
-				pas = 2;
-				avancarTorn();
+				pas = 5;
+				//avancarTorn();
 			}
+		}
+		else if(pas == 5){
+			if(torn == 12) avancarTorn();
+//			if(!hihaCartesDisponibles()){
+//				pas = 2;
+//				avancarTorn();
+//			}
 		}
 		return true;
 	}
@@ -427,6 +435,9 @@ public class Partida {
 				break;
 			case 4:
 				text = text + "El jugador " + getNomJugador(idJugadorActual) + " ha de robar una carta de la pila que vulgui";
+				break;
+			case 5:
+				text = "<html> El jugador " + getNomJugador(idJugadorInici) + " ha de passar la carta Àgora a un altre jugador";
 				break;
 		}
 		text = text + " </html>";
@@ -780,6 +791,7 @@ public class Partida {
 
 	public void setIdJugadorInici(int idJugadorInici) {
 		this.idJugadorInici = idJugadorInici;
+		this.idJugadorActual = idJugadorInici;
 	}
 	
 	public int getColorJugadorActual(){

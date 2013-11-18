@@ -100,5 +100,9 @@ public class ControladorIA {
 			logic.cartaAgafadaDeLaBaralla(jugadorID, idBaralla);
 			System.out.println("Baralla " + idBaralla);
 		}
+		else if (pas == 5){
+			int idJugador = robot.getProximJugadorInici();
+			logic.jugadorIniciCanviat(idJugador);
+		}
 	}
 }

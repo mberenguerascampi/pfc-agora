@@ -262,6 +262,14 @@ public class ControladorLogic {
 		}
 	}
 	
+	public void jugadorIniciCanviat(int idJugador){
+		partida.setIdJugadorInici(idJugador);
+		partida.avancarPas();
+		agora.mostraJugadorInici(idJugador);
+		agora.updateView();
+		getProximMoviment();
+	}
+	
 	/**
 	 * Acció que divideix la baralla principal de la partida en dues baralles de mides similars
 	 */

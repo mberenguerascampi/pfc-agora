@@ -9,6 +9,7 @@ import upc.tfg.logic.Districte;
 import upc.tfg.logic.Jugador;
 import upc.tfg.logic.Partida;
 import upc.tfg.utils.PassejantsAMoure;
+import upc.tfg.utils.ResultatsFinals;
 
 public class JugadorRegles extends DefaultJugador implements JugadorRobot{
 	private Jugador jugador;
@@ -194,6 +195,20 @@ public class JugadorRegles extends DefaultJugador implements JugadorRobot{
 				}
 			}
 			++numRegla;
+		}
+		return solucio;
+	}
+	
+	public int getProximJugadorInici(){
+		int[] possiblesJugadors = getPossibleJugadorInici();
+		int solucio = 0;
+		int maxValue = Integer.MIN_VALUE;
+		ResultatsFinals puntuacio = Partida.getInstance().getPuntuacioFinal();
+		for(int i = 0; i < possiblesJugadors.length; ++i){
+			if(puntuacio.getPunts(possiblesJugadors[i]) > maxValue){
+				maxValue = puntuacio.getPunts(possiblesJugadors[i]);
+				solucio = possiblesJugadors[i];
+			}
 		}
 		return solucio;
 	}
