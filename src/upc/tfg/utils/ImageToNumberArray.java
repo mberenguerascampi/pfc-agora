@@ -1,5 +1,6 @@
 package upc.tfg.utils;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,7 +8,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayDeque;
-import java.util.LinkedList;
 import java.util.Queue;
 
 import javax.imageio.ImageIO;
@@ -22,8 +22,13 @@ public class ImageToNumberArray {
 	public int pix[][];
 	
 	public ImageToNumberArray() throws IOException {
-		URL urlTaulerImg = getClass().getResource(Constants.fileUrl+"Barcelona_districtes_dividits.png");
+		URL urlTaulerImg = getClass().getResource(Constants.fileUrl+"Barcelona_districtes_dividits_big.png");
 		BufferedImage img = ImageIO.read(urlTaulerImg);
+//		int img_width = 508;//508;
+//		int img_height = 450;//401;
+//		Image imageTemp = image.getScaledInstance(img_width, img_height, Image.SCALE_SMOOTH);
+//		BufferedImage img = new BufferedImage(img_width, img_height, BufferedImage.TYPE_INT_RGB);
+//		img.getGraphics().drawImage(imageTemp, 0, 0 , null);
 		pix = new int[img.getHeight()][img.getWidth()];
 		int rgb,value;
 		for (int y = 0; y < img.getHeight(); ++y) {
@@ -42,10 +47,7 @@ public class ImageToNumberArray {
 		
 		//Modifiquem la matriu de manera que per cada districte ens quedi un numero diferent assignat
 		splitDistricts();
-		
 		printInFile("map_districtes.txt");
-        
-        
      }
 	
 	private void splitDistricts()

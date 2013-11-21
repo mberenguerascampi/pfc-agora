@@ -17,7 +17,7 @@ public class VistaAlertes extends TransparentView{
 	 */
 	private static final long serialVersionUID = 9174551117712932495L;
 	public static final int WARNING_WIDTH = 250;
-	public static final int WARNING_HEIGHT = 210;
+	public static final int WARNING_HEIGHT = 235;
 	private JLabel warningLabel;
 	private JLabel iconLabel;
 	private JLabel titleLabel;

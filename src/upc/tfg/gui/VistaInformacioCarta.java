@@ -1,6 +1,8 @@
 package upc.tfg.gui;
 
 import java.awt.Color;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -8,6 +10,7 @@ import javax.swing.JLabel;
 
 import upc.tfg.logic.Carta;
 import upc.tfg.utils.Constants;
+import upc.tfg.utils.CustomDefaultButton;
 
 public class VistaInformacioCarta extends TransparentView {
 	/**
@@ -53,10 +56,11 @@ public class VistaInformacioCarta extends TransparentView {
 		imatgeCarta.setOpaque(false);
 		add(imatgeCarta);
 		
-		selectButton = new JButton();
-		selectButton.setLayout(null);
-		selectButton.setBounds(imatgeCarta.getLocation().x, imatgeCarta.getLocation().y+imatgeCarta.getBounds().height+30, 100,30);
-		selectButton.setText("Seleccionar");
+		Locale defaultLocale = Locale.getDefault();
+		ResourceBundle bundle = ResourceBundle.getBundle("AgoraBundle", defaultLocale);
+		selectButton = new CustomDefaultButton(bundle.getString("seleccionar_carta"), 111, 37, Color.BLACK);
+		selectButton.setBounds(imatgeCarta.getLocation().x-3, imatgeCarta.getLocation().y+imatgeCarta.getBounds().height+30, 
+				111, 37);
 		selectButton.setVisible(false);
 		add(selectButton);
 	}
@@ -82,6 +86,11 @@ public class VistaInformacioCarta extends TransparentView {
 	public void setSelectVisible(boolean visibility){
 		selectButton.setVisible(visibility);
 		nomCarta.setVisible(!visibility);
+	}
+	
+	public void showOnlyName(){
+		selectButton.setVisible(false);
+		nomCarta.setVisible(false);
 	}
 
 }

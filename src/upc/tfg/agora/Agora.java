@@ -32,6 +32,7 @@ import upc.tfg.logic.ControladorLogic;
 import upc.tfg.logic.Districte;
 import upc.tfg.logic.Jugador;
 import upc.tfg.logic.Partida;
+import upc.tfg.utils.AudioPlayer;
 import upc.tfg.utils.Constants;
 import upc.tfg.utils.ResultatsFinals;
 
@@ -387,6 +388,14 @@ public class Agora extends JFrame implements MenuPrincipalListener, TaulerListen
 		vInstruccions.setVisible(true);
 		backToTauler = true;
         removeMenu();
+	}
+	
+	public void canviarVolum(){
+		try {
+			AudioPlayer.getInstance().changeState();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//////

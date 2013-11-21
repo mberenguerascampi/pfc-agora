@@ -10,4 +10,5 @@ public interface MenuBarListener {
 	public void mostraAjuda();
 	public void carregarPartida();
 	public void crearPartida();
+	public void canviarVolum();
 }

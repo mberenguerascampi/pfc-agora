@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import javax.jws.Oneway;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -43,8 +41,8 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 	 * 
 	 */
 	private static final long serialVersionUID = -5693342904886251734L;
-	private static final int IMG_TAULER_WIDTH = 508;
-	private static final int IMG_TAULER_HEIGHT = 401;
+	private static final int IMG_TAULER_WIDTH = 559;//508;
+	private static final int IMG_TAULER_HEIGHT = 441;//401;
 	public static final int CARTA_WIDTH = 74;
 	public static final int CARTA_HEIGHT = 105;
 	public static final int CARTA_DESCARTADA_X = Constants.paddingX+35;
@@ -213,7 +211,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 				urlImg = getClass().getResource(Constants.fileUrl+"icon_info_off.png");
 			}
 			else{
-				urlImg = getClass().getResource(Constants.fileUrl+"icon_info_off_agora.png");
+				urlImg = getClass().getResource(Constants.fileUrl+"icon_info_off_agora2.png");
 			}
 		    ImageIcon icon = new ImageIcon(urlImg);
 		    RotatedIcon rIcon = null;
@@ -511,7 +509,8 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 						cardInfoView.setCarta(cartaEntity);
 						infoView.setVisible(false);
 						cardInfoView.setVisible(true);
-						cardInfoView.setSelectVisible(true);
+						if(jugadorID == 4)cardInfoView.setSelectVisible(true);
+						else cardInfoView.showOnlyName();
 						for(ActionListener l:cardInfoView.selectButton.getActionListeners()){
 							cardInfoView.selectButton.removeActionListener(l);
 						}
@@ -521,6 +520,7 @@ public class VistaTauler extends DefaultView implements VistaEstatListener, Popu
 								cartesIntercanvi[0] = carta;
 								carta.setSeleccionada(true);
 								listener.cartaRobada(1, cartaEntity);
+								cardInfoView.setVisible(false);
 							}
 						});
 					}

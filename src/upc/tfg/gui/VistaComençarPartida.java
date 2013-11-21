@@ -1,8 +1,11 @@
 package upc.tfg.gui;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -40,6 +43,7 @@ public class VistaComençarPartida extends DefaultView {
 	final JButton iaJ3 = new JButton();
 	final JButton iaJ4 = new JButton();
 	private JButton[] buttonsIA = {iaJ1, iaJ2, iaJ3, iaJ4};
+	private JLabel[] labelsIA = new JLabel[4];
 	private int[] indexColors = new int[4];
 	private int[] indexIA = new int[3];
 	private VistaAmbBotoTornarListener listener;
@@ -137,13 +141,79 @@ public class VistaComençarPartida extends DefaultView {
 			      public void actionPerformed(ActionEvent actionEvent) {
 			    	  int nextColor = (indexIA[index]+1)%3;
 			    	  indexIA[index] = nextColor;
-			    	  iaJ.setIcon(new ImageIcon(iaSources[nextColor]));
+			    	  //iaJ.setIcon(new ImageIcon(iaSources[nextColor]));
+			    	  updateIcon(iaJ, nextColor);
+			    	  updateLabel(index+1);
 			      }
 			    };
 			    iaJ.addActionListener(actionListener);
 			}
 		    add(iaJ);
 		    ++i;
+		}
+		addLabelsDifficulty();
+	}
+	
+	private void updateIcon(JButton button, int nextColor){
+		final URL[] iaSources ={
+				getClass().getResource(Constants.fileUrl+"ia/green_icon.png"),
+				getClass().getResource(Constants.fileUrl+"ia/orange_icon.png"),
+				getClass().getResource(Constants.fileUrl+"ia/red_icon.png")};
+		button.setIcon(new ImageIcon(iaSources[nextColor]));
+	}
+	
+	private void addLabelsDifficulty(){
+		String[] strDifficulty = {bundle.getString("jugador_huma"), bundle.getString("jugador_facil"), 
+				bundle.getString("jugador_mitja"), bundle.getString("jugador_dificil")};
+		for(int i=0; i < 4; ++i){
+			JLabel difficulty_label = new JLabel();
+			difficulty_label.setFont(Constants.fontKristenSmall);
+			difficulty_label.setHorizontalAlignment(JLabel.CENTER);
+			difficulty_label.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+			Rectangle rect = buttonsIA[i].getBounds();
+			difficulty_label.setBounds(rect.x+rect.width, rect.y, 100, rect.height);
+			if(i == 0){
+				difficulty_label.setText(strDifficulty[0]);
+			}
+			else {
+				difficulty_label.setText(strDifficulty[indexIA[i-1]+1]);
+			}
+			final int index = i -1;
+			difficulty_label.addMouseListener(new MouseListener() {
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+				}
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+				}
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+				}
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+				}
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					if(index < 0)return;
+					int nextColor = (indexIA[index]+1)%3;
+			    	indexIA[index] = nextColor;
+			    	updateIcon(buttonsIA[index+1], nextColor);
+			    	updateLabel(index+1);
+				}
+			});
+			add(difficulty_label);
+			labelsIA[i] = difficulty_label;
+		}
+	}
+	
+	private void updateLabel(int index){
+		String[] strDifficulty = {bundle.getString("jugador_huma"), bundle.getString("jugador_facil"), 
+				bundle.getString("jugador_mitja"), bundle.getString("jugador_dificil")};
+		if(index == 0){
+			labelsIA[index].setText(strDifficulty[0]);
+		}
+		else {
+			labelsIA[index].setText(strDifficulty[indexIA[index-1]+1]);
 		}
 	}
 	

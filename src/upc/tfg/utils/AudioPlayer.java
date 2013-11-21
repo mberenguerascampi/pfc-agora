@@ -1,7 +1,6 @@
 package upc.tfg.utils;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -13,6 +12,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class AudioPlayer extends Thread {
 	private static AudioPlayer instance = null;
+	private Clip clip = null;
+	private boolean volumeOn = true;
 	
 	public AudioPlayer() {
 		instance = this;
@@ -35,7 +36,7 @@ public class AudioPlayer extends Thread {
 	
 	public void startPlayback() throws IOException {
 		
-		BufferedInputStream myStream = new BufferedInputStream(getClass().getResourceAsStream(Constants.fileAudioUrl+ "QuickSilver.wav")); 
+		BufferedInputStream myStream = new BufferedInputStream(getClass().getResourceAsStream(Constants.fileAudioUrl+ "RelaxingBirds.wav")); 
 		AudioInputStream audio2 = null;
 		try {
 			audio2 = AudioSystem.getAudioInputStream(myStream);
@@ -43,7 +44,6 @@ public class AudioPlayer extends Thread {
 			e1.printStackTrace();
 		}
 		
-		Clip clip = null;
 		try {
 			clip = AudioSystem.getClip();
 		} catch (LineUnavailableException e) {
@@ -55,10 +55,28 @@ public class AudioPlayer extends Thread {
 			e.printStackTrace();
 		}
 		//clip.start();
+		int start = (int) (audio2.getFrameLength() / 3);
+        clip.setLoopPoints(start, -1);
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
+		volumeOn = true;
 	}
 	
 	public void stopPlayBack(){
-		
+		clip.stop();
+		volumeOn = false;
+	}
+	
+	public void changeState() throws IOException{
+		if(volumeOn)stopPlayBack();
+		else startPlayback();
+	}
+
+	public boolean isVolumeOn() {
+		return volumeOn;
+	}
+
+	public void setVolumeOn(boolean volumeOn) {
+		this.volumeOn = volumeOn;
 	}
 
 }

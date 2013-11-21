@@ -19,16 +19,16 @@ public class ErrorController {
 		String errorText = "";
 		switch(idError){
 			case DISTRICTE_AMB_MATEIX_NOMBRE_PASSEJANTS:
-				errorText = "DISTRICTE AMB EL MATEIX NOMBRE DE PASSEJANTS ->" + ((Districte)arg1).getNom();
+				errorText = "El distrcite de " + ((Districte)arg1).getNom() + " té un empat de màxims passejants";
 				break;
 			case DISTRICTE_NO_ADJACENT:
-				errorText = "ELS DISTRICTES DE "+ ((Districte)arg1).getNom() + " I " + ((Districte)arg2).getNom() + " NO SÓN ADJACENTS." +" HAS DE MOURE ELS PASSEJANTS ENTRE DOS DISTRICTES QUE ESTIGUIN DE COSTAT.";
+				errorText = ((Districte)arg1).getNom() + " i " + ((Districte)arg2).getNom() + " no són adjacents." +" Has de moure el passejant entre dos districtes que estiguin de costat.";
 				break;
 			case NO_POT_TREURE_PASSEJANT:
-				errorText = "NO ES POT TREURE CAP PASSEJANT DE COLOR " + Partida.getInstance().getNomColor((int)arg2) +" DEL DISTRICTE DE "+ ((Districte)arg1).getNom();
+				errorText = "No es pot treure cap passejant de color " + Partida.getInstance().getNomColor((int)arg2) +" del districte "+ ((Districte)arg1).getNom();
 				break;
 			case NO_POT_AFEGIR_PASSEJANT:
-				errorText = "NO ES POT AFEGIR CAP PASSEJANT DE COLOR " + Partida.getInstance().getNomColor((int)arg2) +" EN EL DISTRICTE DE "+ ((Districte)arg1).getNom();
+				errorText = "No es pot afegir cap passejant de color " + Partida.getInstance().getNomColor((int)arg2) +" en el districte "+ ((Districte)arg1).getNom();
 				break;
 			case NO_ES_POT_GUARDAR:
 				if(idJugador != 1)errorText = "Només pots guardar en el teu torn";

@@ -12,6 +12,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import upc.tfg.interfaces.MenuBarListener;
+import upc.tfg.utils.AudioPlayer;
 import upc.tfg.utils.Constants;
 
 public class CustomMenuBar extends JMenuBar{
@@ -108,11 +109,44 @@ public class CustomMenuBar extends JMenuBar{
                 listener.crearPartida();
             }
         });
+        
+        ImageIcon icon7 = null;
+        String textVolume = "";
+        if(AudioPlayer.getInstance().isVolumeOn()){
+        	icon7 = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/volume_icon_off.png"));
+        	textVolume = bundle.getString("silenciar_volum"); 
+        }
+        else {
+        	icon7 = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/volume_icon_on.png"));
+        	textVolume = bundle.getString("donar_volum");
+        }
+        final JMenuItem eMenuItem7 = new JMenuItem(textVolume, icon7);
+        eMenuItem7.setBackground(Constants.colorGreen);
+        eMenuItem7.setMnemonic(KeyEvent.VK_S);
+        eMenuItem7.setToolTipText("");
+        eMenuItem7.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+            	listener.canviarVolum();
+            	ImageIcon newIcon7 = null;
+                String newTextVolume = "";
+            	 if(AudioPlayer.getInstance().isVolumeOn()){
+            		 newIcon7 = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/volume_icon_off.png"));
+            		 newTextVolume = bundle.getString("silenciar_volum"); 
+                 }
+                 else {
+                	 newIcon7 = new ImageIcon(getClass().getResource(Constants.fileUrl+"icons/volume_icon_on.png"));
+                	 newTextVolume = bundle.getString("donar_volum");
+                 }
+            	eMenuItem7.setText(newTextVolume);
+            	eMenuItem7.setIcon(newIcon7);
+            }
+        });
        
         partida.add(eMenuItem6);
         partida.add(eMenuItem5);
         partida.add(eMenuItem4);
         partida.add(eMenuItem3);
+        partida.add(eMenuItem7);
         partida.add(eMenuItem2);
         partida.add(eMenuItem);
 
